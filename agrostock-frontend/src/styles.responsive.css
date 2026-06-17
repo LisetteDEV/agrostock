@@ -1,0 +1,153 @@
+/* Global responsive hardening - strict */
+html,
+body,
+#app {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip !important;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+#app * {
+    min-width: 0;
+}
+
+img,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    height: auto;
+}
+
+section,
+main,
+.container,
+.container-fluid,
+.row,
+.card,
+.btn,
+.input-group,
+.form-control,
+.form-select {
+    max-width: 100%;
+}
+
+.d-flex > *,
+.row > * {
+    min-width: 0;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.text-break-anywhere {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+@media (max-width: 991.98px) {
+    .modal-dialog,
+    .modal-dialog.modal-lg,
+    .modal-dialog.modal-xl {
+        margin: 0.75rem;
+        max-width: calc(100vw - 1.5rem);
+    }
+
+    .modal-content {
+        border-radius: 0.9rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .container,
+    .container-fluid {
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
+    }
+
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        --bs-gutter-x: 0.9rem;
+    }
+
+    .table-responsive > .table {
+        min-width: 0 !important;
+    }
+
+    .table-responsive th,
+    .table-responsive td {
+        white-space: normal;
+        word-break: break-word;
+        font-size: 0.82rem;
+        line-height: 1.35;
+    }
+
+    .hero-marquee,
+    .faq-marquee,
+    .marquee-wrapper {
+        overflow-x: clip !important;
+        max-width: 100% !important;
+    }
+
+    .hero-marquee__track,
+    .faq-marquee__track,
+    .marquee-content,
+    .marquee-track {
+        width: max-content;
+        max-width: none !important;
+    }
+
+    .footer-watermark {
+        white-space: normal !important;
+        line-height: 0.95;
+        padding-inline: 0.4rem;
+        bottom: -6px !important;
+    }
+
+    .modal-footer {
+        gap: 0.5rem;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+    }
+
+    .input-group {
+        width: 100%;
+    }
+}
+/* Last-resort mobile overflow guard */
+@media (max-width: 767.98px) {
+    html,
+    body,
+    #app {
+        overflow-x: hidden !important;
+    }
+
+    body * {
+        max-width: 100% !important;
+    }
+
+    .btn {
+        white-space: normal !important;
+    }
+
+    .btn,
+    .badge,
+    .card,
+    .navbar,
+    .container,
+    .container-fluid,
+    .row,
+    .col,
+    [class*="col-"] {
+        overflow-wrap: anywhere;
+    }
+}

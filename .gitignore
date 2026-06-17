@@ -1,0 +1,32 @@
+# Backend Laravel
+agrostock-backend/vendor/
+agrostock-backend/.env
+agrostock-backend/.env.backup
+agrostock-backend/.env.production
+agrostock-backend/storage/*.key
+agrostock-backend/storage/pail
+agrostock-backend/public/build
+agrostock-backend/public/hot
+agrostock-backend/public/storage
+agrostock-backend/.phpunit.cache
+agrostock-backend/_ide_helper.php
+agrostock-backend/Homestead.json
+agrostock-backend/Homestead.yaml
+agrostock-backend/auth.json
+
+# Frontend React
+agrostock-frontend/node_modules/
+agrostock-frontend/dist/
+agrostock-frontend/.env
+agrostock-frontend/.env.local
+
+# Général
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.zed/
+.idea/
+.cursor/
+.nova/
+.codex/

@@ -1,0 +1,176 @@
+/* ===== Google Font ===== */
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+/* ===== Base ===== */
+html {
+    scroll-behavior: smooth;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body, #app {
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== Navbar padding compensation ===== */
+/* Push content below the fixed navbar */
+body > #app > * > section:first-of-type,
+#accueil {
+    scroll-margin-top: 70px;
+}
+
+/* ===== Animations ===== */
+.page-transition {
+    animation: pageFade 0.55s ease-out;
+    will-change: opacity, transform;
+}
+
+@keyframes pageFade {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(40px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes floatBubble {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-20px); }
+}
+
+/* ===== Navbar ===== */
+.navbar {
+    z-index: 1030;
+}
+
+.navbar .nav-link:hover {
+    color: #40916c !important;
+}
+
+.navbar .btn:focus {
+    box-shadow: none;
+}
+
+/* ===== Products Hover Effects ===== */
+.product-card {
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    border-color: #1ab273 !important;
+    box-shadow: 0 12px 30px rgba(26, 178, 115, 0.15) !important;
+}
+
+.product-card .img-container {
+    overflow: hidden;
+}
+
+.product-card .product-img {
+    transition: transform 0.4s ease !important;
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.08);
+}
+
+/* ===== Services Page ===== */
+.service-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+}
+
+/* Pricing card hover effect */
+.pricing-card:hover {
+    transform: translateY(-5px);
+    border-color: #1ab273 !important;
+}
+
+/* Process steps */
+.process-step {
+    position: relative;
+}
+
+.process-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -50%;
+    width: 100%;
+    height: 2px;
+    background: #d8f3dc;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .process-step:not(:last-child)::after {
+        display: none;
+    }
+    
+    .service-card {
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* ===== Mobile Fixes ===== */
+@media (max-width: 768px) {
+    /* Navbar collapse menu spacing */
+    .navbar-collapse {
+        padding-bottom: 0.5rem;
+    }
+
+    /* Prevent text overflow in hero */
+    h1 {
+        word-break: break-word;
+    }
+
+    /* Newsletter rounded container */
+    .newsletter-inner {
+        border-radius: 16px !important;
+        padding: 2rem 1.25rem !important;
+    }
+
+    /* Footer columns spacing */
+    footer .col-6 {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Map section height */
+    .map-mockup {
+        height: 280px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Hero buttons full width */
+    .hero-cta-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Stats strip — remove side borders on tiny screens */
+    .stat-col:not(:nth-child(-n+2)) {
+        border-left: none !important;
+    }
+
+    /* Section padding tighter on phones */
+    section.py-5 {
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+}
