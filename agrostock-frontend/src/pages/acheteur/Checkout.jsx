@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePanier } from "../../context/PanierContext";
 import { useAuth } from "../../context/AuthContext";
-import { AlertCircle, CheckCircle2, ShieldCheck, Smartphone } from "lucide-react";
+import { AlertCircle, CheckCircle2, ShieldCheck, Smartphone, CreditCard } from "lucide-react";
 import { processPayment } from "../../services/paiementService";
 
 const Checkout = () => {
@@ -19,6 +19,11 @@ const Checkout = () => {
   const [numeroMobile, setNumeroMobile] = useState("");
   const [confirmNumero, setConfirmNumero] = useState("");
   const [logistiqueMode, setLogistiqueMode] = useState("livreur_propre");
+  
+  const [typePaiement, setTypePaiement] = useState("mobile_money");
+  const [numeroCarte, setNumeroCarte] = useState("");
+  const [dateExp, setDateExp] = useState("");
+  const [cvc, setCvc] = useState("");
 
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -89,9 +94,16 @@ const Checkout = () => {
       return;
     }
 
-    if (!numeroMobile.trim() || numeroMobile !== confirmNumero) {
-      setSubmitError("Le numero Mobile Money et sa confirmation doivent correspondre.");
-      return;
+    if (typePaiement === "mobile_money") {
+      if (!numeroMobile.trim() || numeroMobile !== confirmNumero) {
+        setSubmitError("Le numero Mobile Money et sa confirmation doivent correspondre.");
+        return;
+      }
+    } else {
+      if (!numeroCarte.trim() || !dateExp.trim() || !cvc.trim()) {
+        setSubmitError("Veuillez remplir toutes les informations de votre carte bancaire.");
+        return;
+      }
     }
 
     const invalidGross = panier.find((item) => item.mode_achat === "gros" && Number(item.quantite) < Number(item.quantite_min_gros || 20));
@@ -136,8 +148,8 @@ const Checkout = () => {
               adresse_livraison: `${adresse} (Q. ${quartier})`,
               ville_livraison: ville,
               telephone_livraison: telephone,
-              paiement_operateur: operateur,
-              numero_mobile: numeroMobile,
+              paiement_operateur: typePaiement === "mobile_money" ? operateur : "Carte Bancaire",
+              numero_mobile: typePaiement === "mobile_money" ? numeroMobile : "Carte terminee par " + numeroCarte.slice(-4),
             },
             token,
           );
@@ -181,7 +193,11 @@ const Checkout = () => {
               <>
                 <div className="spinner-border text-success mb-3" role="status" />
                 <h5 className="fw-bold">Paiement en attente</h5>
-                <p className="small text-muted mb-0">Validation en cours sur {operateur} pour le numero {numeroMobile}...</p>
+                <p className="small text-muted mb-0">
+                  {typePaiement === "mobile_money" 
+                    ? `Validation en cours sur ${operateur} pour le numero ${numeroMobile}...` 
+                    : `Validation securisée en cours pour votre carte bancaire...`}
+                </p>
               </>
             ) : (
               <>
@@ -248,11 +264,11 @@ const Checkout = () => {
                   <div className="d-flex gap-3 flex-wrap">
                     <label className="form-check border rounded-3 px-3 py-2">
                       <input className="form-check-input" type="radio" value="livreur_propre" checked={logistiqueMode === "livreur_propre"} onChange={(e) => setLogistiqueMode(e.target.value)} />
-                      <span className="ms-2 fw-medium">J'ai mon propre livreur (bon + OTP)</span>
+                      <span className="ms-2 fw-medium">J'ai mon propre livreur</span>
                     </label>
                     <label className="form-check border rounded-3 px-3 py-2">
                       <input className="form-check-input" type="radio" value="gozem" checked={logistiqueMode === "gozem"} onChange={(e) => setLogistiqueMode(e.target.value)} />
-                      <span className="ms-2 fw-medium">Besoin d'un livreur (mode gozem - simulation)</span>
+                      <span className="ms-2 fw-medium">Besoin d'un livreur</span>
                     </label>
                   </div>
                 </div>
@@ -277,29 +293,66 @@ const Checkout = () => {
             </div>
 
             <div className="bg-white rounded-4 shadow-sm p-4 mb-4">
-              <h5 className="fw-bold mb-3">Paiement Mobile Money</h5>
-              <div className="d-flex gap-3 mb-3">
-                <label className="form-check">
-                  <input className="form-check-input" type="radio" value="MTN" checked={operateur === "MTN"} onChange={(e) => setOperateur(e.target.value)} /> MTN
+              <h5 className="fw-bold mb-3">Moyen de paiement</h5>
+              
+              <div className="d-flex gap-3 mb-4">
+                <label className={`form-check px-3 py-2 rounded-3 d-flex align-items-center gap-2 m-0 cursor-pointer flex-fill border ${typePaiement === 'mobile_money' ? 'border-success bg-success bg-opacity-10' : ''}`} style={{ cursor: 'pointer' }}>
+                  <input className="form-check-input m-0" type="radio" value="mobile_money" checked={typePaiement === "mobile_money"} onChange={(e) => setTypePaiement(e.target.value)} />
+                  <span className="fw-bold" style={{ color: typePaiement === 'mobile_money' ? '#105c38' : '#64748b' }}><Smartphone size={18}/> Mobile Money</span>
                 </label>
-                <label className="form-check">
-                  <input className="form-check-input" type="radio" value="Moov" checked={operateur === "Moov"} onChange={(e) => setOperateur(e.target.value)} /> Moov
+                <label className={`form-check px-3 py-2 rounded-3 d-flex align-items-center gap-2 m-0 cursor-pointer flex-fill border ${typePaiement === 'carte' ? 'border-success bg-success bg-opacity-10' : ''}`} style={{ cursor: 'pointer' }}>
+                  <input className="form-check-input m-0" type="radio" value="carte" checked={typePaiement === "carte"} onChange={(e) => setTypePaiement(e.target.value)} />
+                  <span className="fw-bold" style={{ color: typePaiement === 'carte' ? '#105c38' : '#64748b' }}><CreditCard size={18}/> Carte Bancaire</span>
                 </label>
               </div>
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <label className="form-label">Numero a debiter</label>
-                  <div className="input-group">
-                    <span className="input-group-text"><Smartphone size={16} /></span>
-                    <input className="form-control" value={numeroMobile} onChange={(e) => setNumeroMobile(e.target.value)} required />
+
+              {typePaiement === "mobile_money" ? (
+                <>
+                  <div className="d-flex gap-3 gap-md-4 mb-3 flex-wrap">
+                    <label className="form-check border px-3 py-2 rounded-3 d-flex align-items-center gap-2 m-0 cursor-pointer" style={{ cursor: 'pointer' }}>
+                      <input className="form-check-input m-0" type="radio" value="MTN" checked={operateur === "MTN"} onChange={(e) => setOperateur(e.target.value)} /> <span className="fw-medium">MTN</span>
+                    </label>
+                    <label className="form-check border px-3 py-2 rounded-3 d-flex align-items-center gap-2 m-0 cursor-pointer" style={{ cursor: 'pointer' }}>
+                      <input className="form-check-input m-0" type="radio" value="Moov" checked={operateur === "Moov"} onChange={(e) => setOperateur(e.target.value)} /> <span className="fw-medium">Moov</span>
+                    </label>
+                    <label className="form-check border px-3 py-2 rounded-3 d-flex align-items-center gap-2 m-0 cursor-pointer" style={{ cursor: 'pointer' }}>
+                      <input className="form-check-input m-0" type="radio" value="Celtis" checked={operateur === "Celtis"} onChange={(e) => setOperateur(e.target.value)} /> <span className="fw-medium">Celtis</span>
+                    </label>
+                  </div>
+                  <div className="row g-3">
+                    <div className="col-md-6">
+                      <label className="form-label">Numero a debiter</label>
+                      <div className="input-group">
+                        <span className="input-group-text"><Smartphone size={16} /></span>
+                        <input className="form-control" value={numeroMobile} onChange={(e) => setNumeroMobile(e.target.value)} required={typePaiement === "mobile_money"} />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <label className="form-label">Confirmer le numero</label>
+                      <input className={`form-control ${confirmNumero && confirmNumero !== numeroMobile ? "is-invalid" : ""}`} value={confirmNumero} onChange={(e) => setConfirmNumero(e.target.value)} required={typePaiement === "mobile_money"} />
+                      {confirmNumero && confirmNumero !== numeroMobile && <div className="invalid-feedback">Les numeros ne correspondent pas.</div>}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="row g-3">
+                  <div className="col-12">
+                    <label className="form-label">Numero de carte</label>
+                    <div className="input-group">
+                      <span className="input-group-text"><CreditCard size={16} /></span>
+                      <input className="form-control" placeholder="0000 0000 0000 0000" value={numeroCarte} onChange={(e) => setNumeroCarte(e.target.value)} required={typePaiement === "carte"} />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Date d'expiration</label>
+                    <input className="form-control" placeholder="MM/AA" value={dateExp} onChange={(e) => setDateExp(e.target.value)} required={typePaiement === "carte"} />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label">CVC / CVV</label>
+                    <input className="form-control" placeholder="123" type="password" maxLength={3} value={cvc} onChange={(e) => setCvc(e.target.value)} required={typePaiement === "carte"} />
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <label className="form-label">Confirmer le numero</label>
-                  <input className={`form-control ${confirmNumero && confirmNumero !== numeroMobile ? "is-invalid" : ""}`} value={confirmNumero} onChange={(e) => setConfirmNumero(e.target.value)} required />
-                  {confirmNumero && confirmNumero !== numeroMobile && <div className="invalid-feedback">Les numeros ne correspondent pas.</div>}
-                </div>
-              </div>
+              )}
             </div>
 
             <div className="bg-white rounded-4 shadow-sm p-4">
