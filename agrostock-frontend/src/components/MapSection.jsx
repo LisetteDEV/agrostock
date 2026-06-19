@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Search, MapPin, Factory, LoaderCircle, Navigation, Building2 } from 'lucide-react';
 import { API_URL } from '../services/config';
 
@@ -349,25 +349,44 @@ const MapSection = () => {
               Visualisez les transformateurs verifies, filtrez par zone et ouvrez leur profil en un clic.
             </p>
 
-            <div className="p-3 bg-white rounded-3 shadow-sm border mb-3">
-              <div className="d-flex align-items-center gap-2 mb-2" style={{ color: '#48695a', fontSize: '0.9rem' }}>
+            <div className="mb-4">
+              <div className="d-flex align-items-center gap-2 mb-3 px-1" style={{ color: '#105c38', fontSize: '0.9rem', fontWeight: '600' }}>
                 <Factory size={16} />
-                <span>{mappedCount} transformateur(s) affiche(s)</span>
+                <span>{mappedCount} transformateur(s) affiché(s) sur la carte</span>
               </div>
 
-              <div className="d-flex align-items-center gap-2">
-                <Search size={18} color="#8ea69a" />
+              <div 
+                className="p-1 bg-white rounded-pill d-flex align-items-center shadow-sm"
+                style={{ border: '1px solid #e2ece5', transition: 'box-shadow 0.3s ease' }}
+                onFocus={(e) => e.currentTarget.style.boxShadow = '0 0 0 4px rgba(26,178,115,0.1)'}
+                onBlur={(e) => e.currentTarget.style.boxShadow = '0 .125rem .25rem rgba(0,0,0,.075)'}
+              >
+                <div className="ps-4 pe-2 text-muted">
+                  <Search size={20} color="#1ab273" />
+                </div>
                 <input
                   type="text"
-                  placeholder="Ville, departement, entreprise..."
-                  className="form-control border-0 p-0 shadow-none"
+                  placeholder="Ville, département, entreprise..."
+                  className="form-control border-0 bg-transparent shadow-none"
                   value={queryInput}
                   onChange={(e) => setQueryInput(e.target.value)}
                   onKeyDown={handleEnter}
-                  style={{ fontSize: '0.95rem' }}
+                  style={{ fontSize: '0.95rem', fontWeight: 500 }}
                 />
-                <button className="btn rounded-pill px-3 py-2" style={{ background: '#105c38', color: '#fff', fontWeight: 600, fontSize: '0.85rem' }} onClick={handleSearch}>
-                  Chercher
+                <button 
+                  className="btn text-white fw-bold border-0 px-4 position-relative me-1 d-flex align-items-center justify-content-center" 
+                  onClick={handleSearch}
+                  style={{ 
+                    height: '42px',
+                    background: 'linear-gradient(135deg, #1ab273 0%, #128e5a 100%)', 
+                    borderRadius: '50px', 
+                    transition: 'all 0.3s',
+                    boxShadow: '0 4px 10px rgba(26,178,115,0.2)' 
+                  }}
+                  onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 15px rgba(26,178,115,0.3)'; }}
+                  onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 10px rgba(26,178,115,0.2)'; }}
+                >
+                  Rechercher
                 </button>
               </div>
             </div>

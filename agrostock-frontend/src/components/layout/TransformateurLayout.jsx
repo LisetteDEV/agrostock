@@ -15,8 +15,11 @@ const TransformateurLayout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const handleLogout = () => {
-        logout();
         navigate('/', { replace: true });
+        // Un délai minime pour permettre la redirection avant que le contexte ne change
+        setTimeout(() => {
+            logout();
+        }, 10);
     };
 
     const tabs = [

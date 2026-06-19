@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login as loginRequest } from '../../services/authService';
 import { useAuth } from '../../context/AuthContext';
@@ -42,7 +42,7 @@ const Login = () => {
             <div className="card border-0 shadow-lg rounded-5 p-5 bg-white">
               <div className="text-center mb-5">
                 <h1 className="fw-bold mb-2">Bienvenue</h1>
-                <p className="text-muted">Connectez-vous ? votre espace</p>
+                <p className="text-muted">Connectez-vous à votre espace</p>
               </div>
 
               <form onSubmit={handleSubmit}>

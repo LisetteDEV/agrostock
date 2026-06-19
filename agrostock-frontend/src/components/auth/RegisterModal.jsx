@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -10,26 +10,42 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_URL } from '../../services/config';
 // Password input with toggle visibility
-const PasswordInput = ({ placeholder = 'Mot de passe', value, onChange, name }) => {
+const PasswordInput = ({ placeholder = '••••••••', value, onChange, name }) => {
     const [show, setShow] = useState(false);
     return (
-        <div className="input-group rounded-3 border overflow-hidden">
-            <span className="input-group-text bg-light border-0"><Lock size={18} /></span>
+        <div className="input-group pro-input-group overflow-hidden" style={{ border: '1px solid #e2e8f0', borderRadius: '10px', transition: 'border-color 0.2s, box-shadow 0.2s', background: '#fff' }}>
+            <span className="input-group-text bg-white border-0 ps-3 pe-2">
+                <Lock size={18} className="input-icon" style={{ color: '#94a3b8', transition: 'color 0.2s' }} />
+            </span>
             <input 
                 type={show ? 'text' : 'password'} 
                 name={name}
-                className="form-control border-0 py-3" 
+                className="form-control bg-white border-0 py-3 px-2 shadow-none fw-medium" 
                 placeholder={placeholder} 
                 value={value} 
-                onChange={onChange} 
+                onChange={onChange}
+                style={{ fontSize: '0.95rem' }}
+                onFocus={(e) => {
+                    const parent = e.target.parentElement;
+                    parent.style.borderColor = '#105c38';
+                    parent.style.boxShadow = '0 0 0 3px rgba(16,92,56,0.1)';
+                    parent.querySelector('.input-icon').style.color = '#105c38';
+                }}
+                onBlur={(e) => {
+                    const parent = e.target.parentElement;
+                    parent.style.borderColor = '#e2e8f0';
+                    parent.style.boxShadow = 'none';
+                    parent.querySelector('.input-icon').style.color = '#94a3b8';
+                }}
             />
             <button 
                 type="button" 
-                className="input-group-text bg-light border-0 px-3" 
+                className="btn btn-link bg-white border-0 pe-3 ps-2 text-muted" 
                 onClick={() => setShow(!show)}
-                style={{ cursor: 'pointer' }}
+                style={{ textDecoration: 'none' }}
+                tabIndex="-1"
             >
-                {show ? <EyeOff size={18} className="text-muted" /> : <Eye size={18} className="text-muted" />}
+                {show ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
         </div>
     );
@@ -335,7 +351,7 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 30 }}
                         className="bg-white rounded-5 overflow-hidden my-auto shadow-lg"
-                        style={{ width: '100%', maxWidth: (mode === 'register' && step === 0) ? '800px' : '550px', position: 'relative' }}
+                        style={{ width: '100%', maxWidth: (mode === 'login' || (mode === 'register' && step === 0)) ? '850px' : '550px', position: 'relative' }}
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button className="btn btn-link position-absolute top-0 end-0 p-3 text-muted border-0 shadow-none" onClick={onClose} style={{ zIndex: 10 }}>
@@ -345,43 +361,96 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                         <div className="row g-0">
                             {/* LOGIN */}
                             {mode === 'login' && (
-                                <div className="col-12 p-4 p-md-5">
-                                    <div className="text-center mb-4">
-                                        <img src="/images/logoAgro.png" alt="AgroStock" style={{ height: '70px', marginBottom: '16px' }} />
-                                        <h2 className="fw-bold mb-1">Connexion</h2>
-                                        <p className="text-muted">Accedez a votre compte personnel</p>
+                                <div className="col-12">
+                                    <div className="row g-0 align-items-stretch" style={{ minHeight: '520px' }}>
+                                        {/* Côté gauche : Marque et Fond Premium (Desktop uniquement) */}
+                                        <div className="col-md-5 d-none d-md-flex flex-column justify-content-between p-4 p-lg-5 text-white position-relative overflow-hidden" 
+                                             style={{ background: '#0a1d13', borderTopLeftRadius: 'calc(1.5rem - 1px)', borderBottomLeftRadius: 'calc(1.5rem - 1px)' }}>
+                                            {/* Pattern géométrique en fond */}
+                                            <div style={{ position: 'absolute', inset: 0, opacity: 0.1, backgroundImage: 'linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+                                            {/* Glows */}
+                                            <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '300px', height: '300px', background: '#1ab273', filter: 'blur(90px)', borderRadius: '50%', opacity: 0.5 }}></div>
+                                            <div style={{ position: 'absolute', bottom: '-15%', right: '-15%', width: '250px', height: '250px', background: '#f5b518', filter: 'blur(90px)', borderRadius: '50%', opacity: 0.25 }}></div>
+
+                                            <div className="position-relative z-1 mb-5">
+                                                <div className="bg-white rounded d-inline-flex p-2 shadow-sm">
+                                                    <img src="/images/logoAgro.png" alt="AgroStock" style={{ height: '35px' }} />
+                                                </div>
+                                            </div>
+
+                                            <div className="position-relative z-1 mb-4 my-auto">
+                                                <h3 className="fw-bold mb-3 text-white" style={{ fontSize: '1.9rem', lineHeight: '1.1', letterSpacing: '-0.5px' }}>
+                                                    Reprenez <br/>le contrôle.
+                                                </h3>
+                                                <p style={{ color: '#a7f3d0', fontSize: '0.95rem', lineHeight: '1.6', opacity: 0.9 }}>
+                                                    Gérez vos stocks, développez votre réseau et accélérez votre business agroalimentaire.
+                                                </p>
+                                            </div>
+
+                                            <div className="position-relative z-1 mt-auto pt-4">
+                                                <div className="d-flex align-items-center gap-2" style={{ color: '#6ee7b7', fontSize: '0.8rem', fontWeight: '500' }}>
+                                                    <ShieldCheck size={16} /> <span>Plateforme chiffrée de bout en bout</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Côté droit : Formulaire épuré */}
+                                        <div className="col-12 col-md-7 p-4 p-md-5 bg-white d-flex flex-column justify-content-center h-100" style={{ borderTopRightRadius: 'calc(1.5rem - 1px)', borderBottomRightRadius: 'calc(1.5rem - 1px)' }}>
+                                            {/* Logo mobile */}
+                                            <div className="d-md-none text-center mb-4">
+                                                <img src="/images/logoAgro.png" alt="AgroStock" style={{ height: '45px' }} />
+                                            </div>
+
+                                            <div className="mb-4">
+                                                <h2 className="fw-bold text-dark mb-1" style={{ fontSize: '1.6rem', letterSpacing: '-0.02em' }}>Bon retour 👋</h2>
+                                                <p className="text-muted small">Veuillez renseigner vos informations d'identification</p>
+                                            </div>
+                                            
+                                            <form onSubmit={handleLoginSubmit}>
+                                                {submitError && (
+                                                    <div className="alert alert-danger d-flex align-items-center gap-2 small mb-4 py-2 px-3 border-0 rounded-3" style={{ background: '#fef2f2', color: '#ef4444' }}>
+                                                        <ShieldCheck size={18} /> {submitError}
+                                                    </div>
+                                                )}
+
+                                                <style>{`
+                                                    .pro-input-group { border: 1px solid #e2e8f0; border-radius: 10px; transition: border-color 0.2s, box-shadow 0.2s; background: #fff; overflow: hidden; }
+                                                    .pro-input-group:focus-within { border-color: #105c38; box-shadow: 0 0 0 3px rgba(16,92,56,0.1); }
+                                                    .pro-input-group .input-icon { color: #94a3b8; transition: color 0.2s; }
+                                                    .pro-input-group:focus-within .input-icon { color: #105c38; }
+                                                    .pro-btn { background: #0f291e; color: #fff; border-radius: 10px; font-weight: 600; border: none; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; }
+                                                    .pro-btn:hover { background: #163c2c; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(15, 41, 30, 0.2); color: #fff; }
+                                                `}</style>
+                                                
+                                                <div className="mb-4">
+                                                    <label className="form-label fw-bold text-dark mb-2" style={{ fontSize: '0.85rem' }}>Email ou Téléphone</label>
+                                                    <div className="input-group pro-input-group">
+                                                        <span className="input-group-text bg-white border-0 ps-3 pe-2"><Mail size={18} className="input-icon" /></span>
+                                                        <input type="text" name="email" className="form-control bg-white border-0 py-3 px-2 shadow-none fw-medium" placeholder="votre@email.com / +229..." value={login.email} onChange={handleLoginChange} style={{ fontSize: '0.95rem' }} />
+                                                    </div>
+                                                </div>
+
+                                                <div className="mb-5">
+                                                    <div className="d-flex justify-content-between align-items-center mb-2">
+                                                        <label className="form-label fw-bold text-dark mb-0" style={{ fontSize: '0.85rem' }}>Mot de passe</label>
+                                                        <a href="#" className="text-decoration-none fw-bold" style={{ fontSize: '0.85rem', color: '#1ab273' }}>Mot de passe oublié ?</a>
+                                                    </div>
+                                                    <PasswordInput name="password" value={login.password} onChange={handleLoginChange} />
+                                                </div>
+
+                                                <button type="submit" className="btn pro-btn btn-lg w-100 py-3 d-flex align-items-center justify-content-center gap-2 mb-4" disabled={isLoading} style={{ fontSize: '0.95rem' }}>
+                                                    {isLoading ? <><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Connexion en cours...</> : <>Connexion <ArrowRight size={18} /></>}
+                                                </button>
+
+                                                <div className="text-center text-muted" style={{ fontSize: '0.9rem' }}>
+                                                    Pas encore de compte ?{' '}
+                                                    <button type="button" onClick={() => handleSwitchMode('register')} className="btn btn-link p-0 fw-bold text-decoration-none" style={{ color: '#1ab273' }}>
+                                                        Créez-en un ici
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
-                                    <form onSubmit={handleLoginSubmit}>
-                                        {submitError && (
-                                            <div className="alert alert-danger small mb-3 p-2 text-center">
-                                                {submitError}
-                                            </div>
-                                        )}
-                                        <div className="mb-3">
-                                            <label className="form-label small fw-bold">Email ou Telephone</label>
-                                            <div className="input-group rounded-3 border overflow-hidden">
-                                                <span className="input-group-text bg-light border-0"><Mail size={18} /></span>
-                                                <input type="text" name="email" className="form-control border-0 py-3" placeholder="votre@email.com / +229..." value={login.email} onChange={handleLoginChange} />
-                                            </div>
-                                        </div>
-                                        <div className="mb-4">
-                                            <label className="form-label small fw-bold d-flex justify-content-between">
-                                                Mot de passe
-                                                <a href="#" className="text-success text-decoration-none fw-normal small">Oublie</a>
-                                            </label>
-                                            <PasswordInput name="password" value={login.password} onChange={handleLoginChange} />
-                                        </div>
-                                        <button 
-                                            type="submit" 
-                                            className="btn btn-success btn-lg w-100 py-3 rounded-pill fw-bold shadow-sm mb-4"
-                                            disabled={isLoading}
-                                        >
-                                            {isLoading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : 'Se connecter'}
-                                        </button>
-                                        <p className="text-center text-muted mb-0 small">
-                                            Pas de compte <button type="button" onClick={() => handleSwitchMode('register')} className="btn btn-link p-0 text-success fw-bold text-decoration-none small">Inscrivez-vous</button>
-                                        </p>
-                                    </form>
                                 </div>
                             )}
 
