@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { register as registerRequest } from '../../services/authService';
 import { useAuth } from '../../context/AuthContext';
@@ -196,10 +196,10 @@ const Register = () => {
                   {loading ? 'Inscription...' : "S'inscrire"}
                 </button>
 
-                <div className="text-center">
-                  <span className="text-muted small">Déjà un compte ? </span>
-                  <Link to="/login" className="text-success text-decoration-none fw-bold small">Se connecter</Link>
-                </div>
+                <p className="text-center mt-3 mb-0 small">
+                  <span className="text-muted">Déjà membre ? </span>
+                  <Link to="/login" className="text-success text-decoration-none fw-bold">Connectez-vous</Link>
+                </p>
               </form>
             </div>
           </div>

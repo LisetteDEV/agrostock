@@ -390,154 +390,213 @@ const MesProduits = () => {
                 </div>
             </div>
 
-            {/* Modal Publier un Produit */}
+            {/* Modal Publier un Produit Premium */}
             {showPublishModal && (
                 <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-                     style={{ zIndex: 2000, background: 'rgba(10,29,19,0.7)', backdropFilter: 'blur(5px)' }}>
-                    <div className="card border-0 w-100 shadow-xl overflow-hidden publish-modal-card">
-                        <div className="p-3 p-md-4 bg-white border-bottom d-flex justify-content-between align-items-center">
-                            <h5 className="fw-bold text-dark mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem' }}>
-                                <Package className="text-success" size={20} /> {editingId ? 'Modifier le produit' : 'Nouveau produit'}
-                            </h5>
-                            <button className="btn-close" onClick={() => {
+                     style={{ zIndex: 2000, background: 'rgba(10,29,19,0.7)', backdropFilter: 'blur(8px)' }}>
+                    <div className="card shadow-lg overflow-hidden publish-modal-card border-0" style={{ maxWidth: '650px', width: '100%', borderRadius: '20px' }}>
+                        {/* HEADER */}
+                        <div className="p-4 bg-white border-bottom d-flex justify-content-between align-items-center position-relative">
+                            <div className="position-absolute top-0 start-0 w-100" style={{ height: '4px', background: 'linear-gradient(90deg, #10b981, #059669)'}}></div>
+                            <div className="d-flex align-items-center gap-3">
+                                <div className="d-flex align-items-center justify-content-center rounded-circle" style={{ width: '48px', height: '48px', background: '#ecfdf5', color: '#10b981' }}>
+                                    <Package size={24} />
+                                </div>
+                                <div>
+                                    <h5 className="fw-bold text-dark mb-0" style={{ fontSize: '1.2rem', letterSpacing: '-0.5px' }}>
+                                        {editingId ? 'Modifier le produit' : 'Nouveau produit'}
+                                    </h5>
+                                    <p className="text-muted small mb-0 fw-medium">Renseignez les details pour votre catalogue</p>
+                                </div>
+                            </div>
+                            <button className="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center" onClick={() => {
                                 setShowPublishModal(false); 
                                 setEditingId(null);
                                 setFormData({ nom: '', categorie: '', prix: '', prix_gros: '', mode_vente: 'les_deux', quantite_min_gros: 20, unite_mesure: 'kg', delai_livraison: '', description: '', stock: '' });
                                 setSelectedCategory('');
                                 setProductImage(null);
                                 setProductImagePreview(null);
-                            }}></button>
+                            }} style={{ width: '36px', height: '36px' }}>
+                                <X size={18} />
+                            </button>
                         </div>
-                        <div className="card-body p-3 p-md-4" style={{ overflowY: 'auto', flex: '1 1 auto', background: '#fafbfa' }}>
-                            {errorMsg && <div className="alert alert-danger border-0 rounded-3 small mb-3">{errorMsg}</div>}
-                            <div className="d-flex flex-column gap-3">
-                                <div>
-                                    <label className="form-label small fw-bold text-muted">NOM DU PRODUIT <span className="text-danger">*</span></label>
-                                    <input type="text" className="form-control rounded-3 py-2" placeholder="Ex: Farine de Gari fortifiee"
-                                           value={formData.nom} onChange={e => setFormData({...formData, nom: e.target.value})} />
-                                </div>
 
-                                <div ref={catDropdownRef} className="position-relative">
-                                    <label className="form-label small fw-bold text-muted">CATEGORIE <span className="text-danger">*</span></label>
-                                    <div
-                                        className="form-control rounded-3 py-2 d-flex align-items-center justify-content-between"
-                                        style={{ cursor: 'pointer', background: '#fff' }}
-                                        onClick={() => setShowCategoryDropdown(v => !v)}>
-                                        <span className={selectedCategory ? 'text-dark' : 'text-muted'} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: '8px' }}>
-                                            {selectedCategory || 'Selectionner une categorie'}
-                                        </span>
-                                        <ChevronDown size={18} className={`text-muted flex-shrink-0 ${showCategoryDropdown ? 'arrow-open' : ''}`} />
+                        {/* BODY */}
+                        <div className="card-body p-0" style={{ overflowY: 'auto', flex: '1 1 auto', background: '#f8fafc' }}>
+                            <div className="p-4">
+                                {errorMsg && (
+                                    <div className="alert border-0 rounded-4 mb-4 d-flex align-items-center gap-2" style={{ background: '#fef2f2', color: '#dc2626' }}>
+                                        <AlertCircle size={18} /> {errorMsg}
                                     </div>
-                                    {showCategoryDropdown && (
-                                        <div className="position-absolute top-100 start-0 w-100 bg-white border rounded-3 shadow-lg mt-1 custom-dropdown-list" style={{ zIndex: 10 }}>
-                                            {categories.map((cat, i) => (
-                                                <div key={i}
-                                                    className={`px-3 py-2 d-flex align-items-center gap-2 dropdown-item-custom ${selectedCategory === cat.nom ? 'dropdown-item-selected' : ''}`}
-                                                    onClick={() => { setSelectedCategory(cat.nom); setShowCategoryDropdown(false); }}>
-                                                    {selectedCategory === cat.nom && <Check size={16} className="text-success flex-shrink-0" />}
-                                                    <span>{cat.nom}</span>
-                                                </div>
-                                            ))}
+                                )}
+
+                                <div className="premium-form-section bg-white p-4 rounded-4 shadow-sm mb-4 border" style={{ borderColor: '#e2e8f0' }}>
+                                    <h6 className="fw-bold mb-4 d-flex align-items-center gap-2" style={{ color: '#0f172a' }}>
+                                        <div style={{ width:'8px', height:'8px', borderRadius:'50%', background:'#10b981'}}></div>
+                                        Informations generales
+                                    </h6>
+                                    
+                                    <div className="row g-4">
+                                        <div className="col-12 text-start">
+                                            <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>NOM DU PRODUIT <span className="text-danger">*</span></label>
+                                            <input type="text" className="form-control premium-input py-2" placeholder="Ex: Farine de Gari fortifiee"
+                                                value={formData.nom} onChange={e => setFormData({...formData, nom: e.target.value})} />
                                         </div>
-                                    )}
-                                </div>
 
-                                <div className="row g-3">
-                                    <div className="col-sm-6">
-                                        <label className="form-label small fw-bold text-muted">PRIX DETAIL (FCFA) <span className="text-danger">*</span></label>
-                                        <input type="number" className="form-control rounded-3 py-2" placeholder="0"
-                                               value={formData.prix} onChange={e => setFormData({...formData, prix: e.target.value})} />
-                                    </div>
-                                    <div className="col-sm-6">
-                                        <label className="form-label small fw-bold text-muted">PRIX DE GROS (FCFA)</label>
-                                        <input type="number" className="form-control rounded-3 py-2" placeholder="Optionnel"
-                                               value={formData.prix_gros} onChange={e => setFormData({...formData, prix_gros: e.target.value})} />
-                                    </div>                                    <div className="col-sm-6">
-                                        <label className="form-label small fw-bold text-muted">MODE DE VENTE</label>
-                                        <select className="form-select rounded-3 py-2" value={formData.mode_vente} onChange={e => setFormData({...formData, mode_vente: e.target.value})}>
-                                            <option value="les_deux">Gros et detail</option>
-                                            <option value="detail">Detail uniquement</option>
-                                            <option value="gros">Gros uniquement</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-sm-6">
-                                        <label className="form-label small fw-bold text-muted">QUANTITE MIN GROS</label>
-                                        <input type="number" className="form-control rounded-3 py-2" value={20} readOnly />
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <label className="form-label small fw-bold text-muted">UNITE MESURE</label>
-                                        <select className="form-select rounded-3 py-2" value={formData.unite_mesure} onChange={e => setFormData({...formData, unite_mesure: e.target.value})}>
-                                            <option value="kg">Kilogramme (kg)</option>
-                                            <option value="g">Gramme (g)</option>
-                                            <option value="litre">Litre (L)</option>
-                                            <option value="bouteille">Bouteille</option>
-                                            <option value="sac">Sac</option>
-                                            <option value="carton">Carton</option>
-                                            <option value="unite">Unite</option>
-                                        </select>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <label className="form-label small fw-bold text-muted">STOCK</label>
-                                        <input type="number" className="form-control rounded-3 py-2" placeholder="0"
-                                               value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} />
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <label className="form-label small fw-bold text-muted">DELAI LIVRAISON (en jours)</label>
-                                        <input type="number" className="form-control rounded-3 py-2" placeholder="Ex: 2"
-                                               value={formData.delai_livraison} onChange={e => setFormData({...formData, delai_livraison: e.target.value})} />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="form-label small fw-bold text-muted">DESCRIPTION</label>
-                                    <textarea className="form-control rounded-3" rows="3" placeholder="Decrivez votre produit..."
-                                              value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}></textarea>
-                                </div>
-
-                                <div>
-                                    <label className="form-label small fw-bold text-muted">PHOTO DU PRODUIT</label>
-                                    <input type="file" ref={fileInputRef} accept="image/*" className="d-none"
-                                           onChange={(e) => {
-                                               const file = e.target.files[0];
-                                               if (file) { setProductImage(file); setProductImagePreview(URL.createObjectURL(file)); }
-                                           }} />
-                                    <div className="border border-2 border-dashed rounded-3 p-4 text-center bg-white"
-                                         style={{ cursor: 'pointer' }} onClick={() => fileInputRef.current?.click()}>
-                                        {productImagePreview ? (
-                                            <div>
-                                                <img src={productImagePreview} alt="Apercu" className="rounded-3 mb-2" style={{ maxHeight: '140px', maxWidth: '100%', objectFit: 'cover' }} />
-                                                <p className="small text-success fw-bold mb-0">{productImage?.name}</p>
-                                                <p className="small text-muted mb-0">Cliquez pour changer</p>
+                                        <div className="col-12 text-start" ref={catDropdownRef}>
+                                            <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>CATEGORIE <span className="text-danger">*</span></label>
+                                            <div className="position-relative">
+                                                <div
+                                                    className="form-control premium-input py-2 d-flex align-items-center justify-content-between"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() => setShowCategoryDropdown(v => !v)}>
+                                                    <span className={selectedCategory ? 'text-dark fw-medium' : 'text-muted'} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                        {selectedCategory || 'Selectionner une categorie'}
+                                                    </span>
+                                                    <ChevronDown size={18} className={`text-muted transition-transform ${showCategoryDropdown ? 'rotate-180' : ''}`} />
+                                                </div>
+                                                {showCategoryDropdown && (
+                                                    <div className="position-absolute top-100 start-0 w-100 bg-white border rounded-3 shadow-lg mt-1 custom-dropdown-list" style={{ zIndex: 10 }}>
+                                                        {categories.map((cat, i) => (
+                                                            <div key={i}
+                                                                className={`px-3 py-2 d-flex align-items-center gap-2 dropdown-item-custom ${selectedCategory === cat.nom ? 'dropdown-item-selected' : ''}`}
+                                                                onClick={() => { setSelectedCategory(cat.nom); setShowCategoryDropdown(false); }}>
+                                                                {selectedCategory === cat.nom ? <Check size={16} className="text-emerald-500 flex-shrink-0" /> : <div style={{width:'16px'}}></div>}
+                                                                <span className={selectedCategory === cat.nom ? 'fw-bold text-emerald-700' : 'text-slate-600'}>{cat.nom}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
                                             </div>
+                                        </div>
+                                        
+                                        <div className="col-12 text-start">
+                                            <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>DESCRIPTION</label>
+                                            <textarea className="form-control premium-input" rows="3" placeholder="Decrivez votre produit pour attirer les clients..."
+                                                    value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="premium-form-section bg-white p-4 rounded-4 shadow-sm mb-4 border" style={{ borderColor: '#e2e8f0' }}>
+                                    <h6 className="fw-bold mb-4 d-flex align-items-center gap-2" style={{ color: '#0f172a' }}>
+                                        <div style={{ width:'8px', height:'8px', borderRadius:'50%', background:'#3b82f6'}}></div>
+                                        Tarifs et Stocks
+                                    </h6>
+                                    
+                                    <div className="row g-4 text-start">
+                                        <div className="col-sm-6">
+                                            <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>PRIX DETAIL <span className="text-danger">*</span></label>
+                                            <div className="input-group premium-input-group overflow-hidden rounded-3">
+                                                <input type="number" className="form-control premium-input border-0 bg-transparent py-2 shadow-none" placeholder="0"
+                                                    value={formData.prix} onChange={e => setFormData({...formData, prix: e.target.value})} />
+                                                <span className="input-group-text bg-transparent border-0 text-muted fw-bold">FCFA</span>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>PRIX DE GROS</label>
+                                            <div className="input-group premium-input-group overflow-hidden rounded-3">
+                                                <input type="number" className="form-control premium-input border-0 bg-transparent py-2 shadow-none" placeholder="Optionnel"
+                                                    value={formData.prix_gros} onChange={e => setFormData({...formData, prix_gros: e.target.value})} />
+                                                <span className="input-group-text bg-transparent border-0 text-muted fw-bold">FCFA</span>
+                                            </div>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>MODE DE VENTE</label>
+                                            <select className="form-select premium-input py-2 fw-medium text-dark rounded-3" value={formData.mode_vente} onChange={e => setFormData({...formData, mode_vente: e.target.value})}>
+                                                <option value="les_deux">Gros et detail</option>
+                                                <option value="detail">Detail uniquement</option>
+                                                <option value="gros">Gros uniquement</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>QTE MIN GROS</label>
+                                            <input type="number" className="form-control premium-input py-2 text-muted bg-light rounded-3 shadow-none" value={20} readOnly />
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>UNITE MESURE</label>
+                                            <select className="form-select premium-input py-2 fw-medium text-dark rounded-3" value={formData.unite_mesure} onChange={e => setFormData({...formData, unite_mesure: e.target.value})}>
+                                                <option value="kg">Kilogramme (kg)</option>
+                                                <option value="g">Gramme (g)</option>
+                                                <option value="litre">Litre (L)</option>
+                                                <option value="bouteille">Bouteille</option>
+                                                <option value="sac">Sac</option>
+                                                <option value="carton">Carton</option>
+                                                <option value="unite">Unite</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>STOCK</label>
+                                            <input type="number" className="form-control premium-input py-2 fw-medium text-dark rounded-3 shadow-none" placeholder="0"
+                                                value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} />
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>DELAI (JRS)</label>
+                                            <input type="number" className="form-control premium-input py-2 fw-medium text-dark rounded-3 shadow-none" placeholder="Ex: 2"
+                                                value={formData.delai_livraison} onChange={e => setFormData({...formData, delai_livraison: e.target.value})} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="premium-form-section bg-white p-4 rounded-4 shadow-sm border" style={{ borderColor: '#e2e8f0' }}>
+                                    <h6 className="fw-bold mb-4 d-flex align-items-center gap-2 text-start" style={{ color: '#0f172a' }}>
+                                        <div style={{ width:'8px', height:'8px', borderRadius:'50%', background:'#8b5cf6'}}></div>
+                                        Photo du produit
+                                    </h6>
+                                    
+                                    <input type="file" ref={fileInputRef} accept="image/*" className="d-none"
+                                        onChange={(e) => {
+                                            const file = e.target.files[0];
+                                            if (file) { setProductImage(file); setProductImagePreview(URL.createObjectURL(file)); }
+                                        }} />
+                                        
+                                    <div className="upload-zone rounded-4 p-5 text-center position-relative overflow-hidden"
+                                        style={{ cursor: 'pointer', background: productImagePreview ? '#000' : '#f8fafc', border: productImagePreview ? 'none' : '2px dashed #cbd5e1', transition: 'all 0.3s' }} 
+                                        onClick={() => fileInputRef.current?.click()}
+                                    >
+                                        {productImagePreview ? (
+                                            <>
+                                                <img src={productImagePreview} alt="Apercu" className="w-100 h-100 object-fit-cover position-absolute top-0 start-0 opacity-50" />
+                                                <div className="position-relative z-1 d-flex flex-column align-items-center justify-content-center h-100">
+                                                    <div className="bg-white rounded-circle p-2 shadow mb-2"><CheckCircle2 size={24} className="text-emerald-500" /></div>
+                                                    <p className="fw-bold text-white mb-0 mt-2 text-shadow-sm">{productImage?.name || 'Image selectionnee'}</p>
+                                                    <span className="badge bg-dark bg-opacity-75 mt-2 fw-medium px-3 py-2">Cliquer pour remplacer</span>
+                                                </div>
+                                            </>
                                         ) : (
-                                            <div>
-                                                <ImageIcon className="text-muted mb-2" size={32} />
-                                                <p className="small text-muted mb-1 fw-medium">Cliquez pour ajouter une photo</p>
-                                                <p className="small text-muted mb-0" style={{ fontSize: '0.75rem' }}>JPG, PNG ou WEBP (max 5 Mo)</p>
+                                            <div className="d-flex flex-column align-items-center">
+                                                <div className="bg-white rounded-circle p-3 shadow-sm mb-3">
+                                                    <ImageIcon className="text-indigo-500" size={32} />
+                                                </div>
+                                                <h6 className="fw-bold text-slate-700 mb-1">Glissez une image ou Parcourez</h6>
+                                                <p className="small text-slate-500 mb-0">Formats supportes: JPG, PNG, WEBP (Max 5 Mo)</p>
                                             </div>
                                         )}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="p-3 p-md-4 bg-white border-top d-flex flex-column flex-sm-row justify-content-end gap-2">
-                            <button className="btn btn-link text-muted fw-bold text-decoration-none" onClick={() => {
+
+                        {/* FOOTER */}
+                        <div className="p-4 bg-white border-top d-flex flex-column flex-sm-row justify-content-end gap-3 align-items-center">
+                            <button className="btn fw-bold text-slate-500 hover-text-slate-800" onClick={() => {
                                 setShowPublishModal(false); 
                                 setEditingId(null);
                                 setFormData({ nom: '', categorie: '', prix: '', prix_gros: '', mode_vente: 'les_deux', quantite_min_gros: 20, unite_mesure: 'kg', delai_livraison: '', description: '', stock: '' });
                                 setSelectedCategory('');
                                 setProductImage(null);
                                 setProductImagePreview(null);
-                            }} disabled={submitting}>Annuler</button>
-                            <button className="btn btn-success py-2 rounded-pill fw-bold shadow-sm px-4 d-flex align-items-center justify-content-center gap-2"
-                                    onClick={handleSubmit} disabled={submitting}>
-                                {submitting ? <><span className="spinner-border spinner-border-sm"></span> Traitement...</> : (editingId ? 'Enregistrer' : 'Publier le produit')}
+                            }} disabled={submitting} style={{ background: 'transparent' }}>
+                                Annuler
+                            </button>
+                            <button className="btn btn-success py-2 px-5 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 premium-btn-submit"
+                                onClick={handleSubmit} disabled={submitting} style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none', fontSize: '1rem' }}>
+                                {submitting ? <><span className="spinner-border spinner-border-sm"></span> Traitement...</> : (editingId ? 'Mettre a jour' : 'Publier le produit')}
                             </button>
                         </div>
                     </div>
                 </div>
             )}
-
 
             {deleteProductId && (
                 <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ zIndex: 2200, background: 'rgba(0,0,0,0.55)' }}>
@@ -562,22 +621,57 @@ const MesProduits = () => {
                 .dropdown-item-custom:hover { background-color: #f0faf5; }
                 .dropdown-item-selected { background-color: #e8f8f0 !important; font-weight: 600; }
                 .dropdown-item-custom span { word-break: normal; white-space: normal; line-height: 1.4; }
-                .arrow-open { transform: rotate(180deg); transition: transform 0.2s; }
                 .publish-modal-card { display: flex; flex-direction: column; }
                 @media (min-width: 768px) {
-                    .publish-modal-card {
-                        max-width: 600px; max-height: 90vh;
-                        height: auto !important; border-radius: 1rem !important;
-                    }
+                    .publish-modal-card { max-height: 90vh; height: auto !important; }
                 }
                 @media (max-width: 767px) {
                     .publish-modal-card { height: 100%; border-radius: 0 !important; }
                 }
-                input:focus, textarea:focus {
-                    box-shadow: 0 0 0 3px rgba(26,178,115,0.1) !important;
-                    border-color: #1ab273 !important;
+
+                /* ---- PREMIUM UI CSS CLASSES ---- */
+                .premium-input {
+                    background: #f8fafc;
+                    border: 1px solid #e2e8f0;
+                    color: #0f172a;
+                    font-weight: 500;
+                    transition: all 0.2s;
+                    box-shadow: none !important;
                 }
+                .premium-input:focus {
+                    background: #ffffff;
+                    border-color: #10b981 !important;
+                    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15) !important;
+                }
+                .premium-input-group {
+                    background: #f8fafc;
+                    border: 1px solid #e2e8f0;
+                    transition: all 0.2s;
+                }
+                .premium-input-group:focus-within {
+                    background: #ffffff;
+                    border-color: #10b981;
+                    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+                }
+                .upload-zone:hover {
+                    border-color: #10b981 !important;
+                    background: #f1f5f9;
+                }
+                .text-shadow-sm { text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+                .text-slate-500 { color: #64748b; }
+                .text-slate-600 { color: #475569; }
+                .text-slate-700 { color: #334155; }
+                .text-emerald-500 { color: #10b981; }
+                .text-emerald-700 { color: #047857; }
+                .text-indigo-500 { color: #6366f1; }
+                .hover-text-slate-800:hover { color: #1e293b !important; }
+                .premium-btn-submit { transition: transform 0.2s, box-shadow 0.2s; }
+                .premium-btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16,185,129,0.3) !important; color: white !important; }
+                .rotate-180 { transform: rotate(180deg); }
+                .transition-transform { transition: transform 0.2s; }
             `}</style>
+
+
         </div>
     );
 };

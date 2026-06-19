@@ -442,12 +442,12 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                     {isLoading ? <><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Connexion en cours...</> : <>Connexion <ArrowRight size={18} /></>}
                                                 </button>
 
-                                                <div className="text-center text-muted" style={{ fontSize: '0.9rem' }}>
-                                                    Pas encore de compte ?{' '}
-                                                    <button type="button" onClick={() => handleSwitchMode('register')} className="btn btn-link p-0 fw-bold text-decoration-none" style={{ color: '#1ab273' }}>
+                                                <p className="text-center mt-4 mb-0" style={{ fontSize: '0.9rem' }}>
+                                                    <span className="text-muted">Pas encore de compte ? </span>
+                                                    <button type="button" onClick={() => handleSwitchMode('register')} className="btn btn-link p-0 fw-bold text-decoration-none" style={{ color: '#1ab273', verticalAlign: 'baseline' }}>
                                                         Créez-en un ici
                                                     </button>
-                                                </div>
+                                                </p>
                                             </form>
                                         </div>
                                     </div>
@@ -487,8 +487,9 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <p className="mt-4 text-muted small mb-0">
-                                                Deja membre <button type="button" onClick={() => handleSwitchMode('login')} className="btn btn-link p-0 text-success fw-bold text-decoration-none small">Connectez-vous</button>
+                                            <p className="text-center mt-4 mb-0 small">
+                                                <span className="text-muted">Déjà membre ? </span>
+                                                <button type="button" onClick={() => handleSwitchMode('login')} className="btn btn-link p-0 fw-bold text-decoration-none" style={{ color: '#1ab273', verticalAlign: 'baseline' }}>Connectez-vous</button>
                                             </p>
                                         </div>
                                     )}

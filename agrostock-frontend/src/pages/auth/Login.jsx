@@ -80,10 +80,10 @@ const Login = () => {
                   {loading ? 'Connexion...' : 'Connexion'}
                 </button>
 
-                <div className="text-center">
-                  <span className="text-muted small">Nouveau sur AgroStock ? </span>
-                  <Link to="/register" className="text-success text-decoration-none fw-bold small">Créer un compte</Link>
-                </div>
+                <p className="text-center mt-3 mb-0 small">
+                  <span className="text-muted">Pas encore de compte ? </span>
+                  <Link to="/register" className="text-success text-decoration-none fw-bold">Créer compte ici</Link>
+                </p>
               </form>
             </div>
           </div>

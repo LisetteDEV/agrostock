@@ -45,29 +45,7 @@ const ESCROW_HOLD_STATUSES = [
 const normalizeStatus = (status) =>
   status === "en_cours" ? "en_cours_livraison" : status;
 
-// Mini sparkline SVG component
-const MiniSparkline = ({ color }) => (
-  <svg width="80" height="32" viewBox="0 0 80 32" fill="none" style={{ opacity: 0.5 }}>
-    <path
-      d="M0 28 Q10 20, 16 22 T32 18 T48 12 T64 16 T80 4"
-      stroke={color}
-      strokeWidth="2"
-      fill="none"
-      strokeLinecap="round"
-    />
-    <path
-      d="M0 28 Q10 20, 16 22 T32 18 T48 12 T64 16 T80 4 V32 H0Z"
-      fill={`url(#grad-${color.replace('#', '')})`}
-      opacity="0.15"
-    />
-    <defs>
-      <linearGradient id={`grad-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stopColor={color} stopOpacity="0.4" />
-        <stop offset="100%" stopColor={color} stopOpacity="0" />
-      </linearGradient>
-    </defs>
-  </svg>
-);
+
 
 const Dashboard = () => {
   const { user, token } = useAuth();
@@ -259,7 +237,7 @@ const Dashboard = () => {
 
   return (
     <div className="dash-senior">
-      {/* ── HERO BANNER ── */}
+      {/* ── HERO BANNER (en haut) ── */}
       <div className="hero-banner position-relative overflow-hidden mb-4" style={{ borderRadius: '20px', background: 'linear-gradient(135deg, #0a1d13 0%, #0f3524 50%, #105c38 100%)', padding: '2rem 2.5rem' }}>
         {/* Grid pattern overlay */}
         <div style={{ position: 'absolute', inset: 0, opacity: 0.06, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1px)', backgroundSize: '22px 22px' }}></div>
@@ -313,13 +291,6 @@ const Dashboard = () => {
                   <div className="d-flex align-items-center justify-content-center" style={{ width: '44px', height: '44px', borderRadius: '14px', background: s.accent, color: '#fff', flexShrink: 0, boxShadow: `0 6px 15px ${s.color}30` }}>
                     {s.icon}
                   </div>
-                </div>
-                {/* Mini sparkline */}
-                <div className="mt-2 d-flex align-items-end justify-content-between">
-                  <MiniSparkline color={s.color} />
-                  <span className="d-flex align-items-center gap-1 fw-bold" style={{ fontSize: '0.7rem', color: s.color }}>
-                    <TrendingUp size={12} /> Actif
-                  </span>
                 </div>
               </div>
             </div>

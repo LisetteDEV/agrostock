@@ -163,8 +163,10 @@ const Dashboard = () => {
   );
 
   const handleLogout = () => {
-    logout();
     navigate("/", { replace: true });
+    setTimeout(() => {
+      logout();
+    }, 10);
   };
 
   const getStatusMeta = (statut) => {
