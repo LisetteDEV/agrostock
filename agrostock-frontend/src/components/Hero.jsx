@@ -106,7 +106,7 @@ const Hero = () => {
                             transition={{ duration: 0.8, delay: 0.2 }}
                         >
                             <h1 className="fw-bold text-white mb-4 lh-sm px-md-5" style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', textShadow: '0 4px 15px rgba(0,0,0,0.5)' }}>
-                                La plateforme des produits <span className="text-success">agroalimentaires</span> transformes au Benin.
+                                La plateforme des produits <span className="text-success">agroalimentaires</span> transformés au Benin.
                             </h1>
 
                             <p className="lead text-white mb-5 mx-auto px-md-5" style={{ maxWidth: '850px', lineHeight: '1.7', textShadow: '0 2px 8px rgba(0,0,0,0.6)', fontSize: 'clamp(1.1rem, 3vw, 1.35rem)', fontWeight: '500', opacity: 0.95 }}>

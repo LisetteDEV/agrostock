@@ -1,7 +1,10 @@
-﻿import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { Heart } from 'lucide-react';
 import { API_URL } from '../../services/config';
+import { useFavoris } from '../../context/FavorisContext';
+import { useAuth } from '../../context/AuthContext';
 
 const API_BASE = `${API_URL}`;
 
@@ -12,6 +15,8 @@ const Catalogue = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { isFavori, toggleFavori } = useFavoris();
+    const { user } = useAuth();
 
     useEffect(() => {
         Promise.all([
@@ -192,6 +197,23 @@ const Catalogue = () => {
                                             >
                                                 {stock.label}
                                             </span>
+                                            {/* BOUTON FAVORI */}
+                                            {user && (
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => { e.preventDefault(); toggleFavori(product); }}
+                                                    className="position-absolute top-0 end-0 m-2 border-0 bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm favori-btn"
+                                                    style={{ width: '36px', height: '36px', transition: 'transform 0.2s' }}
+                                                    title={isFavori(product.id) ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                                                >
+                                                    <Heart
+                                                        size={18}
+                                                        fill={isFavori(product.id) ? '#dc3545' : 'none'}
+                                                        color={isFavori(product.id) ? '#dc3545' : '#94a3b8'}
+                                                        style={{ transition: 'all 0.2s' }}
+                                                    />
+                                                </button>
+                                            )}
                                         </div>
 
                                         <div className="card-body d-flex flex-column">

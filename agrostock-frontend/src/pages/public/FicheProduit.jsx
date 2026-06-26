@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Heart } from 'lucide-react';
 import { usePanier } from '../../context/PanierContext';
 import { useAuth } from '../../context/AuthContext';
+import { useFavoris } from '../../context/FavorisContext';
 import { API_URL } from '../../services/config';
 
 const API_BASE = `${API_URL}`;
@@ -12,6 +14,7 @@ const FicheProduit = () => {
     const navigate = useNavigate();
     const { addToPanier } = usePanier();
     const { user } = useAuth();
+    const { isFavori, toggleFavori } = useFavoris();
 
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -201,6 +204,23 @@ const FicheProduit = () => {
                                 >
                                     Ajouter au Panier
                                 </button>
+                                {user && (
+                                    <button
+                                        type="button"
+                                        onClick={() => toggleFavori(product)}
+                                        className="btn py-3 px-4 rounded-pill fw-bold d-flex align-items-center gap-2 border"
+                                        style={{
+                                            background: isFavori(product.id) ? '#fff0f0' : '#fff',
+                                            color: isFavori(product.id) ? '#dc3545' : '#64748b',
+                                            borderColor: isFavori(product.id) ? '#dc3545' : '#e2e8f0',
+                                            transition: 'all 0.2s'
+                                        }}
+                                        title={isFavori(product.id) ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                                    >
+                                        <Heart size={18} fill={isFavori(product.id) ? '#dc3545' : 'none'} color={isFavori(product.id) ? '#dc3545' : '#64748b'} />
+                                        {isFavori(product.id) ? 'Favori' : 'Favoris'}
+                                    </button>
+                                )}
                             </div>
 
                             <hr style={{ borderColor: '#e8f5ee' }} />

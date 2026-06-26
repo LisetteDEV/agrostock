@@ -243,7 +243,7 @@ const Commandes = () => {
   const formatPrice = (val) => Number(val || 0).toLocaleString("fr-FR") + " FCFA";
 
   return (
-    <div className="bg-light min-vh-100 pb-5" style={{ paddingTop: "100px" }}>
+    <div className="bg-light min-vh-100 pb-5 p-4 p-lg-5">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <div>

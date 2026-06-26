@@ -86,17 +86,13 @@ const Panier = () => {
                             <div className="bg-white rounded-4 shadow-sm p-4 position-sticky" style={{ top: '100px' }}>
                                 <h5 className="fw-bold mb-4">Resume de la commande</h5>
                                 <div className="d-flex justify-content-between mb-3 text-muted">
-                                    <span>Sous-total</span>
+                                    <span>Sous-total des produits</span>
                                     <span>{formatPrice(totalPanier)}</span>
                                 </div>
-                                <div className="d-flex justify-content-between mb-4 text-muted">
-                                    <span>Frais de livraison</span>
-                                    <span className="small bg-light px-2 rounded">Calcules apres</span>
-                                </div>
-                                <hr />
-                                <div className="d-flex justify-content-between mb-3">
-                                    <span className="fw-bold text-dark fs-5">Total</span>
-                                    <span className="fw-bold text-success fs-5">{formatPrice(totalPanier)}</span>
+                                <hr className="text-secondary opacity-25" />
+                                <div className="d-flex justify-content-between mb-4">
+                                    <span className="fw-bold text-dark fs-5">Total estimé</span>
+                                    <span className="fw-bolder text-success fs-5">{formatPrice(totalPanier)}</span>
                                 </div>
 
                                 {invalidGrossItems.length > 0 && (

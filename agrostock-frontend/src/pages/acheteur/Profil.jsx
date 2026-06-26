@@ -25,7 +25,7 @@ const Profil = () => {
     };
 
     return (
-        <div className="bg-light min-vh-100 pb-5" style={{ paddingTop: '100px' }}>
+        <div className="bg-light min-vh-100 pb-5 p-4 p-lg-5">
             <div className="container">
                 <h2 className="fw-bold mb-4" style={{ color: '#0f3a23' }}>Mon Profil</h2>
                 {uiMessage && (

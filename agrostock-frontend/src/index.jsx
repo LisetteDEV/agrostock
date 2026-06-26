@@ -6,6 +6,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './styles.responsive.css';
 import { AuthProvider } from './context/AuthContext';
 import { PanierProvider } from './context/PanierContext';
+import { FavorisProvider } from './context/FavorisContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ScrollToTopButton from './components/layout/ScrollToTopButton';
@@ -29,6 +30,7 @@ import Checkout from './pages/acheteur/Checkout';
 import MesCommandes from './pages/acheteur/Commandes';
 import ProfilAcheteur from './pages/acheteur/Profil';
 import Favoris from './pages/acheteur/Favoris';
+import HistoriqueAvis from './pages/acheteur/Avis';
 import DashboardTransformateur from './pages/transformateur/Dashboard';
 import MesProduits from './pages/transformateur/MesProduits';
 import GestionCommandes from './pages/transformateur/GestionCommandes';
@@ -36,6 +38,7 @@ import Statistiques from './pages/transformateur/Statistiques';
 import ProfilEntreprise from './pages/transformateur/ProfilEntreprise';
 import ParametresTransformateur from './pages/transformateur/Parametres';
 import TransformateurLayout from './components/layout/TransformateurLayout';
+import AcheteurLayout from './components/layout/AcheteurLayout';
 import AdminLayout from './components/layout/AdminLayout';
 import AdminDashboard from './pages/admin/Dashboard';
 import AdminUtilisateurs from './pages/admin/Utilisateurs';
@@ -99,37 +102,18 @@ const AnimatedRoutes = () => {
         </Route>
 
         <Route
-          path="/dashboard-acheteur"
           element={
-            <ProtectedRoute allowedRoles={['acheteur']} redirectPath="/login">
-              <DashboardAcheteur />
+            <ProtectedRoute allowedRoles={['acheteur']} redirectPath="/">
+              <AcheteurLayout />
             </ProtectedRoute>
           }
-        />
-        <Route
-          path="/mes-commandes"
-          element={
-            <ProtectedRoute allowedRoles={['acheteur']} redirectPath="/login">
-              <MesCommandes />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profil"
-          element={
-            <ProtectedRoute allowedRoles={['acheteur']} redirectPath="/login">
-              <ProfilAcheteur />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/favoris"
-          element={
-            <ProtectedRoute allowedRoles={['acheteur']} redirectPath="/login">
-              <Favoris />
-            </ProtectedRoute>
-          }
-        />
+        >
+          <Route path="dashboard-acheteur" element={<DashboardAcheteur />} />
+          <Route path="mes-commandes" element={<MesCommandes />} />
+          <Route path="profil" element={<ProfilAcheteur />} />
+          <Route path="favoris" element={<Favoris />} />
+          <Route path="historique-avis" element={<HistoriqueAvis />} />
+        </Route>
 
         {/* Routes protégées Transformateur */}
         <Route
@@ -161,6 +145,11 @@ const AppContent = () => {
   const isDashboard =
     location.pathname.startsWith('/admin') ||
     location.pathname.startsWith('/dashboard-transformateur') ||
+    location.pathname.startsWith('/dashboard-acheteur') ||
+    location.pathname.startsWith('/mes-commandes') ||
+    location.pathname.startsWith('/profil') ||
+    location.pathname.startsWith('/favoris') ||
+    location.pathname.startsWith('/historique-avis') ||
     location.pathname.startsWith('/admin-portal');
 
   const showAgroBot = !location.pathname.startsWith('/admin') && !location.pathname.startsWith('/admin-portal');
@@ -179,11 +168,13 @@ const AppContent = () => {
 const App = () => {
   return (
     <AuthProvider>
-      <PanierProvider>
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
-      </PanierProvider>
+      <FavorisProvider>
+        <PanierProvider>
+          <BrowserRouter>
+            <AppContent />
+          </BrowserRouter>
+        </PanierProvider>
+      </FavorisProvider>
     </AuthProvider>
   );
 };
