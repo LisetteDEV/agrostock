@@ -115,12 +115,7 @@ const TransformateurLayout = () => {
                             <span className="input-group-text bg-light border-0 ps-3"><Search size={16} className="text-muted" /></span>
                             <input type="text" className="form-control bg-light border-0" placeholder="Rechercher..." style={{ fontSize: '0.85rem' }} />
                         </div>
-                        {/* Bouton déconnexion visible même sur mobile */}
-                        <button type="button" onClick={handleLogout}
-                            className="btn btn-outline-danger btn-sm rounded-pill px-3 d-flex align-items-center gap-1 fw-bold">
-                            <LogOut size={15} />
-                            <span className="d-none d-sm-inline">Déconnexion</span>
-                        </button>
+
                         <div className="bg-success text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm flex-shrink-0"
                              style={{ width: '34px', height: '34px', fontSize: '0.85rem' }}>
                             {user.nom_complet?.charAt(0)}
