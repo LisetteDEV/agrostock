@@ -26,5 +26,7 @@ class DatabaseSeeder extends Seeder
                 'statut' => 'actif',
             ]
         );
+
+        $this->call(CategorieSeeder::class);
     }
 }
