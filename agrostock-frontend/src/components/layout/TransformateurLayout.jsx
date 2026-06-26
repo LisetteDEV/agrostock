@@ -58,7 +58,7 @@ const TransformateurLayout = () => {
                              onError={e => e.target.style.display = 'none'} />
                         <span className="fw-bold fs-5 text-white">AgroStock <span className="text-success">Pro</span></span>
                     </div>
-                    <button type="button" className="btn btn-link text-white p-0" onClick={() => setSidebarOpen(false)}>
+                    <button type="button" className="btn btn-link text-white p-0 d-lg-none" onClick={() => setSidebarOpen(false)}>
                         <X size={24} />
                     </button>
                 </div>
