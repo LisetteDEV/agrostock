@@ -245,7 +245,66 @@ const GestionCommandes = () => {
       )}
 
       {/* ── ORDERS TABLE ── */}
-      <div className="card border-0 rounded-4 shadow-sm overflow-hidden bg-white">
+      {/* MOBILE CARDS */}
+      <div className="d-lg-none mb-4">
+        {filteredOrders.length === 0 ? (
+          <div className="text-center py-5 bg-white rounded-4 shadow-sm border">
+            <div className="d-flex flex-column align-items-center text-muted opacity-50">
+              <ShoppingBag size={40} className="mb-3" />
+              <p className="fw-medium mb-0">Aucune commande pour ce filtre</p>
+            </div>
+          </div>
+        ) : (
+          <div className="d-flex flex-column gap-3">
+            {filteredOrders.map((o) => {
+              const cfg = getStatusConfig(o.status);
+              const initials = (o.client || "C").split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+              return (
+                <div key={o.id} className="bg-white rounded-4 shadow-sm border p-3">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="fw-bold text-dark" style={{ fontFamily: "monospace", letterSpacing: "-0.5px" }}>{o.numero}</span>
+                    <span className="text-muted" style={{ fontSize: "0.85rem" }}>{o.date}</span>
+                  </div>
+                  <div className="d-flex align-items-center gap-3 mb-3">
+                    <div className="gc-avatar d-flex align-items-center justify-content-center rounded-circle fw-bold flex-shrink-0" style={{ width: "36px", height: "36px" }}>
+                      {initials}
+                    </div>
+                    <div>
+                      <div className="fw-bold text-dark" style={{ fontSize: "0.9rem" }}>{o.client}</div>
+                      {o.telephone && <div className="text-muted" style={{ fontSize: "0.78rem" }}>{o.telephone}</div>}
+                    </div>
+                  </div>
+                  
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                      <div className="text-muted small fw-bold text-uppercase mb-1" style={{ fontSize: "0.7rem", letterSpacing: "0.5px" }}>Montant & Articles</div>
+                      <div className="fw-bold text-dark" style={{ fontSize: "0.95rem" }}>{o.total.toLocaleString("fr-FR")} FCFA</div>
+                      <div className="text-muted" style={{ fontSize: "0.8rem" }}>{o.itemsCount} article{o.itemsCount > 1 ? "s" : ""}</div>
+                    </div>
+                    <div className="text-end">
+                      <span className="d-inline-flex align-items-center gap-1 rounded-pill px-2 py-1 fw-bold" style={{ background: cfg.bg, color: cfg.color, fontSize: "0.75rem", textAlign: "right" }}>
+                        <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: cfg.dot, display: "inline-block flex-shrink-0" }}></span>
+                        <span>{getStatusLabel(o.status)}</span>
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <hr className="my-2 opacity-50" />
+                  <div className="text-end mt-2">
+                    <button className="gc-detail-btn d-inline-flex align-items-center justify-content-center w-100 gap-2 fw-bold rounded-pill px-3 py-2 border-0"
+                      onClick={() => { setSelectedOrder(o); setBonCodeInput(o.bon_retrait?.code || ""); setOtpInput(""); }}>
+                      Détails <ArrowRight size={14} />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* DESKTOP TABLE */}
+      <div className="card border-0 rounded-4 shadow-sm overflow-hidden bg-white d-none d-lg-block mb-4">
         <div className="table-responsive">
           <table className="table table-hover align-middle mb-0">
             <thead>

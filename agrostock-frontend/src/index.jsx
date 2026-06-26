@@ -119,7 +119,7 @@ const AnimatedRoutes = () => {
         <Route
           path="/dashboard-transformateur"
           element={
-            <ProtectedRoute allowedRoles={['transformateur']} redirectPath="/login">
+            <ProtectedRoute allowedRoles={['transformateur']} redirectPath="/">
               <TransformateurLayout />
             </ProtectedRoute>
           }

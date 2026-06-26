@@ -356,40 +356,57 @@ const MapSection = () => {
               </div>
 
               <div 
-                className="p-1 bg-white rounded-pill d-flex align-items-center shadow-sm"
-                style={{ border: '1px solid #e2ece5', transition: 'box-shadow 0.3s ease' }}
+                className="p-1 bg-white rounded-pill d-flex align-items-center shadow-sm flex-wrap flex-sm-nowrap gap-2 gap-sm-0"
+                style={{ border: '1px solid #e2ece5', transition: 'box-shadow 0.3s ease', borderRadius: '50px' }}
                 onFocus={(e) => e.currentTarget.style.boxShadow = '0 0 0 4px rgba(26,178,115,0.1)'}
                 onBlur={(e) => e.currentTarget.style.boxShadow = '0 .125rem .25rem rgba(0,0,0,.075)'}
               >
-                <div className="ps-4 pe-2 text-muted">
-                  <Search size={20} color="#1ab273" />
+                <div className="d-flex align-items-center flex-grow-1 w-100 ps-3">
+                  <div className="pe-2 text-muted flex-shrink-0">
+                    <Search size={20} color="#1ab273" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Ville, departement..."
+                    className="form-control border-0 bg-transparent shadow-none px-0"
+                    value={queryInput}
+                    onChange={(e) => setQueryInput(e.target.value)}
+                    onKeyDown={handleEnter}
+                    style={{ fontSize: '0.95rem', fontWeight: 500, minWidth: '100px' }}
+                  />
                 </div>
-                <input
-                  type="text"
-                  placeholder="Ville, département, entreprise..."
-                  className="form-control border-0 bg-transparent shadow-none"
-                  value={queryInput}
-                  onChange={(e) => setQueryInput(e.target.value)}
-                  onKeyDown={handleEnter}
-                  style={{ fontSize: '0.95rem', fontWeight: 500 }}
-                />
                 <button 
-                  className="btn text-white fw-bold border-0 px-4 position-relative me-1 d-flex align-items-center justify-content-center" 
+                  className="btn text-white fw-bold border-0 px-4 position-relative d-flex align-items-center justify-content-center flex-shrink-0 ms-sm-auto w-100" 
                   onClick={handleSearch}
                   style={{ 
                     height: '42px',
                     background: 'linear-gradient(135deg, #1ab273 0%, #128e5a 100%)', 
                     borderRadius: '50px', 
                     transition: 'all 0.3s',
-                    boxShadow: '0 4px 10px rgba(26,178,115,0.2)' 
+                    boxShadow: '0 4px 10px rgba(26,178,115,0.2)',
+                    maxWidth: '100%',
                   }}
                   onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 15px rgba(26,178,115,0.3)'; }}
                   onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 10px rgba(26,178,115,0.2)'; }}
                 >
-                  Rechercher
+                  <span className="d-sm-none">Chercher</span>
+                  <span className="d-none d-sm-inline">Rechercher</span>
                 </button>
               </div>
             </div>
+
+            <style>{`
+              @media (max-width: 576px) {
+                  .bg-white.rounded-pill.d-flex.align-items-center {
+                      border-radius: 12px !important;
+                      padding: 10px !important;
+                  }
+                  .bg-white.rounded-pill.d-flex.align-items-center button {
+                      margin-top: 5px;
+                  }
+              }
+            `}</style>
+
 
             <div className="d-flex flex-wrap gap-2 mb-3">
               {['Cotonou', 'Porto-Novo', 'Parakou', 'Atlantique'].map((chip) => (

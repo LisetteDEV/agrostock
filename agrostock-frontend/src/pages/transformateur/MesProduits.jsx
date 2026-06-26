@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
     Plus, Search, Edit2, Trash2, Eye, Package, AlertCircle, 
     CheckCircle2, Clock, ChevronDown, Check, Image as ImageIcon, X
@@ -309,14 +309,72 @@ const MesProduits = () => {
                 </div>
             </div>
 
-            {/* Products Table */}
-            <div className="card border-0 rounded-4 shadow-sm overflow-hidden">
+            {/* MOBILE CARDS (visible < lg) */}
+            <div className="d-lg-none">
+                {loading ? (
+                    <div className="text-center py-5"><div className="spinner-border text-success" /></div>
+                ) : filteredProducts.length === 0 ? (
+                    <div className="bg-white rounded-4 p-5 text-center shadow-sm">
+                        <div className="opacity-25 mb-3"><Package size={50} /></div>
+                        <p className="text-muted fw-medium">Aucun produit dans votre catalogue.</p>
+                        <button className="btn btn-outline-success btn-sm rounded-pill px-4 mt-2" onClick={() => setShowPublishModal(true)}>
+                            <Plus size={16} /> Ajouter mon premier produit
+                        </button>
+                    </div>
+                ) : (
+                    <div className="row g-3">
+                        {filteredProducts.map(p => {
+                            const photos = p.photos ? (Array.isArray(p.photos) ? p.photos : JSON.parse(p.photos)) : [];
+                            const cat = categories.find(c => c.id === p.categorie_id);
+                            return (
+                                <div key={p.id} className="col-12 col-sm-6">
+                                    <div className="bg-white rounded-4 shadow-sm border p-3 h-100 flex-column d-flex">
+                                        <div className="d-flex gap-3 align-items-start">
+                                            <div className="bg-light rounded-3 overflow-hidden flex-shrink-0" style={{ width: '60px', height: '60px' }}>
+                                                {photos.length > 0
+                                                    ? <img src={`${STORAGE_URL}/${photos[0]}`} className="w-100 h-100 object-fit-cover" alt={p.nom} />
+                                                    : <div className="w-100 h-100 d-flex align-items-center justify-content-center"><Package size={24} className="text-muted opacity-50" /></div>
+                                                }
+                                            </div>
+                                            <div className="flex-grow-1 overflow-hidden">
+                                                <h6 className="fw-bold text-dark mb-1 text-truncate">{p.nom}</h6>
+                                                <span className="badge bg-light text-dark fw-normal rounded-pill px-2" style={{ fontSize: '0.72rem' }}>{cat?.nom || '-'}</span>
+                                            </div>
+                                        </div>
+                                        <hr className="my-2 opacity-50" />
+                                        <div className="d-flex justify-content-between align-items-center mb-3">
+                                            <span className="fw-bold text-success">{Number(p.prix_unitaire).toLocaleString()} FCFA</span>
+                                            <span className={`small fw-medium ${p.stock <= 5 ? 'text-danger' : 'text-muted'}`}>{p.stock ?? '-'} unité(s)</span>
+                                        </div>
+                                        <div className="d-flex justify-content-between align-items-center mt-auto">
+                                            {p.statut === 'actif' ? (
+                                                <span className="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1" style={{ fontSize: '0.75rem' }}>Publié</span>
+                                            ) : p.statut === 'rupture' ? (
+                                                <span className="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-1" style={{ fontSize: '0.75rem' }}>Rupture</span>
+                                            ) : (
+                                                <span className="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-1" style={{ fontSize: '0.75rem' }}>En attente</span>
+                                            )}
+                                            <div className="d-flex gap-2">
+                                                <button className="btn btn-light btn-sm rounded-circle text-primary border-0" onClick={() => handleEdit(p)}><Edit2 size={14} /></button>
+                                                <button className="btn btn-light btn-sm rounded-circle text-danger border-0" onClick={() => handleDelete(p.id)}><Trash2 size={14} /></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+
+            {/* DESKTOP TABLE (hidden < lg) */}
+            <div className="card border-0 rounded-4 shadow-sm overflow-hidden d-none d-lg-block mb-4">
                 <div className="table-responsive">
                     <table className="table table-hover align-middle mb-0">
                         <thead className="table-light">
                             <tr>
                                 <th className="ps-4 py-3 border-0 text-muted small text-uppercase">Produit</th>
-                                <th className="border-0 text-muted small text-uppercase">Categorie</th>
+                                <th className="border-0 text-muted small text-uppercase">Catégorie</th>
                                 <th className="border-0 text-muted small text-uppercase">Prix</th>
                                 <th className="border-0 text-muted small text-uppercase">Stock</th>
                                 <th className="border-0 text-muted small text-uppercase">Statut</th>
@@ -331,10 +389,6 @@ const MesProduits = () => {
                                     <td colSpan="6" className="text-center py-5">
                                         <div className="opacity-25 mb-3"><Package size={50} /></div>
                                         <p className="text-muted fw-medium">Aucun produit dans votre catalogue.</p>
-                                        <button className="btn btn-outline-success btn-sm rounded-pill px-4 mt-2"
-                                                onClick={() => setShowPublishModal(true)}>
-                                            <Plus size={16} /> Ajouter mon premier produit
-                                        </button>
                                     </td>
                                 </tr>
                             ) : filteredProducts.map(p => (
@@ -352,35 +406,27 @@ const MesProduits = () => {
                                             <div className="fw-bold text-dark">{p.nom}</div>
                                         </div>
                                     </td>
-                                    <td><span className="badge bg-light text-dark fw-normal rounded-pill px-3" style={{ fontSize: '0.78rem', whiteSpace: 'normal', textAlign: 'left', lineHeight: '1.3' }}>{categories.find(c => c.id === p.categorie_id)?.nom || '-'}</span></td>
+                                    <td><span className="badge bg-light text-dark fw-normal rounded-pill px-3" style={{ fontSize: '0.78rem' }}>{categories.find(c => c.id === p.categorie_id)?.nom || '-'}</span></td>
                                     <td className="fw-bold text-nowrap">{Number(p.prix_unitaire).toLocaleString()} FCFA</td>
                                     <td>
                                         <div className={`fw-medium text-nowrap ${p.stock <= 5 ? 'text-danger' : 'text-dark'}`}>
-                                            {p.stock ?? '-'} unite(s)
+                                            {p.stock ?? '-'} unité(s)
                                             {p.stock <= 5 && p.stock !== null && <AlertCircle size={14} className="ms-1" />}
                                         </div>
                                     </td>
                                     <td>
                                         {p.statut === 'actif' ? (
-                                            <span className="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1">
-                                                <CheckCircle2 size={12} /> Publie
-                                            </span>
+                                            <span className="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1"><CheckCircle2 size={12} /> Publié</span>
                                         ) : p.statut === 'rupture' ? (
-                                            <span className="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1">
-                                                <X size={12} /> Rupture
-                                            </span>
+                                            <span className="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1"><X size={12} /> Rupture</span>
                                         ) : (
-                                            <span className="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1">
-                                                <Clock size={12} /> En attente
-                                            </span>
+                                            <span className="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1"><Clock size={12} /> En attente</span>
                                         )}
                                     </td>
                                     <td className="pe-4 text-end">
                                         <div className="d-flex justify-content-end gap-2">
-                                            <button className="btn btn-light btn-sm rounded-circle" title="Voir"><Eye size={16} /></button>
-                                            <button className="btn btn-light btn-sm rounded-circle text-primary" title="Modifier" onClick={() => handleEdit(p)}><Edit2 size={16} /></button>
-                                            <button className="btn btn-light btn-sm rounded-circle text-danger" title="Supprimer"
-                                                    onClick={() => handleDelete(p.id)}><Trash2 size={16} /></button>
+                                            <button className="btn btn-light btn-sm rounded-circle text-primary" onClick={() => handleEdit(p)}><Edit2 size={16} /></button>
+                                            <button className="btn btn-light btn-sm rounded-circle text-danger" onClick={() => handleDelete(p.id)}><Trash2 size={16} /></button>
                                         </div>
                                     </td>
                                 </tr>

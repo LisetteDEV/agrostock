@@ -129,7 +129,7 @@ const AdminLayout = () => {
                             <span className="text-white small fw-bold text-truncate">Admin</span>
                         </div>
                         <button onClick={handleLogout} className="btn btn-sm btn-outline-danger rounded-pill px-3 d-flex align-items-center gap-2 fw-bold">
-                            <LogOut size={16} /> <span className="d-none d-md-inline">Deconnexion</span>
+                            <LogOut size={16} /> <span className="d-none d-md-inline">Déconnexion</span>
                         </button>
                     </div>
                 </header>
