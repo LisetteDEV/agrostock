@@ -153,7 +153,7 @@ const MesProduits = () => {
         fd.append('prix_unitaire', formData.prix);
         if (formData.prix_gros) fd.append('prix_gros', formData.prix_gros);
         fd.append('mode_vente', formData.mode_vente);
-        fd.append('quantite_min_gros', '10');
+        fd.append('quantite_min_gros', formData.quantite_min_gros || 1);
         fd.append('unite_mesure', formData.unite_mesure);
         if (formData.delai_livraison) fd.append('delai_livraison', formData.delai_livraison);
         fd.append('description', formData.description);
@@ -557,7 +557,16 @@ const MesProduits = () => {
                                         </div>
                                         <div className="col-sm-6">
                                             <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>QTE MIN GROS</label>
-                                            <input type="number" className="form-control premium-input py-2 text-muted bg-light rounded-3 shadow-none" value={20} readOnly />
+                                            <input
+                                                type="number"
+                                                min="10"
+                                                className="form-control premium-input py-2 fw-medium text-dark rounded-3 shadow-none"
+                                                placeholder="Ex: 10"
+                                                value={formData.quantite_min_gros}
+                                                onChange={e => setFormData({...formData, quantite_min_gros: e.target.value})}
+                                                disabled={formData.mode_vente === 'detail'}
+                                            />
+                                            {formData.mode_vente === 'detail' && <small className="text-muted">Non applicable en vente au détail</small>}
                                         </div>
                                         <div className="col-sm-4">
                                             <label className="form-label fw-bold text-slate-700" style={{ fontSize: '0.85rem' }}>UNITE MESURE</label>
