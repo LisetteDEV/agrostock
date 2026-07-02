@@ -10,7 +10,7 @@ const Panier = () => {
     const { user } = useAuth();
 
     const formatPrice = (val) => (val ? Number(val).toLocaleString('fr-FR') + ' FCFA' : '0 FCFA');
-    const invalidGrossItems = panier.filter((item) => item.mode_achat === 'gros' && Number(item.quantite) < 20);
+    const invalidGrossItems = panier.filter((item) => item.mode_achat === 'gros' && Number(item.quantite) < Number(item.quantite_min_gros || 10));
     const canCheckout = invalidGrossItems.length === 0;
 
     return (
@@ -97,7 +97,7 @@ const Panier = () => {
 
                                 {invalidGrossItems.length > 0 && (
                                     <div className="alert alert-warning small py-2">
-                                        Corrigez les quantites en gros (minimum 20) avant de commander.
+                                        Certains articles en gros n'atteignent pas la quantité minimum requise.
                                     </div>
                                 )}
 
