@@ -91,7 +91,7 @@ class CommandeController extends Controller
 
                 $prixUnitaire = (float) $produit->prix_unitaire;
                 if ($modeAchat === 'gros') {
-                    $minimumGros = max((int) ($produit->quantite_min_gros ?? 20), 20);
+                    $minimumGros = (int) ($produit->quantite_min_gros ?? 10);
                     if ($quantite < $minimumGros) {
                         throw ValidationException::withMessages([
                             'panier' => ["Le minimum en gros pour {$produit->nom} est {$minimumGros} unites."],
