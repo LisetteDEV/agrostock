@@ -825,8 +825,9 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                         ) : (
                                                             <>
                                                                 <div className="mb-3">
-                                                                    <label className="form-label premium-label">Nom de l'entreprise / Marque <span className="text-danger">*</span></label>
-                                                                    <input type="text" name="entreprise" className={`form-control premium-input py-3 px-3 ${errors.entreprise ? 'border-danger' : ''}`} placeholder="Ex: BioSav du Benin" value={data.entreprise} onChange={handleChange} />
+                                                                    <label className="form-label premium-label">Nom de la boutique / Marque / PME <span className="text-danger">*</span></label>
+                                                                    <p className="text-muted small mb-2" style={{ fontSize: '0.8rem', marginTop: '-2px' }}>📍 Ce nom sera affiché publiquement sur le catalogue et vos produits.</p>
+                                                                    <input type="text" name="entreprise" className={`form-control premium-input py-3 px-3 ${errors.entreprise ? 'border-danger' : ''}`} placeholder="Ex: BioSav du Bénin, Chez Marie Bio..." value={data.entreprise} onChange={handleChange} />
                                                                     {fieldError('entreprise')}
                                                                 </div>
                                                                 <div className="row g-3 mb-3">

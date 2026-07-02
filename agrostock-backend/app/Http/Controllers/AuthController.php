@@ -155,6 +155,13 @@ class AuthController extends Controller
             // Generer le jeton Sanctum pour la confirmation de l'inscription
             $token = $user->createToken('auth_token')->plainTextToken;
 
+            // Charger la relation pour que le frontend ait accès à nom_entreprise, etc.
+            if ($user->role === 'transformateur') {
+                $user->load('transformateur');
+            } elseif ($user->role === 'acheteur') {
+                $user->load('acheteur');
+            }
+
             return response()->json([
                 'message' => 'Inscription reussie',
                 'user' => $user,
