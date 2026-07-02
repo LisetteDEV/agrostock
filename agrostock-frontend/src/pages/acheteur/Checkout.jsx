@@ -172,8 +172,8 @@ const Checkout = () => {
           setAccepted(false);
           setSuccessData(data);
           setShowSimulation(false);
-          // Redirection vers le dashboard après 3 secondes
-          setTimeout(() => navigate('/dashboard-acheteur'), 3000);
+          // Redirection vers le dashboard après 5 secondes pour laisser le temps de télécharger le bon
+          setTimeout(() => navigate('/dashboard-acheteur'), 5000);
         } catch (error) {
           setSubmitError(error.message || "Impossible de creer la commande.");
           setShowSimulation(false);
@@ -202,7 +202,7 @@ const Checkout = () => {
     backgroundColor: "#f8fafc"
   };
 
-  if (panier.length === 0) {
+  if (panier.length === 0 && !successData && !showSimulation) {
     return (
       <div className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh", backgroundColor: "#f8fafc" }}>
         <div className="text-center" style={{ ...premiumCardStyle, maxWidth: "500px", width: "90%" }}>
