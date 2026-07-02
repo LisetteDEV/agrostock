@@ -241,7 +241,7 @@ class ProduitController extends Controller
             'prix_unitaire' => $request->prix_unitaire,
             'prix_gros' => $request->prix_gros,
             'mode_vente' => $request->mode_vente,
-            'quantite_min_gros' => 20,
+            'quantite_min_gros' => $request->quantite_min_gros ?? 10,
             'stock' => $request->stock ?? 0,
             'unite_mesure' => $request->unite_mesure ?? 'kg',
             'delai_livraison' => $request->delai_livraison,
