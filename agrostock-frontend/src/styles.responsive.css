@@ -151,3 +151,143 @@ main,
         overflow-wrap: anywhere;
     }
 }
+
+/* ============================================================
+   PREMIUM FORM STYLES - Global
+   ============================================================ */
+
+/* Premium input group (with icon) */
+.pro-input-group {
+    border: 1.5px solid #e8edf5 !important;
+    border-radius: 14px !important;
+    transition: all 0.25s ease !important;
+    background: #f7f9fc !important;
+}
+
+.pro-input-group:focus-within {
+    border-color: #105c38 !important;
+    box-shadow: 0 4px 16px rgba(16, 92, 56, 0.1) !important;
+    background: #ffffff !important;
+}
+
+.pro-input-group .form-control,
+.pro-input-group .input-group-text,
+.pro-input-group .btn {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.pro-input-group .input-icon {
+    color: #b0bec5;
+    transition: color 0.25s;
+}
+
+.pro-input-group:focus-within .input-icon {
+    color: #105c38;
+}
+
+/* Premium standalone inputs / selects / textareas */
+.premium-input {
+    border: 1.5px solid #e8edf5 !important;
+    border-radius: 14px !important;
+    background-color: #f7f9fc !important;
+    transition: all 0.25s ease !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem !important;
+    color: #1a2d1f;
+    box-shadow: none !important;
+    outline: none !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.premium-input:focus {
+    border-color: #105c38 !important;
+    box-shadow: 0 4px 16px rgba(16, 92, 56, 0.1) !important;
+    background-color: #ffffff !important;
+    outline: none !important;
+}
+
+.premium-input::placeholder {
+    color: #aab5c0;
+    font-weight: 400;
+}
+
+/* Select arrow */
+.pro-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 1.25rem center !important;
+    background-size: 14px 14px !important;
+    padding-right: 2.5rem !important;
+}
+
+.pro-select:focus {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23105c38' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+}
+
+/* Premium button */
+.pro-btn {
+    background: linear-gradient(135deg, #105c38 0%, #1ab273 100%) !important;
+    color: #fff !important;
+    border-radius: 14px !important;
+    font-weight: 700 !important;
+    border: none !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 4px 15px rgba(16, 92, 56, 0.25) !important;
+    letter-spacing: 0.01em;
+}
+
+.pro-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #0e4f30 0%, #17a367 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(16, 92, 56, 0.35) !important;
+    color: #fff !important;
+}
+
+.pro-btn:active:not(:disabled) {
+    transform: translateY(0px) !important;
+}
+
+/* Form labels */
+.form-label.premium-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================================
+   NAVBAR - Fixed height, no resize on scroll
+   ============================================================ */
+
+.navbar-fixed-height {
+    height: 64px !important;
+    min-height: 64px !important;
+}
+
+/* AgroStock logo brand text */
+.brand-name {
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: #0a1d13;
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.brand-sub {
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #1ab273;
+    padding-left: 1px;
+    line-height: 1;
+}

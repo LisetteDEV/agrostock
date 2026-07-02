@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock3, Send, Sparkles, MessageSquareQuote } from 'lucide-react';
 import { API_URL } from '../../services/config';
 
@@ -58,12 +58,19 @@ const Contact = () => {
   return (
     <div style={{ background: '#f8fbf7' }}>
       <section
+        className="position-relative overflow-hidden"
         style={{
-          background: 'radial-gradient(circle at 10% 10%, #1ab27322 0%, transparent 50%), linear-gradient(130deg, #0c2418 0%, #0e1f16 45%, #123726 100%)',
-          color: '#f3fbf6',
+            padding: '80px 0 20px 0',
+            background: 'linear-gradient(135deg, rgba(15,46,28,0.85) 0%, rgba(23,84,50,0.85) 100%), url(/images/hero/slide1.jpg) center/cover no-repeat',
+            color: '#f3fbf6',
         }}
       >
-        <div className="container py-5 py-md-6" style={{ paddingTop: '5.5rem', paddingBottom: '5.5rem' }}>
+        {/* Decorative UI elements */}
+        <div className="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style={{ pointerEvents: 'none', opacity: 0.6 }}>
+            <div className="position-absolute" style={{ top: '-10%', left: '-5%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(26, 178, 115, 0.4) 0%, transparent 60%)', borderRadius: '50%' }} />
+            <div className="position-absolute" style={{ bottom: '-20%', right: '10%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(234, 179, 8, 0.15) 0%, transparent 60%)', borderRadius: '50%' }} />
+        </div>
+        <div className="container position-relative z-1 pt-4 pb-2">
           <div className="row align-items-center g-4">
             <div className="col-lg-7">
               <div className="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-3" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.18)' }}>

@@ -89,8 +89,13 @@ const Checkout = () => {
       return;
     }
 
-    if (!ville.trim() || !quartier.trim() || !adresse.trim() || !telephone.trim()) {
-      setSubmitError("Veuillez remplir toutes les informations de livraison.");
+    if (logistiqueMode === 'gozem' && (!ville.trim() || !quartier.trim() || !adresse.trim())) {
+      setSubmitError("Veuillez remplir toutes les informations de livraison (ville, quartier, adresse).");
+      return;
+    }
+
+    if (!telephone.trim()) {
+      setSubmitError("Veuillez renseigner un numéro de contact pour la réception.");
       return;
     }
 
@@ -106,9 +111,9 @@ const Checkout = () => {
       }
     }
 
-    const invalidGross = panier.find((item) => item.mode_achat === "gros" && Number(item.quantite) < Number(item.quantite_min_gros || 20));
+    const invalidGross = panier.find((item) => item.mode_achat === "gros" && Number(item.quantite) < Number(item.quantite_min_gros || 10));
     if (invalidGross) {
-      setSubmitError(`Le produit ${invalidGross.nom} doit etre commande en gros avec minimum 20.`);
+      setSubmitError(`Le produit ${invalidGross.nom} doit etre commande en gros avec minimum ${invalidGross.quantite_min_gros || 10}.`);
       return;
     }
 
@@ -140,13 +145,14 @@ const Checkout = () => {
       setTimeout(async () => {
         try {
           const modeLivraison = logistiqueMode === "livreur_propre" ? "retrait" : "domicile";
+          const isLivreurPropre = logistiqueMode === "livreur_propre";
           const data = await processPayment(
             {
               panier: panierPayload,
               mode_livraison: modeLivraison,
               logistique_mode: logistiqueMode,
-              adresse_livraison: `${adresse} (Q. ${quartier})`,
-              ville_livraison: ville,
+              adresse_livraison: isLivreurPropre ? "Retrait avec livreur propre" : `${adresse} (Q. ${quartier})`,
+              ville_livraison: isLivreurPropre ? "Retrait / Livreur propre" : ville,
               telephone_livraison: telephone,
               paiement_operateur: typePaiement === "mobile_money" ? operateur : "Carte Bancaire",
               numero_mobile: typePaiement === "mobile_money" ? numeroMobile : "Carte terminee par " + numeroCarte.slice(-4),
@@ -159,8 +165,15 @@ const Checkout = () => {
           }
 
           clearPanier();
+          // Réinitialiser le formulaire
+          setVille(''); setQuartier(''); setAdresse('');
+          setNumeroMobile(''); setConfirmNumero('');
+          setNumeroCarte(''); setDateExp(''); setCvc('');
+          setAccepted(false);
           setSuccessData(data);
           setShowSimulation(false);
+          // Redirection vers le dashboard après 3 secondes
+          setTimeout(() => navigate('/dashboard-acheteur'), 3000);
         } catch (error) {
           setSubmitError(error.message || "Impossible de creer la commande.");
           setShowSimulation(false);
@@ -356,24 +369,28 @@ const Checkout = () => {
                     </div>
                   </div>
 
-                  <div className="col-md-6">
-                    <div className="form-floating">
-                      <input type="text" className="form-control shadow-none fw-medium" id="villeInput" placeholder="Ville" value={ville} onChange={(e) => setVille(e.target.value)} required style={{ borderRadius: "12px", border: "2px solid #e2e8f0" }} onFocus={e=>e.target.style.borderColor="#1ab273"} onBlur={e=>e.target.style.borderColor="#e2e8f0"} />
-                      <label htmlFor="villeInput" className="text-muted">Ville</label>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-floating">
-                      <input type="text" className="form-control shadow-none fw-medium" id="quartierInput" placeholder="Quartier" value={quartier} onChange={(e) => setQuartier(e.target.value)} required style={{ borderRadius: "12px", border: "2px solid #e2e8f0" }} onFocus={e=>e.target.style.borderColor="#1ab273"} onBlur={e=>e.target.style.borderColor="#e2e8f0"} />
-                      <label htmlFor="quartierInput" className="text-muted">Quartier</label>
-                    </div>
-                  </div>
-                  <div className="col-12">
-                    <div className="form-floating">
-                      <textarea className="form-control shadow-none fw-medium" id="adresseInput" placeholder="Adresse complète" style={{ height: "100px", borderRadius: "12px", border: "2px solid #e2e8f0", resize: "none" }} value={adresse} onChange={(e) => setAdresse(e.target.value)} required onFocus={e=>e.target.style.borderColor="#1ab273"} onBlur={e=>e.target.style.borderColor="#e2e8f0"}></textarea>
-                      <label htmlFor="adresseInput" className="text-muted">Adresse détaillée complète</label>
-                    </div>
-                  </div>
+                  {logistiqueMode === 'gozem' && (
+                    <>
+                      <div className="col-md-6">
+                        <div className="form-floating">
+                          <input type="text" className="form-control shadow-none fw-medium" id="villeInput" placeholder="Ville" value={ville} onChange={(e) => setVille(e.target.value)} required style={{ borderRadius: "12px", border: "2px solid #e2e8f0" }} onFocus={e=>e.target.style.borderColor="#1ab273"} onBlur={e=>e.target.style.borderColor="#e2e8f0"} />
+                          <label htmlFor="villeInput" className="text-muted">Ville</label>
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="form-floating">
+                          <input type="text" className="form-control shadow-none fw-medium" id="quartierInput" placeholder="Quartier" value={quartier} onChange={(e) => setQuartier(e.target.value)} required style={{ borderRadius: "12px", border: "2px solid #e2e8f0" }} onFocus={e=>e.target.style.borderColor="#1ab273"} onBlur={e=>e.target.style.borderColor="#e2e8f0"} />
+                          <label htmlFor="quartierInput" className="text-muted">Quartier</label>
+                        </div>
+                      </div>
+                      <div className="col-12">
+                        <div className="form-floating">
+                          <textarea className="form-control shadow-none fw-medium" id="adresseInput" placeholder="Adresse complète" style={{ height: "100px", borderRadius: "12px", border: "2px solid #e2e8f0", resize: "none" }} value={adresse} onChange={(e) => setAdresse(e.target.value)} required onFocus={e=>e.target.style.borderColor="#1ab273"} onBlur={e=>e.target.style.borderColor="#e2e8f0"}></textarea>
+                          <label htmlFor="adresseInput" className="text-muted">Adresse détaillée complète</label>
+                        </div>
+                      </div>
+                    </>
+                  )}
                   <div className="col-md-6">
                     <div className="form-floating">
                       <input type="tel" className="form-control shadow-none fw-medium" id="telInput" placeholder="Téléphone" value={telephone} onChange={(e) => setTelephone(e.target.value)} required style={{ borderRadius: "12px", border: "2px solid #e2e8f0" }} onFocus={e=>e.target.style.borderColor="#1ab273"} onBlur={e=>e.target.style.borderColor="#e2e8f0"} />
@@ -408,11 +425,30 @@ const Checkout = () => {
                   {typePaiement === "mobile_money" ? (
                     <div className="animate__animated animate__fadeIn">
                       <div className="d-flex gap-3 mb-4 flex-wrap">
-                        {['MTN', 'Moov', 'Celtis'].map(op => (
-                          <label key={op} className={`form-check flex-fill text-center p-3 rounded-4 cursor-pointer position-relative ${operateur === op ? 'bg-success bg-opacity-10 border-success shadow-sm' : 'bg-white'}`} style={{ cursor: 'pointer', transition: "all 0.2s", border: operateur === op ? '2px solid #1ab273' : '2px solid #e2e8f0', transform: operateur === op ? 'scale(1.02)' : 'none' }}>
-                            <input className="form-check-input mt-0 visually-hidden" type="radio" value={op} checked={operateur === op} onChange={(e) => setOperateur(e.target.value)} />
-                            <span className={`fw-bolder ${operateur === op ? 'text-success' : 'text-secondary'}`} style={{ fontSize: "1.1rem" }}>{op}</span>
-                            {operateur === op && <CheckCircle2 size={16} className="text-success position-absolute top-0 end-0 mt-2 me-2" />}
+                        {[
+                          { name: 'MTN', logo: '/mtn_logo.png', color: '#FFCB00', desc: 'Mobile Money MTN' },
+                          { name: 'Moov', logo: '/moov_logo.png', color: '#005BAC', desc: 'Moov Africa Money' },
+                          { name: 'Celtis', logo: '/celtis_logo.png', color: '#f97316', desc: 'Celtis Mobile' },
+                        ].map(op => (
+                          <label key={op.name} className={`form-check flex-fill text-center p-3 rounded-4 cursor-pointer position-relative ${operateur === op.name ? 'shadow-sm' : 'bg-white'}`}
+                            style={{ cursor: 'pointer', transition: "all 0.2s", border: operateur === op.name ? `2px solid ${op.color}` : '2px solid #e2e8f0', background: operateur === op.name ? `${op.color}18` : '#fff', transform: operateur === op.name ? 'scale(1.03) translateY(-2px)' : 'none' }}>
+                            <input className="form-check-input mt-0 visually-hidden" type="radio" value={op.name} checked={operateur === op.name} onChange={(e) => setOperateur(e.target.value)} />
+                            <div className="d-flex flex-column align-items-center gap-2">
+                              <img
+                                src={op.logo}
+                                alt={op.name}
+                                width="48"
+                                height="48"
+                                style={{ borderRadius: '10px', objectFit: 'contain', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+                                onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                              />
+                              <div style={{ display: 'none', width: '48px', height: '48px', borderRadius: '10px', background: op.color, alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#fff', fontSize: '0.85rem' }}>
+                                {op.name.slice(0, 3)}
+                              </div>
+                              <span className="fw-bold" style={{ fontSize: '0.85rem', color: operateur === op.name ? op.color : '#374151' }}>{op.name}</span>
+                              <span className="text-muted" style={{ fontSize: '0.7rem' }}>{op.desc}</span>
+                            </div>
+                            {operateur === op.name && <CheckCircle2 size={16} className="position-absolute top-0 end-0 mt-2 me-2" style={{ color: op.color }} />}
                           </label>
                         ))}
                       </div>

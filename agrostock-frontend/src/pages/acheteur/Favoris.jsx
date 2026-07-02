@@ -89,9 +89,6 @@ const Favoris = () => {
                                     <div className="d-flex align-items-center justify-content-between mb-3">
                                         <div>
                                             <span className="fw-bolder text-success">{formatPrice(produit.prix_unitaire)}</span>
-                                            {produit.unite_mesure && (
-                                                <span className="text-muted small ms-1">/ {produit.unite_mesure}</span>
-                                            )}
                                         </div>
                                         <span className="badge bg-danger bg-opacity-10 text-danger rounded-pill" style={{ fontSize: '10px' }}>
                                             <Heart size={10} fill="#dc3545" className="me-1" />Favori

@@ -4,39 +4,36 @@ import { CheckCircle2, Target, TrendingUp, Globe, Users, ShieldCheck, Zap, Award
 
 const APropos = () => {
     return (
-        <div style={{ background: '#fcfdfc', minHeight: '100vh', paddingTop: '80px' }}>
+        <div style={{ background: '#fcfdfc', minHeight: '100vh' }}>
             {/* Hero Section */}
-            <section 
-                className="position-relative d-flex align-items-center rounded-bottom-5 overflow-hidden shadow-sm" 
-                style={{ 
-                    height: '40vh', 
-                    minHeight: '350px',
-                    background: 'linear-gradient(135deg, rgba(5,46,22,0.56) 0%, rgba(6,95,70,0.50) 100%), url(/images/background_agro.jpg) center/cover no-repeat'
+            {/* Hero Section */}
+            <section
+                className="position-relative overflow-hidden"
+                style={{
+                    padding: '80px 0 50px 0',
+                    background: 'linear-gradient(135deg, rgba(15,46,28,0.85) 0%, rgba(23,84,50,0.85) 100%), url(/images/hero/slide1.jpg) center/cover no-repeat',
                 }}
             >
-                <div className="position-absolute w-100 h-100 top-0 start-0" style={{ opacity: 0.14 }}>
-                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" strokeWidth="1"/>
-                            </pattern>
-                        </defs>
-                        <rect width="100%" height="100%" fill="url(#grid)" />
-                    </svg>
+                {/* Decorative UI elements */}
+                <div className="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style={{ pointerEvents: 'none', opacity: 0.6 }}>
+                    <div className="position-absolute" style={{ top: '-10%', left: '-5%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(26, 178, 115, 0.4) 0%, transparent 60%)', borderRadius: '50%' }} />
+                    <div className="position-absolute" style={{ bottom: '-20%', right: '10%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(234, 179, 8, 0.15) 0%, transparent 60%)', borderRadius: '50%' }} />
                 </div>
-
-                <div className="container position-relative text-center text-white" style={{ zIndex: 2 }}>
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                    >
-                        <span className="badge rounded-pill px-4 py-2 mb-4 bg-white text-success fw-bold shadow-sm" style={{ letterSpacing: '2px', fontSize: '0.9rem' }}>
-                            A PROPOS D'AGROSTOCK BENIN
-                        </span>
-                        <h1 className="fw-bold mb-3 display-4" style={{ letterSpacing: '-2px' }}>
-                            Mettre la technologie au service <br className="d-none d-lg-block" /> des <span className="text-warning">Transformateurs agroalimentaires locaux</span>
-                        </h1>
-                    </motion.div>
+                
+                <div className="container position-relative z-1">
+                    <div className="row justify-content-center text-center">
+                        <div className="col-lg-8">
+                            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+                                <span className="badge rounded-pill px-4 py-2 mb-4 shadow-sm" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', letterSpacing: '1px', backdropFilter: 'blur(10px)' }}>
+                                    <Target size={14} className="me-2" />
+                                    A PROPOS D'AGROSTOCK BENIN
+                                </span>
+                                <h1 className="fw-bold text-white mb-4 display-4" style={{ letterSpacing: '-1px' }}>
+                                    Mettre la technologie au service <br className="d-none d-lg-block" /> des <span style={{ color: '#4ade80' }}>Transformateurs agroalimentaires locaux</span>
+                                </h1>
+                            </motion.div>
+                        </div>
+                    </div>
                 </div>
             </section>
 

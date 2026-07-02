@@ -3,8 +3,8 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     X, User, Store, ArrowRight, ShieldCheck, Mail, Lock, 
-    Building2, CheckCircle2, ChevronRight, Upload, 
-    FileText, Image as ImageIcon, Briefcase, Smartphone, Eye, EyeOff
+    Building2, CheckCircle2, ChevronRight, ChevronDown, Upload, 
+    FileText, Image as ImageIcon, Briefcase, Smartphone, Eye, EyeOff, Package
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -13,40 +13,185 @@ import { API_URL } from '../../services/config';
 const PasswordInput = ({ placeholder = '••••••••', value, onChange, name }) => {
     const [show, setShow] = useState(false);
     return (
-        <div className="input-group pro-input-group overflow-hidden" style={{ border: '1px solid #e2e8f0', borderRadius: '10px', transition: 'border-color 0.2s, box-shadow 0.2s', background: '#fff' }}>
-            <span className="input-group-text bg-white border-0 ps-3 pe-2">
-                <Lock size={18} className="input-icon" style={{ color: '#94a3b8', transition: 'color 0.2s' }} />
+        <div className="input-group pro-input-group">
+            <span className="input-group-text border-0 ps-3 pe-2">
+                <Lock size={18} className="input-icon" />
             </span>
             <input 
                 type={show ? 'text' : 'password'} 
                 name={name}
-                className="form-control bg-white border-0 py-3 px-2 shadow-none fw-medium" 
+                className="form-control border-0 py-3 px-2 shadow-none fw-medium" 
                 placeholder={placeholder} 
                 value={value} 
                 onChange={onChange}
                 style={{ fontSize: '0.95rem' }}
-                onFocus={(e) => {
-                    const parent = e.target.parentElement;
-                    parent.style.borderColor = '#105c38';
-                    parent.style.boxShadow = '0 0 0 3px rgba(16,92,56,0.1)';
-                    parent.querySelector('.input-icon').style.color = '#105c38';
-                }}
-                onBlur={(e) => {
-                    const parent = e.target.parentElement;
-                    parent.style.borderColor = '#e2e8f0';
-                    parent.style.boxShadow = 'none';
-                    parent.querySelector('.input-icon').style.color = '#94a3b8';
-                }}
             />
             <button 
                 type="button" 
-                className="btn btn-link bg-white border-0 pe-3 ps-2 text-muted" 
+                className="btn btn-link border-0 pe-3 ps-2" 
                 onClick={() => setShow(!show)}
-                style={{ textDecoration: 'none' }}
+                style={{ textDecoration: 'none', color: '#94a3b8' }}
                 tabIndex="-1"
             >
                 {show ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
+        </div>
+    );
+};
+
+// Premium custom select dropdown
+const CustomSelect = ({ name, value, onChange, options, placeholder = 'Sélectionnez...', error }) => {
+    const [open, setOpen] = React.useState(false);
+    const ref = React.useRef(null);
+    const selected = options.find(o => o.value === value);
+
+    React.useEffect(() => {
+        const close = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+        document.addEventListener('mousedown', close);
+        return () => document.removeEventListener('mousedown', close);
+    }, []);
+
+    return (
+        <div ref={ref} className="position-relative">
+            <div
+                onClick={() => setOpen(!open)}
+                className={`d-flex align-items-center justify-content-between px-3 ${error ? 'border-danger' : ''}`}
+                style={{
+                    cursor: 'pointer',
+                    border: open ? '1.5px solid #105c38' : '1.5px solid #e8edf5',
+                    borderRadius: '14px',
+                    background: open ? '#fff' : '#f7f9fc',
+                    padding: '14px 16px',
+                    transition: 'all 0.25s ease',
+                    boxShadow: open ? '0 4px 16px rgba(16,92,56,0.1)' : 'none',
+                }}
+            >
+                <span style={{ fontSize: '0.95rem', fontWeight: selected ? 500 : 400, color: selected ? '#1a2d1f' : '#aab5c0' }}>
+                    {selected ? selected.label : placeholder}
+                </span>
+                <ChevronDown size={18} style={{ color: '#6b7280', transition: 'transform 0.25s', transform: open ? 'rotate(180deg)' : 'rotate(0)' }} />
+            </div>
+
+            <AnimatePresence>
+                {open && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                        transition={{ duration: 0.18 }}
+                        className="position-absolute w-100 bg-white overflow-auto"
+                        style={{
+                            zIndex: 9999,
+                            marginTop: '6px',
+                            borderRadius: '14px',
+                            border: '1.5px solid #e8edf5',
+                            boxShadow: '0 12px 36px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
+                            maxHeight: '220px',
+                        }}
+                    >
+                        {options.map((opt, i) => (
+                            <div
+                                key={opt.value}
+                                onClick={() => { onChange({ target: { name, value: opt.value } }); setOpen(false); }}
+                                className="d-flex align-items-center justify-content-between"
+                                style={{
+                                    padding: '12px 16px',
+                                    cursor: 'pointer',
+                                    fontSize: '0.93rem',
+                                    fontWeight: value === opt.value ? 600 : 400,
+                                    color: value === opt.value ? '#105c38' : '#374151',
+                                    background: value === opt.value ? '#f0faf5' : 'transparent',
+                                    borderBottom: i < options.length - 1 ? '1px solid #f3f4f6' : 'none',
+                                    transition: 'background 0.15s',
+                                }}
+                                onMouseEnter={(e) => { if (value !== opt.value) e.currentTarget.style.background = '#f9fafb'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.background = value === opt.value ? '#f0faf5' : 'transparent'; }}
+                            >
+                                <span>{opt.label}</span>
+                                {value === opt.value && <CheckCircle2 size={16} className="text-success" />}
+                            </div>
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+};
+
+const COUNTRIES = [
+    { code: '+229', iso: 'bj', name: 'Bénin' },
+    { code: '+228', iso: 'tg', name: 'Togo' },
+    { code: '+225', iso: 'ci', name: "Côte d'Ivoire" },
+    { code: '+226', iso: 'bf', name: 'Burkina Faso' },
+    { code: '+227', iso: 'ne', name: 'Niger' },
+    { code: '+221', iso: 'sn', name: 'Sénégal' },
+    { code: '+223', iso: 'ml', name: 'Mali' },
+    { code: '+234', iso: 'ng', name: 'Nigeria' },
+    { code: '+237', iso: 'cm', name: 'Cameroun' },
+];
+
+const CustomCountrySelect = ({ value, onChange, name }) => {
+    const [open, setOpen] = React.useState(false);
+    const ref = React.useRef(null);
+    const selected = COUNTRIES.find(c => c.code === value) || COUNTRIES[0];
+
+    React.useEffect(() => {
+        const close = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+        document.addEventListener('mousedown', close);
+        return () => document.removeEventListener('mousedown', close);
+    }, []);
+
+    return (
+        <div ref={ref} className="position-relative h-100" style={{ minWidth: '110px', cursor: 'pointer' }}>
+            <div
+                onClick={() => setOpen(!open)}
+                className="d-flex align-items-center justify-content-between h-100 px-3 py-3"
+                style={{ background: '#eef2f6', borderRight: '1px solid #e8edf5', transition: 'background 0.2s', borderTopLeftRadius: '14px', borderBottomLeftRadius: '14px' }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = '#e4e9f0'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = '#eef2f6'; }}
+            >
+                <div className="d-flex align-items-center gap-2">
+                    <img src={`https://flagcdn.com/w20/${selected.iso}.png`} width="20" alt={selected.name} style={{ borderRadius: '2px', boxShadow: '0 0 2px rgba(0,0,0,0.15)' }} />
+                    <span className="fw-bold" style={{ fontSize: '0.9rem', color: '#1a2d1f' }}>{selected.code}</span>
+                </div>
+                <ChevronDown size={14} className="text-muted ms-2 transition-all" style={{ transform: open ? 'rotate(180deg)' : 'rotate(0)' }} />
+            </div>
+
+            <AnimatePresence>
+                {open && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -5, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -5, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="position-absolute bg-white overflow-auto shadow-lg"
+                        style={{
+                            top: '100%', left: 0, zIndex: 9999, marginTop: '8px',
+                            borderRadius: '12px', border: '1px solid #e8edf5', maxHeight: '250px', width: '230px'
+                        }}
+                    >
+                        {COUNTRIES.map(c => (
+                            <div
+                                key={c.code}
+                                onClick={() => { onChange({ target: { name, value: c.code } }); setOpen(false); }}
+                                className="d-flex align-items-center gap-3 px-3 py-2.5 transition-all"
+                                style={{
+                                    background: value === c.code ? '#f0faf5' : 'transparent',
+                                    borderBottom: '1px solid #f3f4f6'
+                                }}
+                                onMouseEnter={(e) => { if (value !== c.code) e.currentTarget.style.background = '#f9fafb'; }}
+                                onMouseLeave={(e) => { e.currentTarget.style.background = value === c.code ? '#f0faf5' : 'transparent'; }}
+                            >
+                                <img src={`https://flagcdn.com/w20/${c.iso}.png`} width="20" alt={c.name} style={{ borderRadius: '2px', boxShadow: '0 0 2px rgba(0,0,0,0.15)' }} />
+                                <div className="d-flex flex-column" style={{ lineHeight: '1.3' }}>
+                                    <span className="fw-medium" style={{ fontSize: '0.85rem', color: value === c.code ? '#105c38' : '#1f2937' }}>{c.name}</span>
+                                    <span className="text-muted" style={{ fontSize: '0.75rem' }}>{c.code}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
@@ -61,13 +206,13 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
 
     // Acheteur form data
     const [acheteur, setAcheteur] = useState({
-        nom: '', email: '', telephone: '', password: '', confirmPassword: '',
+        nom: '', email: '', indicatif: '+229', telephone: '', password: '', confirmPassword: '',
         typeAcheteur: '', entreprise: '', departement: '', commune: '', cgu: false
     });
 
     // Transformateur form data
     const [transformateur, setTransformateur] = useState({
-        nom: '', email: '', telephone: '', password: '', confirmPassword: '',
+        nom: '', email: '', indicatif: '+229', telephone: '', password: '', confirmPassword: '',
         entreprise: '', type: '', categorie: [], description: '', modeVente: '', departement: '', commune: '',
         ifu: '', pj_identite: null, pj_rccm: null, pj_atelier: null, cgu: false
     });
@@ -132,7 +277,20 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
         if (step === 1) {
             if (!data.nom.trim()) newErrors.nom = 'Champ requis';
             if (!data.email.trim()) newErrors.email = 'Champ requis';
-            if (!data.telephone.trim()) newErrors.telephone = 'Champ requis';
+            if (!data.telephone.trim()) {
+                newErrors.telephone = 'Champ requis';
+            } else {
+                const phoneFixed = data.telephone.replace(/\s+/g, '');
+                if (data.indicatif === '+229' || role === 'transformateur') {
+                    if (!/^01\d{8}$/.test(phoneFixed)) {
+                        newErrors.telephone = 'Doit commencer par 01 et avoir 10 chiffres (Bénin)';
+                    }
+                } else {
+                    if (!/^\d{8,15}$/.test(phoneFixed)) {
+                        newErrors.telephone = 'Format invalide';
+                    }
+                }
+            }
             if (!data.password) newErrors.password = 'Champ requis';
             if (data.password.length > 0 && data.password.length < 6) newErrors.password = 'Minimum 6 caracteres';
             if (data.password !== data.confirmPassword) newErrors.confirmPassword = 'Les mots de passe ne correspondent pas';
@@ -141,7 +299,9 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
         if (step === 2) {
             if (role === 'acheteur') {
                 if (!data.typeAcheteur) newErrors.typeAcheteur = 'Champ requis';
-                if (!data.departement) newErrors.departement = 'Champ requis';
+                if (data.indicatif === '+229') {
+                    if (!data.departement) newErrors.departement = 'Champ requis';
+                }
                 if (!data.commune.trim()) newErrors.commune = 'Champ requis';
             } else {
                 if (!data.entreprise.trim()) newErrors.entreprise = 'Champ requis';
@@ -347,15 +507,30 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                     onClick={onClose}
                 >
                     <motion.div 
-                        initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                        initial={{ opacity: 0, scale: 0.92, y: 40 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                        className="bg-white rounded-5 overflow-hidden my-auto shadow-lg"
-                        style={{ width: '100%', maxWidth: (mode === 'login' || (mode === 'register' && step === 0)) ? '850px' : '550px', position: 'relative' }}
+                        exit={{ opacity: 0, scale: 0.92, y: 40 }}
+                        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                        className="overflow-hidden my-auto"
+                        style={{ 
+                            width: '100%', 
+                            maxWidth: (mode === 'login' || (mode === 'register' && step === 0)) ? '850px' : '580px', 
+                            position: 'relative',
+                            background: '#ffffff',
+                            borderRadius: '24px',
+                            border: '1px solid rgba(16, 92, 56, 0.08)',
+                            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255,255,255,0.05)'
+                        }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <button className="btn btn-link position-absolute top-0 end-0 p-3 text-muted border-0 shadow-none" onClick={onClose} style={{ zIndex: 10 }}>
-                            <X size={22} />
+                        <button 
+                            className="btn position-absolute d-flex align-items-center justify-content-center border-0 shadow-none" 
+                            onClick={onClose} 
+                            style={{ zIndex: 10, top: '16px', right: '16px', width: '36px', height: '36px', borderRadius: '12px', background: 'rgba(0,0,0,0.05)', color: '#6b7280', transition: 'all 0.2s' }}
+                            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.1)'; e.currentTarget.style.color = '#1f2937'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.05)'; e.currentTarget.style.color = '#6b7280'; }}
+                        >
+                            <X size={18} strokeWidth={2.5} />
                         </button>
 
                         <div className="row g-0">
@@ -373,8 +548,18 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                             <div style={{ position: 'absolute', bottom: '-15%', right: '-15%', width: '250px', height: '250px', background: '#f5b518', filter: 'blur(90px)', borderRadius: '50%', opacity: 0.25 }}></div>
 
                                             <div className="position-relative z-1 mb-5">
-                                                <div className="bg-white rounded d-inline-flex p-2 shadow-sm">
-                                                    <img src="/images/logoAgro.png" alt="AgroStock" style={{ height: '35px' }} />
+                                                <div className="bg-white rounded-4 d-inline-flex px-3 py-2 shadow-sm align-items-center gap-2">
+                                                    <div className="bg-success rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '36px', height: '36px' }}>
+                                                        <Package size={20} className="text-white" strokeWidth={2.5} />
+                                                    </div>
+                                                    <div className="d-flex flex-column justify-content-center lh-1">
+                                                        <span style={{ color: '#0a1d13', fontSize: '1.25rem', fontWeight: '800', letterSpacing: '-0.5px', fontFamily: '"Outfit", system-ui, sans-serif' }}>
+                                                            Agro<span className="text-success">Stock</span>
+                                                        </span>
+                                                        <span className="text-success" style={{ fontSize: '0.65rem', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', paddingLeft: '1px' }}>
+                                                            Bénin
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -397,8 +582,18 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                         {/* Côté droit : Formulaire épuré */}
                                         <div className="col-12 col-md-7 p-4 p-md-5 bg-white d-flex flex-column justify-content-center h-100" style={{ borderTopRightRadius: 'calc(1.5rem - 1px)', borderBottomRightRadius: 'calc(1.5rem - 1px)' }}>
                                             {/* Logo mobile */}
-                                            <div className="d-md-none text-center mb-4">
-                                                <img src="/images/logoAgro.png" alt="AgroStock" style={{ height: '45px' }} />
+                                            <div className="d-md-none text-center mb-4 d-flex align-items-center justify-content-center gap-2">
+                                                <div className="bg-success rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '40px', height: '40px' }}>
+                                                    <Package size={22} className="text-white" strokeWidth={2.5}/>
+                                                </div>
+                                                <div className="d-flex flex-column justify-content-center lh-1 text-start">
+                                                    <span style={{ color: '#0a1d13', fontSize: '1.5rem', fontWeight: '800', letterSpacing: '-0.5px', fontFamily: '"Outfit", system-ui, sans-serif' }}>
+                                                        Agro<span className="text-success">Stock</span>
+                                                    </span>
+                                                    <span className="text-success" style={{ fontSize: '0.75rem', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', paddingLeft: '2px' }}>
+                                                        Bénin
+                                                    </span>
+                                                </div>
                                             </div>
 
                                             <div className="mb-4">
@@ -413,27 +608,20 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                     </div>
                                                 )}
 
-                                                <style>{`
-                                                    .pro-input-group { border: 1px solid #e2e8f0; border-radius: 10px; transition: border-color 0.2s, box-shadow 0.2s; background: #fff; overflow: hidden; }
-                                                    .pro-input-group:focus-within { border-color: #105c38; box-shadow: 0 0 0 3px rgba(16,92,56,0.1); }
-                                                    .pro-input-group .input-icon { color: #94a3b8; transition: color 0.2s; }
-                                                    .pro-input-group:focus-within .input-icon { color: #105c38; }
-                                                    .pro-btn { background: #0f291e; color: #fff; border-radius: 10px; font-weight: 600; border: none; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; }
-                                                    .pro-btn:hover { background: #163c2c; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(15, 41, 30, 0.2); color: #fff; }
-                                                `}</style>
+                                                
                                                 
                                                 <div className="mb-4">
-                                                    <label className="form-label fw-bold text-dark mb-2" style={{ fontSize: '0.85rem' }}>Email ou Téléphone</label>
+                                                    <label className="form-label premium-label">Email ou Téléphone</label>
                                                     <div className="input-group pro-input-group">
-                                                        <span className="input-group-text bg-white border-0 ps-3 pe-2"><Mail size={18} className="input-icon" /></span>
-                                                        <input type="text" name="email" className="form-control bg-white border-0 py-3 px-2 shadow-none fw-medium" placeholder="votre@email.com / +229..." value={login.email} onChange={handleLoginChange} style={{ fontSize: '0.95rem' }} />
+                                                        <span className="input-group-text border-0 ps-3 pe-2"><Mail size={18} className="input-icon" /></span>
+                                                        <input type="text" name="email" className="form-control border-0 py-3 px-2 shadow-none fw-medium" placeholder="votre@email.com / +229..." value={login.email} onChange={handleLoginChange} style={{ fontSize: '0.95rem' }} />
                                                     </div>
                                                 </div>
 
                                                 <div className="mb-5">
                                                     <div className="d-flex justify-content-between align-items-center mb-2">
-                                                        <label className="form-label fw-bold text-dark mb-0" style={{ fontSize: '0.85rem' }}>Mot de passe</label>
-                                                        <a href="#" className="text-decoration-none fw-bold" style={{ fontSize: '0.85rem', color: '#1ab273' }}>Mot de passe oublié ?</a>
+                                                        <label className="form-label premium-label mb-0">Mot de passe</label>
+                                                        <a href="#" className="text-decoration-none fw-bold" style={{ fontSize: '0.82rem', color: '#1ab273' }}>Mot de passe oublié ?</a>
                                                     </div>
                                                     <PasswordInput name="password" value={login.password} onChange={handleLoginChange} />
                                                 </div>
@@ -460,30 +648,60 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                     {/* Role Selection */}
                                     {step === 0 && (
                                         <div className="p-4 p-md-5 text-center">
-                                            <img src="/images/logoAgro.png" alt="AgroStock" style={{ height: '70px', marginBottom: '12px' }} />
+                                            <div className="text-center mb-4 d-flex align-items-center justify-content-center gap-2" style={{ marginBottom: '16px' }}>
+                                                <div className="bg-success rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '56px', height: '56px' }}>
+                                                    <Package size={30} className="text-white" strokeWidth={2.5}/>
+                                                </div>
+                                                <div className="d-flex flex-column justify-content-center lh-1 text-start">
+                                                    <span style={{ color: '#0a1d13', fontSize: '2.4rem', fontWeight: '800', letterSpacing: '-1px', fontFamily: '"Outfit", system-ui, sans-serif' }}>
+                                                        Agro<span className="text-success">Stock</span>
+                                                    </span>
+                                                    <span className="text-success" style={{ fontSize: '0.9rem', fontWeight: '700', letterSpacing: '2.5px', textTransform: 'uppercase', paddingLeft: '3px' }}>
+                                                        Bénin
+                                                    </span>
+                                                </div>
+                                            </div>
                                             <h2 className="fw-bold mb-2">Rejoindre AgroStock</h2>
                                             <p className="text-muted mb-4">Quel est votre profil</p>
-                                            <div className="row g-3">
+                                            <div className="row g-3 mt-1">
                                                 <div className="col-6">
                                                     <div 
-                                                        className="p-4 h-100 rounded-4 border text-center transition-all"
-                                                        style={{ cursor: 'pointer' }}
+                                                        className="p-4 h-100 rounded-4 text-center position-relative"
+                                                        style={{ 
+                                                            cursor: 'pointer', 
+                                                            border: '2px solid #e8f5ee',
+                                                            background: '#f0faf5',
+                                                            transition: 'all 0.2s ease'
+                                                        }}
                                                         onClick={() => { setRole('acheteur'); setStep(1); }}
+                                                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#1ab273'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(26,178,115,0.15)'; }}
+                                                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#e8f5ee'; e.currentTarget.style.boxShadow = 'none'; }}
                                                     >
-                                                        <div className="bg-success text-white p-3 rounded-circle d-inline-flex mb-3"><User size={32} /></div>
-                                                        <h5 className="fw-bold mb-2">Acheteur</h5>
-                                                        <p className="small text-muted mb-0">Grossiste, detaillant, restaurateur ou particulier.</p>
+                                                        <div className="d-flex align-items-center justify-content-center mb-3" style={{ width: '60px', height: '60px', borderRadius: '16px', background: 'linear-gradient(135deg, #1ab273, #105c38)', margin: '0 auto' }}>
+                                                            <User size={28} className="text-white" />
+                                                        </div>
+                                                        <h5 className="fw-bold mb-1" style={{ color: '#0a1d13' }}>Acheteur</h5>
+                                                        <p className="small mb-0" style={{ color: '#6b7280' }}>Grossiste, détaillant, restaurateur ou particulier.</p>
                                                     </div>
                                                 </div>
                                                 <div className="col-6">
                                                     <div 
-                                                        className="p-4 h-100 rounded-4 border text-center transition-all"
-                                                        style={{ cursor: 'pointer' }}
+                                                        className="p-4 h-100 rounded-4 text-center"
+                                                        style={{ 
+                                                            cursor: 'pointer', 
+                                                            border: '2px solid #e8f5ee',
+                                                            background: '#f0faf5',
+                                                            transition: 'all 0.2s ease'
+                                                        }}
                                                         onClick={() => { setRole('transformateur'); setStep(1); }}
+                                                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#1ab273'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(26,178,115,0.15)'; }}
+                                                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#e8f5ee'; e.currentTarget.style.boxShadow = 'none'; }}
                                                     >
-                                                        <div className="bg-success text-white p-3 rounded-circle d-inline-flex mb-3"><Store size={32} /></div>
-                                                        <h5 className="fw-bold mb-2">Transformateur</h5>
-                                                        <p className="small text-muted mb-0">PME, cooperative ou artisan agroalimentaire.</p>
+                                                        <div className="d-flex align-items-center justify-content-center mb-3" style={{ width: '60px', height: '60px', borderRadius: '16px', background: 'linear-gradient(135deg, #f5b518, #e09010)', margin: '0 auto' }}>
+                                                            <Store size={28} className="text-white" />
+                                                        </div>
+                                                        <h5 className="fw-bold mb-1" style={{ color: '#0a1d13' }}>Transformateur</h5>
+                                                        <p className="small mb-0" style={{ color: '#6b7280' }}>PME, coopérative ou artisan agroalimentaire.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -496,60 +714,78 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
 
                                     {/* Multi-Step Form */}
                                     {step > 0 && (
-                                        <div className="p-4 p-md-5">
-                                            <div className="text-center mb-3">
-                                                <img src="/images/logoAgro.png" alt="AgroStock" style={{ height: '55px' }} />
-                                            </div>
-                                            <div className="d-flex align-items-center gap-3 mb-4">
-                                                <div className="bg-success text-white p-2 rounded-3">
-                                                    {role === 'acheteur' ? <User size={18} /> : <Building2 size={18} />}
+                                        <div>
+                                            {/* Premium gradient header */}
+                                            <div className="px-4 px-md-5 pt-4 pb-3" style={{ background: 'linear-gradient(135deg, #f0faf5, #e8f5ee)', borderBottom: '1px solid #d1e8db' }}>
+                                                <div className="d-flex align-items-center gap-3 mb-3">
+                                                    <div className="d-flex align-items-center justify-content-center" style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'linear-gradient(135deg, #1ab273, #105c38)', flexShrink: 0 }}>
+                                                        {role === 'acheteur' ? <User size={22} className="text-white" /> : <Building2 size={22} className="text-white" />}
+                                                    </div>
+                                                    <div className="flex-grow-1">
+                                                        <h5 className="fw-bold mb-0" style={{ color: '#0a1d13', fontSize: '1.15rem' }}>Inscription {role === 'acheteur' ? 'Acheteur' : 'Transformateur'}</h5>
+                                                        <p className="mb-0" style={{ color: '#6b7c70', fontSize: '0.85rem' }}>Étape {step} sur {totalSteps}</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h5 className="fw-bold mb-0">Inscription {role === 'acheteur' ? 'Acheteur' : 'Transformateur'}</h5>
-                                                    <p className="text-muted small mb-0">Etape {step}/{totalSteps}</p>
-                                                </div>
-                                                <button type="button" className="btn btn-link text-muted ms-auto p-0 text-decoration-none small" onClick={() => { setStep(0); setRole(null); setErrors({}); }}>Annuler</button>
+                                                <ProgressIndicator />
                                             </div>
 
-                                            <ProgressIndicator />
-
-                                            <form className="mt-5 pt-2" onSubmit={(e) => e.preventDefault()}>
+                                            <div className="p-4 p-md-5">
+                                            <form className="mt-2" onSubmit={(e) => e.preventDefault()}>
 
                                                 {/* STEP 1: Compte */}
                                                 {step === 1 && (
                                                     <>
                                                         <div className="mb-3">
-                                                            <label className="form-label small fw-bold">{role === 'transformateur' ? 'Nom complet du responsable' : 'Nom complet'} <span className="text-danger">*</span></label>
-                                                            <div className={`input-group rounded-3 border overflow-hidden ${errors.nom ? 'border-danger' : ''}`}>
-                                                                <span className="input-group-text bg-light border-0"><User size={18} /></span>
-                                                                <input type="text" name="nom" className="form-control border-0 py-3" placeholder="Ex: Jean Gbadamassi" value={data.nom} onChange={handleChange} />
+                                                            <label className="form-label premium-label">{role === 'transformateur' ? 'Nom complet du responsable' : 'Nom complet'} <span className="text-danger">*</span></label>
+                                                            <div className={`input-group pro-input-group ${errors.nom ? 'border-danger' : ''}`}>
+                                                                <span className="input-group-text border-0"><User size={18} className="input-icon" /></span>
+                                                                <input type="text" name="nom" className="form-control border-0 py-3 shadow-none fw-medium" placeholder="Ex: Jean Gbadamassi" value={data.nom} onChange={handleChange} style={{ fontSize: '0.95rem' }} />
                                                             </div>
                                                             {fieldError('nom')}
                                                         </div>
                                                         <div className="mb-3">
-                                                            <label className="form-label small fw-bold">Email <span className="text-danger">*</span></label>
-                                                            <div className={`input-group rounded-3 border overflow-hidden ${errors.email ? 'border-danger' : ''}`}>
-                                                                <span className="input-group-text bg-light border-0"><Mail size={18} /></span>
-                                                                <input type="email" name="email" className="form-control border-0 py-3" placeholder="contact@exemple.com" value={data.email} onChange={handleChange} />
+                                                            <label className="form-label premium-label">Email <span className="text-danger">*</span></label>
+                                                            <div className={`input-group pro-input-group ${errors.email ? 'border-danger' : ''}`}>
+                                                                <span className="input-group-text border-0"><Mail size={18} className="input-icon" /></span>
+                                                                <input type="email" name="email" className="form-control border-0 py-3 shadow-none fw-medium" placeholder="contact@exemple.com" value={data.email} onChange={handleChange} style={{ fontSize: '0.95rem' }} />
                                                             </div>
                                                             {fieldError('email')}
                                                         </div>
                                                         <div className="mb-3">
-                                                            <label className="form-label small fw-bold">Telephone (MTN / Moov) <span className="text-danger">*</span></label>
-                                                            <div className={`input-group rounded-3 border overflow-hidden ${errors.telephone ? 'border-danger' : ''}`}>
-                                                                <span className="input-group-text bg-light border-0"><Smartphone size={18} /></span>
-                                                                <input type="tel" name="telephone" className="form-control border-0 py-3" placeholder="+229 00 00 00 00" value={data.telephone} onChange={handleChange} />
+                                                            <label className="form-label premium-label">Téléphone <span className="text-danger">*</span></label>
+                                                            <div className={`input-group pro-input-group p-0 overflow-visible ${errors.telephone ? 'border-danger' : ''}`}>
+                                                                {role === 'transformateur' ? (
+                                                                    <div className="d-flex align-items-center px-3 py-3 gap-2" style={{ background: '#eef2f6', borderRight: '1px solid #e8edf5', borderTopLeftRadius: '14px', borderBottomLeftRadius: '14px', minWidth: '110px' }}>
+                                                                        <img src="https://flagcdn.com/w20/bj.png" width="20" alt="Bénin" style={{ borderRadius: '2px', boxShadow: '0 0 2px rgba(0,0,0,0.15)' }} />
+                                                                        <span className="fw-bold" style={{ fontSize: '0.9rem', color: '#1a2d1f' }}>+229</span>
+                                                                    </div>
+                                                                ) : (
+                                                                    <CustomCountrySelect 
+                                                                        name="indicatif" 
+                                                                        value={data.indicatif} 
+                                                                        onChange={handleChange} 
+                                                                    />
+                                                                )}
+                                                                <input 
+                                                                    type="tel" 
+                                                                    name="telephone" 
+                                                                    className="form-control border-0 py-3 shadow-none fw-medium" 
+                                                                    placeholder="01 00 00 00 00"
+                                                                    value={data.telephone} 
+                                                                    onChange={handleChange} 
+                                                                    style={{ fontSize: '0.95rem' }} 
+                                                                />
                                                             </div>
                                                             {fieldError('telephone')}
                                                         </div>
                                                         <div className="row g-3">
                                                             <div className="col-md-6">
-                                                                <label className="form-label small fw-bold">Mot de passe <span className="text-danger">*</span></label>
+                                                                <label className="form-label premium-label">Mot de passe <span className="text-danger">*</span></label>
                                                                 <PasswordInput name="password" value={data.password} onChange={handleChange} />
                                                                 {fieldError('password')}
                                                             </div>
                                                             <div className="col-md-6">
-                                                                <label className="form-label small fw-bold">Confirmation <span className="text-danger">*</span></label>
+                                                                <label className="form-label premium-label">Confirmation <span className="text-danger">*</span></label>
                                                                 <PasswordInput name="confirmPassword" value={data.confirmPassword} onChange={handleChange} />
                                                                 {fieldError('confirmPassword')}
                                                             </div>
@@ -563,44 +799,54 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                         {role === 'acheteur' ? (
                                                             <>
                                                                 <div className="mb-3">
-                                                                    <label className="form-label small fw-bold">Type d'acheteur <span className="text-danger">*</span></label>
-                                                                    <select name="typeAcheteur" className={`form-select py-3 rounded-3 ${errors.typeAcheteur ? 'border-danger' : ''}`} value={data.typeAcheteur} onChange={handleChange}>
-                                                                        <option value="">Selectionnez...</option>
-                                                                        <option value="grossiste">Grossiste</option>
-                                                                        <option value="detaillant">Detaillant</option>
-                                                                        <option value="restaurateur">Restaurateur</option>
-                                                                        <option value="particulier">Particulier</option>
-                                                                    </select>
+                                                                    <label className="form-label premium-label">Type d'acheteur <span className="text-danger">*</span></label>
+                                                                    <CustomSelect
+                                                                        name="typeAcheteur"
+                                                                        value={data.typeAcheteur}
+                                                                        onChange={handleChange}
+                                                                        error={errors.typeAcheteur}
+                                                                        options={[
+                                                                            { value: 'grossiste', label: 'Grossiste' },
+                                                                            { value: 'detaillant', label: 'Détaillant / Revendeur' },
+                                                                            { value: 'restaurateur', label: 'Restaurateur / Hôtelier' },
+                                                                            { value: 'particulier', label: 'Particulier' },
+                                                                        ]}
+                                                                    />
                                                                     {fieldError('typeAcheteur')}
                                                                 </div>
                                                                 <div className="mb-3">
-                                                                    <label className="form-label small fw-bold">Nom de l'entreprise <span className="text-muted fw-normal">(optionnel)</span></label>
-                                                                    <div className="input-group rounded-3 border overflow-hidden">
-                                                                        <span className="input-group-text bg-light border-0"><Building2 size={18} /></span>
-                                                                        <input type="text" name="entreprise" className="form-control border-0 py-3" placeholder="Nom de votre structure" value={data.entreprise} onChange={handleChange} />
+                                                                    <label className="form-label premium-label">Nom de l'entreprise <span className="text-muted fw-normal" style={{ textTransform: 'none' }}>(optionnel)</span></label>
+                                                                    <div className="input-group pro-input-group">
+                                                                        <span className="input-group-text border-0 ps-3"><Building2 size={18} className="input-icon" /></span>
+                                                                        <input type="text" name="entreprise" className="form-control border-0 py-3 shadow-none fw-medium" placeholder="Nom de votre structure" value={data.entreprise} onChange={handleChange} style={{ fontSize: '0.95rem' }} />
                                                                     </div>
                                                                 </div>
                                                             </>
                                                         ) : (
                                                             <>
                                                                 <div className="mb-3">
-                                                                    <label className="form-label small fw-bold">Nom de l'entreprise / Marque <span className="text-danger">*</span></label>
-                                                                    <input type="text" name="entreprise" className={`form-control py-3 rounded-3 ${errors.entreprise ? 'border-danger' : ''}`} placeholder="Ex: BioSav du Benin" value={data.entreprise} onChange={handleChange} />
+                                                                    <label className="form-label premium-label">Nom de l'entreprise / Marque <span className="text-danger">*</span></label>
+                                                                    <input type="text" name="entreprise" className={`form-control premium-input py-3 px-3 ${errors.entreprise ? 'border-danger' : ''}`} placeholder="Ex: BioSav du Benin" value={data.entreprise} onChange={handleChange} />
                                                                     {fieldError('entreprise')}
                                                                 </div>
                                                                 <div className="row g-3 mb-3">
                                                                     <div className="col-md-6">
-                                                                        <label className="form-label small fw-bold">Type <span className="text-danger">*</span></label>
-                                                                        <select name="type" className={`form-select py-3 rounded-3 ${errors.type ? 'border-danger' : ''}`} value={data.type} onChange={handleChange}>
-                                                                            <option value="">Selectionnez...</option>
-                                                                            <option value="pme">PME</option>
-                                                                            <option value="cooperative">Cooperative</option>
-                                                                            <option value="artisan">Artisan</option>
-                                                                        </select>
+                                                                        <label className="form-label premium-label">Type <span className="text-danger">*</span></label>
+                                                                        <CustomSelect
+                                                                            name="type"
+                                                                            value={data.type}
+                                                                            onChange={handleChange}
+                                                                            error={errors.type}
+                                                                            options={[
+                                                                                { value: 'pme', label: 'PME' },
+                                                                                { value: 'cooperative', label: 'Coopérative' },
+                                                                                { value: 'artisan', label: 'Artisan' },
+                                                                            ]}
+                                                                        />
                                                                         {fieldError('type')}
                                                                     </div>
                                                                     <div className="col-12 mt-3">
-                                                                        <label className="form-label small fw-bold">Categories (Plusieurs choix possibles) <span className="text-danger">*</span></label>
+                                                                        <label className="form-label premium-label">Catégories <span className="text-danger">*</span></label>
                                                                         <div className="d-flex flex-wrap gap-2 mt-1">
                                                                             {['Jus', 'Farines', 'Huiles', 'Conserves', 'Epices', 'Autres'].map(cat => (
                                                                                 <button 
@@ -618,11 +864,11 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="mb-3">
-                                                                    <label className="form-label small fw-bold">Description courte</label>
-                                                                    <textarea name="description" className="form-control rounded-3" rows="2" placeholder="Decrivez vos produits..." value={data.description} onChange={handleChange}></textarea>
+                                                                    <label className="form-label premium-label">Description courte</label>
+                                                                    <textarea name="description" className="form-control premium-input p-3" rows="2" placeholder="Decrivez vos produits..." value={data.description} onChange={handleChange}></textarea>
                                                                 </div>
                                                                 <div className="mb-3">
-                                                                    <label className="form-label small fw-bold">Mode de vente <span className="text-danger">*</span></label>
+                                                                    <label className="form-label premium-label">Mode de vente <span className="text-danger">*</span></label>
                                                                     <div className="d-flex gap-3 flex-wrap">
                                                                         {['Vente en gros', 'Vente au detail', 'Les deux'].map((opt) => (
                                                                             <div key={opt} className="form-check">
@@ -644,28 +890,44 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                             </>
                                                         )}
                                                         <div className="row g-3">
-                                                            <div className="col-md-6">
-                                                                <label className="form-label small fw-bold">Departement <span className="text-danger">*</span></label>
-                                                                <select name="departement" className={`form-select py-3 rounded-3 ${errors.departement ? 'border-danger' : ''}`} value={data.departement} onChange={handleChange}>
-                                                                    <option value="">Selectionnez...</option>
-                                                                    <option value="alibori">Alibori</option>
-                                                                    <option value="atacora">Atacora</option>
-                                                                    <option value="atlantique">Atlantique</option>
-                                                                    <option value="borgou">Borgou</option>
-                                                                    <option value="collines">Collines</option>
-                                                                    <option value="couffo">Couffo</option>
-                                                                    <option value="donga">Donga</option>
-                                                                    <option value="littoral">Littoral</option>
-                                                                    <option value="mono">Mono</option>
-                                                                    <option value="oueme">Oueme</option>
-                                                                    <option value="plateau">Plateau</option>
-                                                                    <option value="zou">Zou</option>
-                                                                </select>
-                                                                {fieldError('departement')}
-                                                            </div>
-                                                            <div className="col-md-6">
-                                                                <label className="form-label small fw-bold">Commune / Ville <span className="text-danger">*</span></label>
-                                                                <input type="text" name="commune" className={`form-control py-3 rounded-3 ${errors.commune ? 'border-danger' : ''}`} placeholder="Ex: Cotonou" value={data.commune} onChange={handleChange} />
+                                                            {(data.indicatif === '+229' || role === 'transformateur') && (
+                                                                <div className="col-md-6">
+                                                                    <label className="form-label premium-label">Département <span className="text-danger">*</span></label>
+                                                                    <CustomSelect
+                                                                        name="departement"
+                                                                        value={data.departement}
+                                                                        onChange={handleChange}
+                                                                        error={errors.departement}
+                                                                        options={[
+                                                                            { value: 'alibori', label: 'Alibori' },
+                                                                            { value: 'atacora', label: 'Atacora' },
+                                                                            { value: 'atlantique', label: 'Atlantique' },
+                                                                            { value: 'borgou', label: 'Borgou' },
+                                                                            { value: 'collines', label: 'Collines' },
+                                                                            { value: 'couffo', label: 'Couffo' },
+                                                                            { value: 'donga', label: 'Donga' },
+                                                                            { value: 'littoral', label: 'Littoral' },
+                                                                            { value: 'mono', label: 'Mono' },
+                                                                            { value: 'oueme', label: 'Ouémé' },
+                                                                            { value: 'plateau', label: 'Plateau' },
+                                                                            { value: 'zou', label: 'Zou' },
+                                                                        ]}
+                                                                    />
+                                                                    {fieldError('departement')}
+                                                                </div>
+                                                            )}
+                                                            <div className={data.indicatif === '+229' || role === 'transformateur' ? 'col-md-6' : 'col-md-12'}>
+                                                                <label className="form-label premium-label">
+                                                                    {data.indicatif === '+229' || role === 'transformateur' ? 'Commune / Ville' : 'Ville / Région'} <span className="text-danger">*</span>
+                                                                </label>
+                                                                <input 
+                                                                    type="text" 
+                                                                    name="commune" 
+                                                                    className={`form-control premium-input py-3 px-3 ${errors.commune ? 'border-danger' : ''}`} 
+                                                                    placeholder={data.indicatif === '+229' || role === 'transformateur' ? 'Ex: Cotonou' : 'Ex: Abidjan, Bamako...'} 
+                                                                    value={data.commune} 
+                                                                    onChange={handleChange} 
+                                                                />
                                                                 {fieldError('commune')}
                                                             </div>
                                                         </div>
@@ -678,13 +940,13 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                         {role === 'transformateur' ? (
                                                             <>
                                                                 <div className="mb-3">
-                                                                    <label className="form-label small fw-bold">Numero IFU <span className="text-danger">*</span></label>
-                                                                    <input type="text" name="ifu" className={`form-control py-3 rounded-3 ${errors.ifu ? 'border-danger' : ''}`} placeholder="N° IFU a 13 chiffres" value={data.ifu} onChange={handleChange} />
+                                                                    <label className="form-label premium-label">Numéro IFU <span className="text-danger">*</span></label>
+                                                                    <input type="text" name="ifu" className={`form-control premium-input py-3 px-3 ${errors.ifu ? 'border-danger' : ''}`} placeholder="N° IFU a 13 chiffres" value={data.ifu} onChange={handleChange} />
                                                                     {fieldError('ifu')}
                                                                 </div>
                                                                 <div className="row g-3 mb-3">
                                                                     <div className="col-6">
-                                                                        <label className="form-label small fw-bold d-block text-center">Piece d'identite <span className="text-danger">*</span></label>
+                                                                        <label className="form-label premium-label d-block text-center">Pièce d'identité <span className="text-danger">*</span></label>
                                                                         <label className={`d-block p-3 border rounded-4 text-center transition-all ${data.pj_identite ? 'border-success bg-success bg-opacity-10' : ''}`} style={{ cursor: 'pointer', borderStyle: 'dashed' }}>
                                                                             {data.pj_identite ? <CheckCircle2 size={22} className="text-success mb-1" /> : <Upload size={22} className="text-success mb-1" />}
                                                                             <p className="small mb-0 text-muted text-truncate">{data.pj_identite ? data.pj_identite.name : 'Charger l\'ID'}</p>
@@ -692,7 +954,7 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                                         </label>
                                                                     </div>
                                                                     <div className="col-6">
-                                                                        <label className="form-label small fw-bold d-block text-center">RCCM (Opt.)</label>
+                                                                        <label className="form-label premium-label d-block text-center">RCCM (Opt.)</label>
                                                                         <label className={`d-block p-3 border rounded-4 text-center transition-all ${data.pj_rccm ? 'border-info bg-info bg-opacity-10' : ''}`} style={{ cursor: 'pointer', borderStyle: 'dashed' }}>
                                                                             {data.pj_rccm ? <CheckCircle2 size={22} className="text-info mb-1" /> : <FileText size={22} className="text-info mb-1" />}
                                                                             <p className="small mb-0 text-muted text-truncate">{data.pj_rccm ? data.pj_rccm.name : 'Charger RCCM'}</p>
@@ -701,7 +963,7 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="mb-4">
-                                                                    <label className="form-label small fw-bold d-block text-center">Photo atelier / lieu de production <span className="text-danger">*</span></label>
+                                                                    <label className="form-label premium-label d-block text-center">Photo atelier <span className="text-danger">*</span></label>
                                                                     <label className={`d-block p-3 border rounded-4 text-center transition-all ${data.pj_atelier ? 'border-warning bg-warning bg-opacity-10' : ''}`} style={{ cursor: 'pointer', borderStyle: 'dashed' }}>
                                                                         {data.pj_atelier ? <CheckCircle2 size={22} className="text-warning mb-1" /> : <ImageIcon size={22} className="text-warning mb-1" />}
                                                                         <p className="small mb-0 text-muted text-truncate">{data.pj_atelier ? data.pj_atelier.name : 'Charger une photo'}</p>
@@ -747,18 +1009,21 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                         {submitError}
                                                     </div>
                                                 )}
-                                                <div className="d-flex gap-3 mt-4">
-                                                    <button type="button" className="btn btn-light px-4 py-3 rounded-pill fw-bold" style={{ flex: '0 0 35%' }} onClick={prevStep} disabled={isLoading}>
+                                                <div className="d-flex gap-3 mt-5">
+                                                    <button type="button" className="btn px-4 py-3 fw-bold d-flex align-items-center justify-content-center" style={{ flex: '0 0 35%', borderRadius: '14px', background: '#f1f5f2', color: '#374151', border: 'none', transition: 'all 0.2s' }} onClick={prevStep} disabled={isLoading}
+                                                        onMouseEnter={(e) => e.currentTarget.style.background = '#e5ebe7'}
+                                                        onMouseLeave={(e) => e.currentTarget.style.background = '#f1f5f2'}
+                                                    >
                                                         Retour
                                                     </button>
                                                     {step < totalSteps ? (
-                                                        <button type="button" className="btn btn-success px-4 py-3 rounded-pill fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2" style={{ flex: '1' }} onClick={nextStep}>
+                                                        <button type="button" className="btn pro-btn px-4 py-3 d-flex align-items-center justify-content-center gap-2" style={{ flex: '1' }} onClick={nextStep}>
                                                             Suivant <ChevronRight size={18} />
                                                         </button>
                                                     ) : (
                                                         <button 
                                                             type="button" 
-                                                            className="btn btn-success px-4 py-3 rounded-pill fw-bold shadow-sm" 
+                                                            className="btn pro-btn px-4 py-3" 
                                                             style={{ flex: '1', opacity: canSubmitFinalStep() && !isLoading ? 1 : 0.5 }}
                                                             disabled={isLoading}
                                                             onClick={handleSubmit}
@@ -766,12 +1031,13 @@ const RegisterModal = ({ isOpen, onClose, initialMode = 'register' }) => {
                                                             {isLoading ? (
                                                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                             ) : (
-                                                                role === 'acheteur' ? 'Creer mon compte' : 'Soumettre le dossier'
+                                                                role === 'acheteur' ? 'Créer mon compte' : 'Soumettre le dossier'
                                                             )}
                                                         </button>
                                                     )}
                                                 </div>
                                             </form>
+                                            </div>
                                         </div>
                                     )}
                                 </div>

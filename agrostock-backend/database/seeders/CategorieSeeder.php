@@ -14,16 +14,16 @@ class CategorieSeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['nom' => 'Céréales et farines',    'slug' => 'cereales-et-farines'],
-            ['nom' => 'Légumineuses',            'slug' => 'legumineuses'],
-            ['nom' => 'Tubercules et racines',   'slug' => 'tubercules-et-racines'],
-            ['nom' => 'Oléagineux',              'slug' => 'oleagineux'],
-            ['nom' => 'Fruits et légumes',       'slug' => 'fruits-et-legumes'],
-            ['nom' => 'Viandes et poissons',     'slug' => 'viandes-et-poissons'],
-            ['nom' => 'Épices et condiments',    'slug' => 'epices-et-condiments'],
-            ['nom' => 'Produits laitiers',       'slug' => 'produits-laitiers'],
-            ['nom' => 'Jus et boisson',          'slug' => 'jus-et-boisson'],
-            ['nom' => 'Snack et autres',         'slug' => 'snack-et-autres'],
+            ['nom' => 'Céréales et farines',                   'slug' => 'cereales-et-farines'],
+            ['nom' => 'Tubercules transformés',                'slug' => 'tubercules-transformes'],
+            ['nom' => 'Fruits et légumes transformés',         'slug' => 'fruits-et-legumes-transformes'],
+            ['nom' => 'Jus et boissons naturelles',            'slug' => 'jus-et-boissons-naturelles'],
+            ['nom' => 'Huiles alimentaires',                   'slug' => 'huiles-alimentaires'],
+            ['nom' => 'Épices et condiments',                  'slug' => 'epices-et-condiments'],
+            ['nom' => 'Produits laitiers',                     'slug' => 'produits-laitiers'],
+            ['nom' => 'Produits carnés et halieutiques',       'slug' => 'produits-carnes-et-halieutiques'],
+            ['nom' => 'Snacks et produits sucrés',             'slug' => 'snacks-et-produits-sucres'],
+            ['nom' => 'Conserves et produits fermentés',       'slug' => 'conserves-et-produits-fermentes'],
         ];
 
         DB::table('categories')->insertOrIgnore($categories);

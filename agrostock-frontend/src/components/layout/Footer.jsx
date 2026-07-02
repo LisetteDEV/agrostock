@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Phone, Mail, ArrowRight, MessageCircle } from 'lucide-react';
+import { MapPin, Phone, Mail, ArrowRight, MessageCircle, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const FacebookIcon = ({ size = 17 }) => (
@@ -70,8 +70,18 @@ const Footer = () => {
       <div className="container pt-4 position-relative" style={{ zIndex: 2 }}>
         <div className="row g-4 mb-5">
           <div className="col-12 col-lg-4 pe-lg-4">
-            <Link className="d-inline-flex align-items-center text-decoration-none mb-4" to="/">
-              <img src="/images/logoAgro.png" alt="AgroStock" style={{ height: '52px', width: 'auto' }} />
+            <Link className="d-inline-flex align-items-center gap-2 text-decoration-none mb-4" to="/">
+              <div className="bg-success rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '40px', height: '40px' }}>
+                <Package size={22} className="text-white" strokeWidth={2.5} />
+              </div>
+              <div className="d-flex flex-column justify-content-center" style={{ lineHeight: '1.1' }}>
+                <span style={{ color: '#e8f1eb', fontSize: '1.6rem', fontWeight: '800', letterSpacing: '-0.5px', fontFamily: '"Outfit", system-ui, sans-serif' }}>
+                    Agro<span className="text-success">Stock</span>
+                </span>
+                <span className="text-success" style={{ fontSize: '0.75rem', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', paddingLeft: '2px' }}>
+                    Bénin
+                </span>
+              </div>
             </Link>
 
             <p className="mb-4" style={{ color: muted, lineHeight: 1.7 }}>

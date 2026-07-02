@@ -375,23 +375,6 @@ const MapSection = () => {
                     style={{ fontSize: '0.95rem', fontWeight: 500, minWidth: '100px' }}
                   />
                 </div>
-                <button 
-                  className="btn text-white fw-bold border-0 px-4 position-relative d-flex align-items-center justify-content-center flex-shrink-0 ms-sm-auto w-100" 
-                  onClick={handleSearch}
-                  style={{ 
-                    height: '42px',
-                    background: 'linear-gradient(135deg, #1ab273 0%, #128e5a 100%)', 
-                    borderRadius: '50px', 
-                    transition: 'all 0.3s',
-                    boxShadow: '0 4px 10px rgba(26,178,115,0.2)',
-                    maxWidth: '100%',
-                  }}
-                  onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 15px rgba(26,178,115,0.3)'; }}
-                  onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 10px rgba(26,178,115,0.2)'; }}
-                >
-                  <span className="d-sm-none">Chercher</span>
-                  <span className="d-none d-sm-inline">Rechercher</span>
-                </button>
               </div>
             </div>
 

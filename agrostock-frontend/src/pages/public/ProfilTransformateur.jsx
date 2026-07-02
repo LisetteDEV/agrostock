@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MapPin, ShieldCheck, Package, ArrowLeft, Star } from 'lucide-react';
@@ -259,11 +259,6 @@ const ProfilTransformateur = () => {
                                                                 <span className="fw-bold" style={{ color: '#1ab273', fontSize: '0.95rem' }}>
                                                                     {formatPrice(p.prix_unitaire)}
                                                                 </span>
-                                                                {p.unite_mesure && (
-                                                                    <span className="badge bg-light text-muted rounded-pill px-2" style={{ fontSize: '0.72rem' }}>
-                                                                        / {p.unite_mesure}
-                                                                    </span>
-                                                                )}
                                                             </div>
                                                         </div>
                                                     </div>

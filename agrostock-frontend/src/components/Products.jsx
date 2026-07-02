@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../services/config';
 const API_BASE = `${API_URL}`;
@@ -149,7 +149,7 @@ const Products = () => {
                                             <div className="mb-3">
                                                 <h5 className="fw-bold mb-1" style={{ color: '#ffffff', fontSize: '1.1rem' }}>{product.nom}</h5>
                                                 <div style={{ color: '#a0a0a0', fontSize: '0.85rem' }}>
-                                                    {product.unite_mesure ? `/ ${product.unite_mesure}` : ''}
+                                                    {/* unite_mesure removed */}
                                                 </div>
                                             </div>
 
@@ -167,9 +167,20 @@ const Products = () => {
                                                 >
                                                     {product.vendeur_initiales}
                                                 </div>
-                                                <span style={{ color: '#1ab273', fontSize: '0.85rem', fontWeight: '500' }}>
-                                                    {product.entreprise}
-                                                </span>
+                                                {product.transformateur_id ? (
+                                                    <Link
+                                                        to={`/transformateur/${product.transformateur_id}`}
+                                                        style={{ color: '#1ab273', fontSize: '0.85rem', fontWeight: '500', textDecoration: 'none', transition: 'color 0.2s' }}
+                                                        onMouseEnter={(e) => e.target.style.color = '#148b59'}
+                                                        onMouseLeave={(e) => e.target.style.color = '#1ab273'}
+                                                    >
+                                                        {product.entreprise}
+                                                    </Link>
+                                                ) : (
+                                                    <span style={{ color: '#1ab273', fontSize: '0.85rem', fontWeight: '500' }}>
+                                                        {product.entreprise}
+                                                    </span>
+                                                )}
                                                 {product.commune && (
                                                     <>
                                                         <div style={{ width: '4px', height: '4px', backgroundColor: '#1ab273', borderRadius: '50%' }} />

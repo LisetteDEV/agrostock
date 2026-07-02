@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
     Home,
@@ -10,6 +10,7 @@ import {
     ShoppingCart,
     Menu,
     X,
+    Package
 } from 'lucide-react';
 
 import RegisterModal from '../auth/RegisterModal';
@@ -65,32 +66,29 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`navbar navbar-expand-lg fixed-top transition-all duration-500 navbar-glow ${
-                scrolled ? 'py-2' : 'py-3'
-            }`}
+            className="navbar navbar-expand-lg fixed-top navbar-glow navbar-fixed-height"
             style={{
                 zIndex: 1000,
                 position: 'fixed',
-                background: scrolled ? 'rgba(255, 255, 255, 0.97)' : 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(16px)',
-                WebkitBackdropFilter: 'blur(16px)',
-                borderBottom: '1px solid rgba(16, 92, 56, 0.16)',
+                background: scrolled ? 'rgba(255, 255, 255, 0.98)' : 'rgba(255, 255, 255, 0.92)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                borderBottom: scrolled ? '1px solid rgba(16, 92, 56, 0.2)' : '1px solid rgba(16, 92, 56, 0.1)',
+                boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.08)' : 'none',
+                transition: 'background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
                 overflow: 'hidden',
             }}
         >
             <div className="navbar-grid-glow" aria-hidden="true"></div>
             <div className="container">
-                <Link className="navbar-brand d-flex align-items-center p-0" to="/">
-                    <img
-                        src="/images/logoAgro.png"
-                        alt="AgroStock"
-                        className="img-fluid"
-                        style={{ height: '55px', width: 'auto' }}
-                        onError={(e) => {
-                            e.target.style.display = 'none';
-                            e.target.parentElement.innerHTML = '<span class="text-success fw-bold fs-3">AS</span>';
-                        }}
-                    />
+                <Link className="navbar-brand d-flex align-items-center gap-2 p-0 text-decoration-none" to="/">
+                    <div className="bg-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: '38px', height: '38px', flexShrink: 0, background: 'linear-gradient(135deg, #1ab273, #105c38)' }}>
+                        <Package size={20} className="text-white" strokeWidth={2.5} />
+                    </div>
+                    <div className="d-flex flex-column justify-content-center" style={{ lineHeight: '1.15', gap: 0 }}>
+                        <span className="brand-name">Agro<span style={{ color: '#1ab273' }}>Stock</span></span>
+                        <span className="brand-sub">Bénin</span>
+                    </div>
                 </Link>
 
                 <div className="d-flex align-items-center gap-2 d-lg-none">

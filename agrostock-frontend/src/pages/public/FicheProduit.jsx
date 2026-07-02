@@ -35,7 +35,7 @@ const FicheProduit = () => {
                 const defaultMode = loaded.mode_vente === 'gros' ? 'gros' : 'detail';
                 setProduct(loaded);
                 setModeAchat(defaultMode);
-                setQuantite(defaultMode === 'gros' ? 20 : 1);
+                setQuantite(defaultMode === 'gros' ? 10 : 1);
                 setLoading(false);
             })
             .catch((err) => {
@@ -48,12 +48,12 @@ const FicheProduit = () => {
 
     const getStockInfo = (stock) => {
         if (!stock || stock === 0) return { label: 'Rupture de stock', color: '#dc3545', bg: '#fff0f0' };
-        if (stock < 20) return { label: `Stock faible (${stock} restants)`, color: '#d97706', bg: '#fffbeb' };
-        return { label: `En stock (${stock} ${product?.unite_mesure || 'unites'})`, color: '#16a34a', bg: '#f0fdf4' };
+        if (stock < 10) return { label: `Stock faible (${stock} restants)`, color: '#d97706', bg: '#fffbeb' };
+        return { label: `En stock (${stock})`, color: '#16a34a', bg: '#f0fdf4' };
     };
 
     const modeVente = product?.mode_vente || 'les_deux';
-    const minimumGros = Number(product?.quantite_min_gros || 20);
+    const minimumGros = Number(product?.quantite_min_gros || 10);
     const isGrosAllowed = modeVente === 'gros' || modeVente === 'les_deux';
     const isDetailAllowed = modeVente === 'detail' || modeVente === 'les_deux';
     const prixActif = modeAchat === 'gros' ? Number(product?.prix_gros || 0) : Number(product?.prix_unitaire || 0);
@@ -101,7 +101,7 @@ const FicheProduit = () => {
     const images = product.images && product.images.length > 0 ? product.images : null;
 
     return (
-        <div style={{ paddingTop: '90px', background: '#f8fbf8', minHeight: '100vh' }}>
+        <div style={{ paddingTop: '64px', background: '#f8fbf8', minHeight: '100vh' }}>
             <div style={{ background: '#fff', borderBottom: '1px solid #eee' }}>
                 <div className="container py-3">
                     <nav aria-label="breadcrumb">
@@ -149,7 +149,6 @@ const FicheProduit = () => {
                             <div className="mb-4">
                                 <div className="d-flex align-items-baseline gap-3 flex-wrap">
                                     <span style={{ fontSize: '2.2rem', fontWeight: '800', color: '#1ab273' }}>{formatPrice(prixActif)}</span>
-                                    {product.unite_mesure && <span className="text-muted fw-medium">/ {product.unite_mesure}</span>}
                                 </div>
                                 {product.prix_gros && <div className="mt-1"><span className="badge bg-warning text-dark rounded-pill px-3 py-1" style={{ fontSize: '0.8rem' }}>Prix de gros : {formatPrice(product.prix_gros)}</span></div>}
                             </div>
@@ -230,7 +229,17 @@ const FicheProduit = () => {
                                     {product.vendeur_initiales}
                                 </div>
                                 <div>
-                                    <div className="fw-bold text-dark">{product.entreprise}</div>
+                                    <div className="fw-bold">
+                                        <Link 
+                                            to={`/transformateur/${product.transformateur_id}`} 
+                                            className="text-dark text-decoration-none" 
+                                            onMouseEnter={(e) => e.target.style.color = '#1ab273'}
+                                            onMouseLeave={(e) => e.target.style.color = '#212529'}
+                                            style={{ transition: 'color 0.2s' }}
+                                        >
+                                            {product.entreprise}
+                                        </Link>
+                                    </div>
                                     <div className="text-muted small">{[product.commune, product.departement].filter(Boolean).join(', ')} - Benin</div>
                                     {product.type_entreprise && <span className="badge mt-1 rounded-pill px-2 py-1" style={{ background: 'rgba(26,178,115,0.15)', color: '#1ab273', fontSize: '0.75rem' }}>{product.type_entreprise}</span>}
                                 </div>

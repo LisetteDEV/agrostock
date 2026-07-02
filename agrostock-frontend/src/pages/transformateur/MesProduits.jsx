@@ -54,7 +54,7 @@ const MesProduits = () => {
 
     // Form state
     const [editingId, setEditingId] = useState(null);
-    const [formData, setFormData] = useState({ nom: '', categorie: '', prix: '', prix_gros: '', mode_vente: 'les_deux', quantite_min_gros: 20, unite_mesure: 'kg', delai_livraison: '', description: '', stock: '' });
+    const [formData, setFormData] = useState({ nom: '', categorie: '', prix: '', prix_gros: '', mode_vente: 'les_deux', quantite_min_gros: 10, unite_mesure: 'kg', delai_livraison: '', description: '', stock: '' });
     const [productImage, setProductImage] = useState(null);
     const [productImagePreview, setProductImagePreview] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -153,7 +153,7 @@ const MesProduits = () => {
         fd.append('prix_unitaire', formData.prix);
         if (formData.prix_gros) fd.append('prix_gros', formData.prix_gros);
         fd.append('mode_vente', formData.mode_vente);
-        fd.append('quantite_min_gros', '20');
+        fd.append('quantite_min_gros', '10');
         fd.append('unite_mesure', formData.unite_mesure);
         if (formData.delai_livraison) fd.append('delai_livraison', formData.delai_livraison);
         fd.append('description', formData.description);
@@ -175,7 +175,7 @@ const MesProduits = () => {
                 setSuccessMsg(editingId ? 'Produit mis a jour !' : 'Produit publie avec succes !');
                 setShowPublishModal(false);
                 setEditingId(null);
-                setFormData({ nom: '', categorie: '', prix: '', prix_gros: '', mode_vente: 'les_deux', quantite_min_gros: 20, unite_mesure: 'kg', delai_livraison: '', description: '', stock: '' });
+                setFormData({ nom: '', categorie: '', prix: '', prix_gros: '', mode_vente: 'les_deux', quantite_min_gros: 10, unite_mesure: 'kg', delai_livraison: '', description: '', stock: '' });
                 setSelectedCategory('');
                 setProductImage(null);
                 setProductImagePreview(null);
@@ -203,7 +203,7 @@ const MesProduits = () => {
             prix: p.prix_unitaire || '',
             prix_gros: p.prix_gros || '',
             mode_vente: p.mode_vente || 'les_deux',
-            quantite_min_gros: Number(p.quantite_min_gros || 20),
+            quantite_min_gros: Number(p.quantite_min_gros || 10),
             unite_mesure: p.unite_mesure || 'kg',
             delai_livraison: p.delai_livraison || '',
             description: p.description || '',
@@ -458,7 +458,7 @@ const MesProduits = () => {
                             <button className="btn btn-light rounded-circle p-2 d-flex align-items-center justify-content-center" onClick={() => {
                                 setShowPublishModal(false); 
                                 setEditingId(null);
-                                setFormData({ nom: '', categorie: '', prix: '', prix_gros: '', mode_vente: 'les_deux', quantite_min_gros: 20, unite_mesure: 'kg', delai_livraison: '', description: '', stock: '' });
+                                setFormData({ nom: '', categorie: '', prix: '', prix_gros: '', mode_vente: 'les_deux', quantite_min_gros: 10, unite_mesure: 'kg', delai_livraison: '', description: '', stock: '' });
                                 setSelectedCategory('');
                                 setProductImage(null);
                                 setProductImagePreview(null);
@@ -628,7 +628,7 @@ const MesProduits = () => {
                             <button className="btn fw-bold text-slate-500 hover-text-slate-800" onClick={() => {
                                 setShowPublishModal(false); 
                                 setEditingId(null);
-                                setFormData({ nom: '', categorie: '', prix: '', prix_gros: '', mode_vente: 'les_deux', quantite_min_gros: 20, unite_mesure: 'kg', delai_livraison: '', description: '', stock: '' });
+                                setFormData({ nom: '', categorie: '', prix: '', prix_gros: '', mode_vente: 'les_deux', quantite_min_gros: 10, unite_mesure: 'kg', delai_livraison: '', description: '', stock: '' });
                                 setSelectedCategory('');
                                 setProductImage(null);
                                 setProductImagePreview(null);

@@ -14,7 +14,7 @@ const Panier = () => {
     const canCheckout = invalidGrossItems.length === 0;
 
     return (
-        <div style={{ paddingTop: '90px', background: '#f8fbf8', minHeight: '100vh', paddingBottom: '80px' }}>
+        <div style={{ paddingTop: '64px', background: '#f8fbf8', minHeight: '100vh', paddingBottom: '80px' }}>
             <div className="container py-5">
                 <h2 className="fw-bold mb-4" style={{ color: '#0f3a23' }}>Votre Panier</h2>
 
@@ -35,7 +35,7 @@ const Panier = () => {
                             <div className="bg-white rounded-4 shadow-sm p-4">
                                 {panier.map((item) => {
                                     const linePrice = getPrixByMode(item);
-                                    const minGros = Number(item.quantite_min_gros || 20);
+                                    const minGros = Number(item.quantite_min_gros || 10);
                                     return (
                                         <motion.div
                                             key={item.panier_key}
@@ -55,7 +55,7 @@ const Panier = () => {
                                                 </div>
                                                 <div>
                                                     <h5 className="fw-bold mb-1" style={{ fontSize: '1.1rem' }}>{item.nom}</h5>
-                                                    <p className="text-success fw-bold mb-1">{formatPrice(linePrice)} {item.unite_mesure ? `/ ${item.unite_mesure}` : ''}</p>
+                                                    <p className="text-success fw-bold mb-1">{formatPrice(linePrice)}</p>
                                                     <span className={`badge rounded-pill ${item.mode_achat === 'gros' ? 'bg-warning text-dark' : 'bg-success-subtle text-success'}`}>
                                                         {item.mode_achat === 'gros' ? `Gros (min ${minGros})` : 'Detail'}
                                                     </span>

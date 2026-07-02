@@ -64,11 +64,16 @@ const AdminLayout = () => {
                    style={{ width: '260px', height: '100vh', top: 0, left: 0, background: '#0a1d13', zIndex: 1050, borderRight: '1px solid #183827', overflowY: 'auto' }}>
                 <div className="p-4 d-flex align-items-center justify-content-between flex-shrink-0" style={{ borderBottom: '1px solid #183827' }}>
                     <div className="d-flex align-items-center gap-2">
-                        <img src="/images/logoAgro.png" alt="AgroStock" style={{ height: '38px', width: 'auto' }}
-                             onError={(e) => { e.target.style.display = 'none'; }} />
-                        <div>
-                            <div className="fw-bold text-white" style={{ fontSize: '0.95rem' }}>AgroStock</div>
-                            <div className="text-success small fw-bold" style={{ fontSize: '0.7rem' }}>ADMIN PANEL</div>
+                        <div className="bg-success rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '38px', height: '38px' }}>
+                            <Package size={20} className="text-white" strokeWidth={2.5}/>
+                        </div>
+                        <div className="d-flex flex-column justify-content-center lh-1">
+                            <span style={{ color: '#fff', fontSize: '1.2rem', fontWeight: '800', letterSpacing: '-0.5px', fontFamily: '"Outfit", system-ui, sans-serif' }}>
+                                Agro<span className="text-success">Stock</span>
+                            </span>
+                            <span className="text-success" style={{ fontSize: '0.65rem', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', paddingLeft: '1px' }}>
+                                ADMIN PANEL
+                            </span>
                         </div>
                     </div>
                     <button className="btn btn-sm text-white d-lg-none p-0" onClick={() => setSidebarOpen(false)}><X size={20} /></button>

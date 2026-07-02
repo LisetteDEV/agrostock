@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { Newspaper } from 'lucide-react';
 import { API_URL } from '../../services/config';
 const API_BASE = `${API_URL}`;
 
@@ -21,35 +22,38 @@ const Blog = () => {
     return (
         <div style={{ background: '#f8f9fa', minHeight: '100vh', paddingBottom: '80px' }}>
             {/* HERO SECTION PREMIUM */}
-            <div className="position-relative overflow-hidden mb-5" style={{ background: '#0a1d13', paddingTop: '150px', paddingBottom: '90px' }}>
-                <div className="position-absolute bg-success rounded-circle" style={{ width: '400px', height: '400px', filter: 'blur(100px)', opacity: 0.15, top: '20%', left: '-10%' }}></div>
-                <div className="position-absolute bg-success rounded-circle" style={{ width: '500px', height: '500px', filter: 'blur(120px)', opacity: 0.1, bottom: '-20%', right: '-10%' }}></div>
+            <section
+                className="position-relative overflow-hidden mb-5"
+                style={{
+                    padding: '100px 0 80px 0',
+                    background: 'linear-gradient(135deg, rgba(15,46,28,0.85) 0%, rgba(23,84,50,0.85) 100%), url(/images/hero/slide1.jpg) center/cover no-repeat',
+                }}
+            >
+                {/* Decorative UI elements */}
+                <div className="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style={{ pointerEvents: 'none', opacity: 0.6 }}>
+                    <div className="position-absolute" style={{ top: '-10%', left: '-5%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(26, 178, 115, 0.4) 0%, transparent 60%)', borderRadius: '50%' }} />
+                    <div className="position-absolute" style={{ bottom: '-20%', right: '10%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(234, 179, 8, 0.15) 0%, transparent 60%)', borderRadius: '50%' }} />
+                </div>
                 
                 <div className="container position-relative z-1">
                     <div className="row justify-content-center text-center">
                         <div className="col-lg-8">
-                            <motion.span 
-                                initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
-                                className="badge bg-success bg-opacity-25 text-success rounded-pill px-4 py-2 mb-4 fw-bold" style={{ letterSpacing: '2px', fontSize: '0.8rem' }}
-                            >
-                                ACTUALITES & RESSOURCES
-                            </motion.span>
-                            <motion.h1 
-                                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                                className="display-3 fw-bold mb-4 text-white" style={{ letterSpacing: '-1px' }}
-                            >
-                                Le Hub de <span style={{ color: '#1ab273' }}>l'Agro-Innovation</span>
-                            </motion.h1>
-                            <motion.p 
-                                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-                                className="lead mx-auto" style={{ maxWidth: '700px', color: '#8a9b92', lineHeight: '1.8' }}
-                            >
-                                Decryptez les tendances du marche, decouvrez nos conseils exclusifs en qualite et packaging, et suivez la revolution de l'agroalimentaire au Benin.
-                            </motion.p>
+                            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+                                <span className="badge rounded-pill px-4 py-2 mb-4 shadow-sm" style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', letterSpacing: '1px', backdropFilter: 'blur(10px)' }}>
+                                    <Newspaper size={14} className="me-2" />
+                                    ACTUALITÉS & RESSOURCES
+                                </span>
+                                <h1 className="fw-bold text-white mb-4 display-4" style={{ letterSpacing: '-1px' }}>
+                                    Le Hub de <span style={{ color: '#4ade80' }}>l'Agro-Innovation</span>
+                                </h1>
+                                <p className="lead mx-auto mb-0" style={{ color: 'rgba(255,255,255,0.85)', maxWidth: '700px' }}>
+                                    Décryptez les tendances du marché, découvrez nos conseils exclusifs en qualité et packaging, et suivez la révolution de l'agroalimentaire au Bénin.
+                                </p>
+                            </motion.div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <div className="container">
                 {loading ? (

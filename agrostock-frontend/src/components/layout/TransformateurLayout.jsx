@@ -53,11 +53,19 @@ const TransformateurLayout = () => {
                 transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
             }}>
                 <div className="p-4 d-flex align-items-center justify-content-between" style={{ borderBottom: '1px solid #183827' }}>
-                    <div className="d-flex align-items-center gap-2">
-                        <img src="/images/logoAgro.png" alt="Logo" style={{ height: '35px' }}
-                             onError={e => e.target.style.display = 'none'} />
-                        <span className="fw-bold fs-5 text-white">AgroStock <span className="text-success">Pro</span></span>
-                    </div>
+                    <Link to="/" className="d-flex align-items-center text-white text-decoration-none gap-2">
+                        <div className="bg-success rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '38px', height: '38px' }}>
+                            <Package size={20} className="text-white" strokeWidth={2.5}/>
+                        </div>
+                        <div className="d-flex flex-column justify-content-center lh-1">
+                            <span style={{ color: '#fff', fontSize: '1.2rem', fontWeight: '800', letterSpacing: '-0.5px', fontFamily: '"Outfit", system-ui, sans-serif' }}>
+                                Agro<span className="text-success">Stock</span>
+                            </span>
+                            <span className="text-success" style={{ fontSize: '0.65rem', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase', paddingLeft: '1px' }}>
+                                Bénin
+                            </span>
+                        </div>
+                    </Link>
                     <button type="button" className="btn btn-link text-white p-0 d-lg-none" onClick={() => setSidebarOpen(false)}>
                         <X size={24} />
                     </button>

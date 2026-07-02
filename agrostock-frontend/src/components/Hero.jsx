@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom';
 
 const heroImages = [
     '/images/hero/slide1.jpg',
-    '/images/hero/slide2.jpg',
-    '/images/hero/slide3.png',
-    '/images/hero/slide4.jpg',
+    '/images/hero/slide2.png',
+     '/images/hero/slide3.jpg',
+    '/images/hero/slide4.png',
+    
 ];
 
 const statsData = [
@@ -53,7 +54,7 @@ const Hero = () => {
     }, []);
 
     return (
-        <section id="accueil" className="position-relative overflow-hidden" style={{ minHeight: '90vh', background: '#000' }}>
+        <section id="accueil" className="position-relative overflow-hidden" style={{ minHeight: '90vh', background: '#000', paddingTop: '64px' }}>
             {/* Slideshow background */}
             {heroImages.map((img, index) => {
                 const isActive = index === currentSlide;

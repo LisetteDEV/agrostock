@@ -109,8 +109,8 @@ const Dashboard = () => {
           <h4 className="fw-bolder text-dark mb-1">Bienvenue, {user?.nom_complet}</h4>
           <p className="text-muted small mb-0">Ravi de vous revoir sur AgroStock.</p>
         </div>
-        <Link to="/" className="btn btn-success px-4 py-2 rounded-pill fw-bold small shadow-sm d-flex align-items-center gap-2 transform-hover border-0">
-          <ShoppingBag size={16} /> Market
+        <Link to="/catalogue" className="btn btn-success px-4 py-2 rounded-pill fw-bold small shadow-sm d-flex align-items-center gap-2 transform-hover border-0">
+          <ShoppingBag size={16} /> Catalogue
         </Link>
       </div>
 

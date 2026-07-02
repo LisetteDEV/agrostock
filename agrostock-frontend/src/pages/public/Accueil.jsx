@@ -307,7 +307,7 @@ const FAQSection = () => {
 
 const Accueil = () => {
     return (
-        <div style={{ paddingTop: '85px' }}>
+        <div>
             <Hero />
             <HowItWorks />
             <Products />
