@@ -236,7 +236,7 @@ const Commandes = () => {
 
   const canShowBon = (cmd) => {
     const statut = cmd?.statut;
-    return cmd?.logistique_mode === "livreur_propre" && ["en_attente_retrait_livreur", "en_cours_livraison", "livree"].includes(statut);
+    return cmd?.logistique_mode === "livreur_propre" && ["en_attente_confirmation", "confirmee", "en_attente_retrait_livreur", "en_cours_livraison", "livree"].includes(statut);
   };
 
   const filteredCommandes = commandes.filter((cmd) => String(cmd.numero || cmd.id).toLowerCase().includes(searchTerm.toLowerCase()));

@@ -351,7 +351,7 @@ class CommandeController extends Controller
 
         $normalizedStatus = $commande->statut === 'en_cours' ? 'en_cours_livraison' : $commande->statut;
         $isBonVisible = $commande->logistique_mode === 'livreur_propre'
-            && in_array($normalizedStatus, ['en_attente_retrait_livreur', 'en_cours_livraison', 'livree'], true);
+            && in_array($normalizedStatus, ['en_attente_confirmation', 'confirmee', 'en_attente_retrait_livreur', 'en_cours_livraison', 'livree'], true);
 
         if (!$isBonVisible) {
             return response()->json(['message' => 'Bon de retrait indisponible pour ce statut de commande'], 404);
@@ -683,7 +683,7 @@ class CommandeController extends Controller
         $bon = $cmd->bonRetrait;
         $bonPayload = null;
         $canExposeBon = $cmd->logistique_mode === 'livreur_propre'
-            && in_array($normalizedStatus, ['en_attente_retrait_livreur', 'en_cours_livraison', 'livree'], true);
+            && in_array($normalizedStatus, ['en_attente_confirmation', 'confirmee', 'en_attente_retrait_livreur', 'en_cours_livraison', 'livree'], true);
 
         if ($bon && $canExposeBon) {
             $gpsLink = $bon->gps_link;
