@@ -196,35 +196,35 @@ class CommandeController extends Controller
                     ]);
 
                     Produit::where('id', $ligne['produit_id'])->decrement('stock', $ligne['quantite']);
-                }
+                                    }
 
-                if ($request->logistique_mode === 'livreur_propre' && $transformateur) {
-                    $bon = $this->createBonRetrait($commande, $transformateur);
-                    $bonsRetrait[] = [
-                        'commande_id' => $commande->id,
-                        'code' => $bon->code,
-                        'otp_code' => $bon->otp_code,
-                        'zone_retrait' => $bon->zone_retrait,
-                        'gps_link' => $bon->gps_link,
-                        'instructions' => $bon->instructions,
-                    ];
-                }
+                                    if ($request->logistique_mode === 'livreur_propre' && $transformateur) {
+                                        $bon = $this->createBonRetrait($commande, $transformateur);
+                                        $bonsRetrait[] = [
+                                            'commande_id' => $commande->id,
+                                            'code' => $bon->code,
+                                            'otp_code' => $bon->otp_code,
+                                            'zone_retrait' => $bon->zone_retrait,
+                                            'gps_link' => $bon->gps_link,
+                                            'instructions' => $bon->instructions,
+                                        ];
+                                    }
 
-                Transaction::create([
-                    'commande_id' => $commande->id,
-                    'from_user_id' => $user->id,
-                    'to_user_id' => null,
-                    'reference' => 'PAY-' . $commande->id . '-' . now()->format('YmdHis'),
-                    'type' => 'paiement',
-                    'operateur' => $request->paiement_operateur,
-                    'numero_masked' => $this->maskPhone((string) $request->input('numero_mobile', '')),
-                    'montant' => $montantTotal,
-                    'statut' => 'succeeded',
-                    'meta' => [
-                        'escrow_status' => 'held',
-                        'logistique_mode' => $request->logistique_mode,
-                    ],
-                ]);
+                                    Transaction::create([
+                                        'commande_id' => $commande->id,
+                                        'from_user_id' => $user->id,
+                                        'to_user_id' => null,
+                                        'reference' => 'PAY-' . $commande->id . '-' . now()->format('YmdHis'),
+                                        'type' => 'paiement',
+                                        'operateur' => $request->paiement_operateur,
+                                        'numero_masked' => $this->maskPhone((string) $request->input('numero_mobile', '')),
+                                        'montant' => $montantTotal,
+                                        'statut' => 'succeeded',
+                                        'meta' => [
+                                            'escrow_status' => 'held',
+                                            'logistique_mode' => $request->logistique_mode,
+                                        ],
+                                    ]);
 
                 $createdCommandes[] = $commande->id;
                 $commandesResume[] = [
@@ -814,8 +814,3 @@ class CommandeController extends Controller
         return str_repeat('*', $len - 4) . substr($digits, -4);
     }
 }
-
-
-
-
-

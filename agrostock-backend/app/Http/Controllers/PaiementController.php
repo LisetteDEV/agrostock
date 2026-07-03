@@ -23,7 +23,7 @@ class PaiementController extends Controller
             'ville_livraison' => 'required|string',
             'telephone_livraison' => 'required|string',
             'paiement_operateur' => 'required|string',
-            'numero_mobile' => 'required|string|min:8',
+            'numero_mobile' => 'nullable|string',
             'simulate_echec' => 'nullable|boolean',
         ]);
 

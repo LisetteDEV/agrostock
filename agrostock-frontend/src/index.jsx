@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,51 +12,54 @@ import Footer from './components/layout/Footer';
 import ScrollToTopButton from './components/layout/ScrollToTopButton';
 import AgroBotWidget from './components/layout/AgroBotWidget';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import Accueil from './pages/public/Accueil';
-import APropos from './pages/public/APropos';
-import Catalogue from './pages/public/Catalogue';
-import FicheProduit from './pages/public/FicheProduit';
-import Transformateurs from './pages/public/Transformateurs';
-import ProfilTransformateur from './pages/public/ProfilTransformateur';
-import Blog from './pages/public/Blog';
-import Contact from './pages/public/Contact';
-import ArticleSingle from './pages/public/ArticleSingle';
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
-import AdminLogin from './pages/admin/AdminLogin';
-import DashboardAcheteur from './pages/acheteur/Dashboard';
-import Panier from './pages/acheteur/Panier';
-import Checkout from './pages/acheteur/Checkout';
-import MesCommandes from './pages/acheteur/Commandes';
-import ProfilAcheteur from './pages/acheteur/Profil';
-import Favoris from './pages/acheteur/Favoris';
-import HistoriqueAvis from './pages/acheteur/Avis';
-import DashboardTransformateur from './pages/transformateur/Dashboard';
-import MesProduits from './pages/transformateur/MesProduits';
-import GestionCommandes from './pages/transformateur/GestionCommandes';
-import Statistiques from './pages/transformateur/Statistiques';
-import ProfilEntreprise from './pages/transformateur/ProfilEntreprise';
-import ParametresTransformateur from './pages/transformateur/Parametres';
 import TransformateurLayout from './components/layout/TransformateurLayout';
 import AcheteurLayout from './components/layout/AcheteurLayout';
 import AdminLayout from './components/layout/AdminLayout';
-import AdminDashboard from './pages/admin/Dashboard';
-import AdminUtilisateurs from './pages/admin/Utilisateurs';
-import AdminTransformateurs from './pages/admin/Transformateurs';
-import AdminProduits from './pages/admin/Produits';
-import AdminCommandes from './pages/admin/Commandes';
-import AdminTransactions from './pages/admin/Transactions';
-import AdminAvis from './pages/admin/Avis';
-import AdminBlog from './pages/admin/Blog';
-import AdminParametres from './pages/admin/Parametres';
-import AdminMessagesContact from './pages/admin/MessagesContact';
+
+// Code Splitting - Lazy Loading Pages
+const Accueil = lazy(() => import('./pages/public/Accueil'));
+const APropos = lazy(() => import('./pages/public/APropos'));
+const Catalogue = lazy(() => import('./pages/public/Catalogue'));
+const FicheProduit = lazy(() => import('./pages/public/FicheProduit'));
+const Transformateurs = lazy(() => import('./pages/public/Transformateurs'));
+const ProfilTransformateur = lazy(() => import('./pages/public/ProfilTransformateur'));
+const Blog = lazy(() => import('./pages/public/Blog'));
+const Contact = lazy(() => import('./pages/public/Contact'));
+const ArticleSingle = lazy(() => import('./pages/public/ArticleSingle'));
+const Login = lazy(() => import('./pages/auth/Login'));
+const Register = lazy(() => import('./pages/auth/Register'));
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
+const DashboardAcheteur = lazy(() => import('./pages/acheteur/Dashboard'));
+const Panier = lazy(() => import('./pages/acheteur/Panier'));
+const Checkout = lazy(() => import('./pages/acheteur/Checkout'));
+const MesCommandes = lazy(() => import('./pages/acheteur/Commandes'));
+const ProfilAcheteur = lazy(() => import('./pages/acheteur/Profil'));
+const Favoris = lazy(() => import('./pages/acheteur/Favoris'));
+const HistoriqueAvis = lazy(() => import('./pages/acheteur/Avis'));
+const DashboardTransformateur = lazy(() => import('./pages/transformateur/Dashboard'));
+const MesProduits = lazy(() => import('./pages/transformateur/MesProduits'));
+const GestionCommandes = lazy(() => import('./pages/transformateur/GestionCommandes'));
+const Statistiques = lazy(() => import('./pages/transformateur/Statistiques'));
+const ProfilEntreprise = lazy(() => import('./pages/transformateur/ProfilEntreprise'));
+const ParametresTransformateur = lazy(() => import('./pages/transformateur/Parametres'));
+const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
+const AdminUtilisateurs = lazy(() => import('./pages/admin/Utilisateurs'));
+const AdminTransformateurs = lazy(() => import('./pages/admin/Transformateurs'));
+const AdminProduits = lazy(() => import('./pages/admin/Produits'));
+const AdminCommandes = lazy(() => import('./pages/admin/Commandes'));
+const AdminTransactions = lazy(() => import('./pages/admin/Transactions'));
+const AdminAvis = lazy(() => import('./pages/admin/Avis'));
+const AdminBlog = lazy(() => import('./pages/admin/Blog'));
+const AdminParametres = lazy(() => import('./pages/admin/Parametres'));
+const AdminMessagesContact = lazy(() => import('./pages/admin/MessagesContact'));
 
 const AnimatedRoutes = () => {
   const location = useLocation();
 
   return (
     <div key={location.pathname}>
-      <Routes location={location}>
+      <Suspense fallback={<div className="d-flex justify-content-center align-items-center vh-100"><div className="spinner-border text-success" role="status"></div></div>}>
+        <Routes location={location}>
         <Route path="/" element={<Accueil />} />
         <Route path="/a-propos" element={<APropos />} />
         <Route path="/catalogue" element={<Catalogue />} />
@@ -134,6 +137,7 @@ const AnimatedRoutes = () => {
 
         <Route path="*" element={<Accueil />} />
       </Routes>
+      </Suspense>
     </div>
   );
 };
