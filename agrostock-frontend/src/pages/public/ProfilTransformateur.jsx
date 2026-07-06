@@ -284,7 +284,9 @@ const ProfilTransformateur = () => {
                         <div className="row g-3">
                             {avis.map((a, i) => (
                                 <div key={i} className="col-md-6 col-lg-4">
-                                    <div className="card border-0 rounded-4 p-4 h-100" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.07)' }}>
+                                    <div className="card rounded-4 p-4 h-100 transition-all" style={{ background: '#ffffff', border: '1px solid #d1fae5', boxShadow: '0 8px 24px rgba(16, 185, 129, 0.06)' }}
+                                         onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(16, 185, 129, 0.12)'; e.currentTarget.style.borderColor = '#6ee7b7'; }}
+                                         onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(16, 185, 129, 0.06)'; e.currentTarget.style.borderColor = '#d1fae5'; }}>
                                         <div className="d-flex gap-1 mb-3">
                                             {[1,2,3,4,5].map(s => (
                                                 <svg key={s} xmlns="http://www.w3.org/2000/svg" width="16" height="16"

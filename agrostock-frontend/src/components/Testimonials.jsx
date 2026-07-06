@@ -26,28 +26,28 @@ const Testimonials = () => {
     if (avis.length === 0) return null;
 
     return (
-        <section id="avis" className="py-5" style={{ background: '#ffffff' }}>
+        <section id="avis" className="py-5" style={{ background: '#f0fdf4', borderTop: '1px solid #bbf7d0' }}>
             <div className="container py-5">
                 <div className="text-center mb-5">
                     <div className="d-inline-flex align-items-center justify-content-center px-3 py-1 mb-3 rounded-pill"
-                        style={{ background: 'rgba(26, 178, 115, 0.1)', color: '#105c38', fontWeight: '600', fontSize: '0.9rem' }}>
+                        style={{ background: 'rgba(26, 178, 115, 0.12)', color: '#105c38', fontWeight: '700', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                         Avis Utilisateurs
                     </div>
-                    <h2 className="fw-bold mb-3" style={{ color: '#1A1C19', fontSize: '2.5rem' }}>
+                    <h2 className="fw-bold mb-3" style={{ color: '#0f172a', fontSize: '2.5rem', letterSpacing: '-0.5px' }}>
                         Ce que disent nos utilisateurs
                     </h2>
-                    <p style={{ color: '#6c757d', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
-                        Temoignages verifies recueillis apres des transactions sur la plateforme AgroStock Benin.
+                    <p style={{ color: '#64748b', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
+                        Témoignages vérifiés recueillis après des transactions sur la plateforme AgroStock Bénin.
                     </p>
                 </div>
 
                 <div className="row g-4">
                     {avis.map((a, i) => (
                         <div className="col-12 col-md-4" key={i}>
-                            <div className="card h-100 border-0 p-4"
-                                style={{ background: '#ffffff', borderRadius: '16px', boxShadow: '0 8px 30px rgba(0,0,0,0.06)', transition: 'transform 0.3s ease' }}
-                                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-                                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                            <div className="card h-100 p-4 position-relative overflow-hidden"
+                                style={{ background: '#ffffff', border: '1px solid #d1fae5', borderRadius: '24px', boxShadow: '0 10px 40px rgba(16, 185, 129, 0.1)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}
+                                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-8px)'; e.currentTarget.style.boxShadow = '0 20px 40px rgba(16, 185, 129, 0.2)'; e.currentTarget.style.borderColor = '#6ee7b7'; }}
+                                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 40px rgba(16, 185, 129, 0.1)'; e.currentTarget.style.borderColor = '#d1fae5'; }}>
                                 <StarRating rating={a.note} />
                                 <p style={{ color: '#4a5568', fontSize: '1rem', lineHeight: '1.6' }} className="fst-italic mt-3">
                                     "{a.commentaire}"
