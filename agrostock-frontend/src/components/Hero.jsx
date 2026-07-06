@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
 const heroImages = [
-    '/images/hero/slide1.jpg',
-    '/images/hero/slide2.png',
-     '/images/hero/slide3.jpg',
-    '/images/hero/slide4.png',
+    '/images/hero/slide1.webp',
+    '/images/hero/slide2.webp',
+     '/images/hero/slide3.webp',
+    '/images/hero/slide4.webp',
     
 ];
 
