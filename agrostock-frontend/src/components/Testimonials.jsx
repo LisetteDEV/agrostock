@@ -52,7 +52,7 @@ const Testimonials = () => {
                                 <p style={{ color: '#4a5568', fontSize: '1rem', lineHeight: '1.6' }} className="fst-italic mt-3">
                                     "{a.commentaire}"
                                 </p>
-                                <div className="d-flex align-items-center gap-3 mt-4 pt-4" style={{ borderTop: '1px solid #f1f5f9' }}>
+                                <div className="d-flex align-items-center gap-3 mt-auto pt-4" style={{ borderTop: '1px solid #f1f5f9' }}>
                                     <div className="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white"
                                         style={{ width: '48px', height: '48px', background: '#105c38', fontSize: '1.1rem', flexShrink: 0 }}>
                                         {a.acheteur_nom?.charAt(0).toUpperCase() || 'A'}
