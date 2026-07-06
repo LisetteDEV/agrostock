@@ -14,7 +14,7 @@ const CarteProduit = ({ product }) => {
             <div className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden position-relative transition-all hover-up bg-white">
                 <Link to={`/produit/${product.id}`} className="text-decoration-none text-dark">
                     <div className="position-relative" style={{ height: '220px' }}>
-                        <img src={product.img} className="w-100 h-100 object-fit-cover" alt={product.name} />
+                        <img src={product.img} className="w-100 h-100 object-fit-cover" loading="lazy" alt={product.name} />
                         <div className="position-absolute top-0 end-0 m-3">
                             <span className="badge bg-white text-dark shadow-sm rounded-pill px-3 py-2 border-0">{product.category}</span>
                         </div>

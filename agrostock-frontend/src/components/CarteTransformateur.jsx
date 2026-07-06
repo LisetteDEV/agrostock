@@ -12,7 +12,7 @@ const CarteTransformateur = ({ seller }) => {
         >
             <div className="card h-100 border-0 shadow-sm rounded-5 overflow-hidden transition-all hover-up bg-white">
                 <div className="position-relative" style={{ height: '200px' }}>
-                    <img src={seller.img} className="w-100 h-100 object-fit-cover" alt={seller.name} />
+                    <img src={seller.img} className="w-100 h-100 object-fit-cover" loading="lazy" alt={seller.name} />
                     {seller.premium && (
                         <div className="position-absolute top-0 start-0 m-3">
                             <span className="badge rounded-pill px-3 py-2 shadow-lg" style={{ background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)', color: '#684501' }}>
