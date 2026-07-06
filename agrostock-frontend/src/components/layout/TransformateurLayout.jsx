@@ -110,7 +110,7 @@ const TransformateurLayout = () => {
                 {/* Top Header */}
                 <header className="sticky-top d-flex align-items-center justify-content-between px-3 px-md-4 py-3 bg-white shadow-sm" style={{ zIndex: 1030 }}>
                     <div className="d-flex align-items-center gap-3">
-                        <button type="button" className="btn btn-light rounded-3 p-2" onClick={() => setSidebarOpen(true)}>
+                        <button type="button" className="btn btn-light rounded-3 p-2 d-lg-none" onClick={() => setSidebarOpen(true)}>
                             <Menu size={20} className="text-success" />
                         </button>
                         <h5 className="fw-bold text-dark mb-0 d-none d-md-block">
