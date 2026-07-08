@@ -82,7 +82,7 @@ const AcheteurLayout = () => {
                 <div className="mt-auto pt-4 border-top border-white border-opacity-10">
                     <button type="button" 
                             onClick={(e) => { e.preventDefault(); handleLogout(); }} 
-                            className="btn btn-danger w-100 rounded-pill py-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-lg transform-hover border-0">
+                            className="btn btn-success w-100 rounded-pill py-3 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-lg transform-hover border-0">
                         <LogOut size={18} /> Déconnexion
                     </button>
                 </div>

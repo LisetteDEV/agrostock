@@ -96,7 +96,7 @@ const TransformateurLayout = () => {
                         </div>
                     </div>
                     <button type="button" onClick={handleLogout}
-                        className="btn btn-danger w-100 d-flex align-items-center justify-content-center gap-2 py-2 rounded-3 fw-bold border-0">
+                        className="btn btn-success w-100 d-flex align-items-center justify-content-center gap-2 py-2 rounded-3 fw-bold border-0">
                         <LogOut size={18} /> Déconnexion
                     </button>
                 </div>

@@ -133,7 +133,7 @@ const AdminLayout = () => {
                             <div className="bg-success rounded-circle flex-shrink-0" style={{ width: '8px', height: '8px' }}></div>
                             <span className="text-white small fw-bold text-truncate">Admin</span>
                         </div>
-                        <button onClick={handleLogout} className="btn btn-sm btn-outline-danger rounded-pill px-3 d-flex align-items-center gap-2 fw-bold">
+                        <button onClick={handleLogout} className="btn btn-sm btn-outline-success rounded-pill px-3 d-flex align-items-center gap-2 fw-bold">
                             <LogOut size={16} /> <span className="d-none d-md-inline">Déconnexion</span>
                         </button>
                     </div>
