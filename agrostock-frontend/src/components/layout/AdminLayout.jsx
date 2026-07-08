@@ -149,7 +149,7 @@ const AdminLayout = () => {
                 .table-dark { --bs-table-color: #fff; --bs-table-striped-color: #fff; }
                 .form-control:focus, .form-select:focus { box-shadow: 0 0 0 2px rgba(26,178,115,0.3); border-color: #1ab273; }
                 .form-control::placeholder { color: #5a7566; }
-                button.text-start:hover, a.text-start:hover { background: rgba(255, 255, 255, 0.05) !important; color: #fff !important; }
+                aside nav a:hover { background: rgba(255, 255, 255, 0.06) !important; color: #fff !important; }
             `}</style>
         </div>
     );

@@ -53,12 +53,31 @@ const AdminBlog = lazy(() => import('./pages/admin/Blog'));
 const AdminParametres = lazy(() => import('./pages/admin/Parametres'));
 const AdminMessagesContact = lazy(() => import('./pages/admin/MessagesContact'));
 
+const PageLoader = () => (
+  <div style={{
+    position: 'fixed', inset: 0,
+    background: '#050e08',
+    display: 'flex', flexDirection: 'column',
+    alignItems: 'center', justifyContent: 'center',
+    zIndex: 9999
+  }}>
+    <div style={{
+      width: 48, height: 48,
+      border: '3px solid rgba(74,222,128,0.15)',
+      borderTop: '3px solid #4ade80',
+      borderRadius: '50%',
+      animation: 'spin 0.7s linear infinite'
+    }} />
+    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+  </div>
+);
+
 const AnimatedRoutes = () => {
   const location = useLocation();
 
   return (
-    <div key={location.pathname}>
-      <Suspense fallback={<div className="d-flex justify-content-center align-items-center vh-100"><div className="spinner-border text-success" role="status"></div></div>}>
+    <div>
+      <Suspense fallback={<PageLoader />}>
         <Routes location={location}>
         <Route path="/" element={<Accueil />} />
         <Route path="/a-propos" element={<APropos />} />

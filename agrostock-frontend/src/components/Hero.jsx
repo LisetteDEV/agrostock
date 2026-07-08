@@ -106,11 +106,16 @@ const Hero = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
                         >
-                            <h1 className="fw-bold text-white mb-4 lh-sm px-md-5" style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', textShadow: '0 4px 15px rgba(0,0,0,0.5)' }}>
-                                La plateforme des produits <span className="text-success">agroalimentaires</span> transformés au Benin.
+                            <h1 className="fw-bold text-white mb-4 lh-sm px-md-5" style={{
+                                fontSize: 'clamp(2rem, 6vw, 3.5rem)',
+                                textShadow: '0 1px 0 rgba(0,0,0,0.8), 0 2px 6px rgba(0,0,0,0.9), 0 6px 20px rgba(0,0,0,0.7), 0 12px 40px rgba(0,0,0,0.5)'
+                            }}>
+                                La plateforme des produits{' '}
+                                <span className="hero-highlight">agroalimentaires</span>{' '}
+                                transformés au Benin.
                             </h1>
 
-                            <p className="lead text-white mb-5 mx-auto px-md-5" style={{ maxWidth: '850px', lineHeight: '1.7', textShadow: '0 2px 8px rgba(0,0,0,0.6)', fontSize: 'clamp(1.1rem, 3vw, 1.35rem)', fontWeight: '500', opacity: 0.95 }}>
+                            <p className="lead text-white mb-5 mx-auto px-md-5" style={{ maxWidth: '850px', lineHeight: '1.7', textShadow: '0 1px 0 rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.9)', fontSize: 'clamp(1.1rem, 3vw, 1.35rem)', fontWeight: '500', opacity: 0.95 }}>
                                 Commandez directement aupres des transformateurs locaux certifies :  jus, farines, huiles, conserves et bien plus.
                             </p>
 
@@ -173,6 +178,31 @@ const Hero = () => {
             </div>
 
             <style>{`
+                .hero-highlight {
+                    color: #4ade80;
+                    position: relative;
+                    display: inline-block;
+                    text-shadow: 0 0 20px rgba(74, 222, 128, 0.5), 0 1px 0 rgba(0,0,0,0.9), 0 3px 10px rgba(0,0,0,0.8);
+                }
+
+                .hero-highlight::after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    bottom: -4px;
+                    width: 100%;
+                    height: 2px;
+                    background: linear-gradient(90deg, transparent, #4ade80, #22c55e, transparent);
+                    border-radius: 2px;
+                    animation: heroUnderline 2.5s ease-in-out infinite;
+                    box-shadow: 0 0 8px rgba(74, 222, 128, 0.7);
+                }
+
+                @keyframes heroUnderline {
+                    0%, 100% { opacity: 0.5; transform: scaleX(0.85); }
+                    50% { opacity: 1; transform: scaleX(1); }
+                }
+
                 .hero-marquee {
                     position: absolute;
                     left: 0;

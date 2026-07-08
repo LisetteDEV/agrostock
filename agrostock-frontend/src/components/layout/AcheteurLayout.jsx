@@ -69,7 +69,7 @@ const AcheteurLayout = () => {
                             <li key={link.path} className="nav-item">
                                 <Link to={link.path} 
                                       onClick={() => setIsSidebarOpen(false)}
-                                      className={`nav-link rounded-4 py-3 px-4 d-flex align-items-center gap-3 fw-bold transition-all ${isActive ? 'active' : 'text-white opacity-75 hover-opacity-100'}`}
+                                      className={`a-nav-link ${isActive ? 'active' : ''}`}
                                       style={isActive ? { background: "rgba(26, 178, 115, 0.2)", border: "1px solid rgba(26, 178, 115, 0.3)" } : {}}>
                                     {link.icon}
                                     {link.label}
@@ -149,7 +149,21 @@ const AcheteurLayout = () => {
                 .sidebar-wrapper { left: 0; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
                 .main-content { padding-left: 280px; transition: padding 0.3s ease; }
                 .nav-link.active { color: white !important; }
-                .hover-opacity-100:hover { opacity: 1 !important; background: rgba(255,255,255,0.05); }
+                .a-nav-link {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px 16px;
+                    border-radius: 12px;
+                    color: rgba(255,255,255,0.7);
+                    text-decoration: none;
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    transition: all 0.2s ease;
+                    border: 1px solid transparent;
+                }
+                .a-nav-link:hover { background: rgba(255,255,255,0.07); color: #fff; }
+                .a-nav-link.active { color: #fff !important; }
                 .transform-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
                 
                 @media (max-width: 991.98px) {
