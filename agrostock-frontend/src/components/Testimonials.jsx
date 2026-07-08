@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { API_URL } from '../services/config';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 const StarRating = ({ rating, size = 16 }) => (
     <div className="d-flex gap-1">
         {[1,2,3,4,5].map(i => (
@@ -13,6 +14,15 @@ const StarRating = ({ rating, size = 16 }) => (
 
 const Testimonials = () => {
     const [avis, setAvis] = useState([]);
+    const [startIndex, setStartIndex] = useState(0);
+
+    const nextSlide = () => {
+        if (startIndex + 3 < avis.length) setStartIndex(s => s + 1);
+    };
+
+    const prevSlide = () => {
+        if (startIndex > 0) setStartIndex(s => s - 1);
+    };
 
     useEffect(() => {
         fetch(`${API_URL}/avis/recents`, {
@@ -39,10 +49,31 @@ const Testimonials = () => {
                     <p style={{ color: '#64748b', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
                         Témoignages vérifiés recueillis après des transactions sur la plateforme AgroStock Bénin.
                     </p>
+
+                    {avis.length > 3 && (
+                        <div className="d-flex justify-content-center gap-3 mt-4">
+                            <button 
+                                onClick={prevSlide} 
+                                disabled={startIndex === 0}
+                                className="btn rounded-circle shadow-sm d-flex align-items-center justify-content-center"
+                                style={{ width: '48px', height: '48px', background: startIndex === 0 ? '#f1f5f9' : '#fff', color: startIndex === 0 ? '#94a3b8' : '#105c38', border: '1px solid #e2e8f0' }}
+                            >
+                                <ChevronLeft size={24} />
+                            </button>
+                            <button 
+                                onClick={nextSlide} 
+                                disabled={startIndex >= avis.length - 3}
+                                className="btn rounded-circle shadow-sm d-flex align-items-center justify-content-center"
+                                style={{ width: '48px', height: '48px', background: startIndex >= avis.length - 3 ? '#f1f5f9' : '#fff', color: startIndex >= avis.length - 3 ? '#94a3b8' : '#105c38', border: '1px solid #e2e8f0' }}
+                            >
+                                <ChevronRight size={24} />
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 <div className="row g-4">
-                    {avis.map((a, i) => (
+                    {avis.slice(startIndex, startIndex + 3).map((a, i) => (
                         <div className="col-12 col-md-4" key={i}>
                             <div className="card h-100 p-4 position-relative overflow-hidden"
                                 style={{ background: '#ffffff', border: '1px solid #d1fae5', borderRadius: '24px', boxShadow: '0 10px 40px rgba(16, 185, 129, 0.1)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}
