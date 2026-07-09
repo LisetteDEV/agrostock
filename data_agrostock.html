@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroStock Bénin — Guide de test</title>
+<style>
+  :root {
+    --green: #2E7D32;
+    --green-dark: #1B5E20;
+    --green-light: #E8F5E9;
+    --grey: #666666;
+    --dark: #1B1B1B;
+    --border: #d5e5d6;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Segoe UI", Calibri, Arial, sans-serif;
+    color: var(--dark);
+    background: #f4f6f4;
+    margin: 0;
+    padding: 40px 16px;
+    line-height: 1.5;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 56px 60px;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+    border-radius: 6px;
+  }
+
+  h1 {
+    color: var(--green);
+    font-size: 34px;
+    margin: 0 0 6px 0;
+    letter-spacing: 0.5px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: var(--dark);
+    margin: 0 0 14px 0;
+    padding-bottom: 18px;
+    border-bottom: 3px solid var(--green);
+  }
+
+  .meta {
+    font-size: 13px;
+    color: var(--grey);
+    margin: 18px 0 24px 0;
+  }
+  .meta b { color: var(--dark); }
+  .meta span.sep { margin: 0 10px; color: var(--border); }
+
+  .intro {
+    font-size: 14.5px;
+    color: var(--dark);
+    margin-bottom: 30px;
+  }
+
+  h2 {
+    color: var(--green);
+    font-size: 15px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--green);
+    padding-bottom: 8px;
+    margin: 38px 0 14px 0;
+  }
+
+  p.note {
+    font-size: 14px;
+    color: var(--dark);
+    margin: 0 0 12px 0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+    font-size: 13.5px;
+  }
+
+  thead th {
+    background: var(--green);
+    color: #ffffff;
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 600;
+  }
+
+  tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+  }
+  tbody td:first-child { border-left: none; }
+
+  tbody tr:nth-child(even) { background: var(--green-light); }
+
+  tbody td[contenteditable="true"]:empty::before {
+    content: attr(data-placeholder);
+    color: #a9b7aa;
+    font-style: italic;
+  }
+
+  ol.steps {
+    padding-left: 22px;
+    font-size: 14px;
+  }
+  ol.steps li { margin-bottom: 8px; }
+
+  .notes-box {
+    min-height: 90px;
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+    padding: 14px;
+    font-size: 14px;
+    color: #a9b7aa;
+    font-style: italic;
+  }
+  .notes-box:focus, .notes-box:not(:empty) {
+    color: var(--dark);
+    font-style: normal;
+    outline: none;
+  }
+
+  .footer {
+    margin-top: 50px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 11.5px;
+    color: var(--grey);
+    text-align: center;
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page { box-shadow: none; border-radius: 0; padding: 30px 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>AgroStock Bénin</h1> <a href="https://agrostockbenin.vercel.app">https://agrostockbenin.vercel.app</a>
+  <p class="subtitle">Guide et données de test de la plateforme</p>
+
+  <p class="meta">
+    <b>Préparé pour :</b> Dr ATINDEHOU 
+    <span class="sep">|</span>
+    <b>Préparé par :</b> Lisette & Batista
+  </p>
+
+  <p class="intro">
+    Ce document rassemble les comptes et scénarios nécessaires pour tester la plateforme
+  </p>
+
+  <h2>1. Accès à la plateforme</h2>
+  <table>
+    <thead><tr><th style="width:35%">Élément</th><th>Valeur</th></tr></thead>
+    <tbody>
+      <tr><td>Lien plateforme (frontend)</td><td contenteditable="true" data-placeholder=" ">https://agrostockbenin.vercel.app</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Comptes de test</h2>
+  <p class="note">Comptes prêts à l'emploi, avec rôles déjà configurés.</p>
+  <table>
+    <thead><tr><th>Rôle</th><th>Email</th><th>Mot de passe</th><th>Statut</th></tr></thead>
+    <tbody>
+      <tr><td>Admin</td><td>admin@agrostock.bj</td><td>password123</td><td>Actif</td></tr>
+      <tr><td>Transformateur</td><td contenteditable="true" data-placeholder="email">cynthia@gmail.com</td><td contenteditable="true" data-placeholder="mot de passe">kpakpalikpa</td><td>Vérifié (IFU)</td></tr>
+      <tr><td>Acheteur</td><td contenteditable="true" data-placeholder="email">miracle@gmail.com </td><td contenteditable="true" data-placeholder="mot de passe">Mira2026</td><td>Actif</td></tr>
+    </tbody>
+  </table>
+
+
+
+  <h2>3. Paiement test ( simulation )</h2>
+  <p>le paiement est en simulation, aucun de API de paiement n'est connecté. Pour le choix du mode de livraison , veuillez choisir " Livreur propre" car les fonctionnalités de "besoin d'un livreur" seront implémentées après la soutenance.</p>
+
+  
+
+  <h2>6. Scénarios de test suggérés</h2>
+  <ol class="steps">
+    <li>Se connecter en tant que transformateur → publier un produit → recevoir des commandes → valider les commandes.</li>
+    <li>Se connecter en tant qu'acheteur → commander ce produit → choisir "livreur propre" comme mode de livraison et  payer→ remettre le code OTP au livreur →suivre la commande → confirmer la réception après avoir reçu la commande → Laisser un avis .</li>
+    <li>Se connecter en tant qu'admin → consulter la gestion des transformateurs et utilisateurs.</li>
+  </ol>
+
+
+  <div class="footer">AgroStock Bénin — Document de test généré pour la soutenance</div>
+
+</div>
+</body>
+</html>
