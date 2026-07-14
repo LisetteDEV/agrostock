@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\PublierProduitSurFacebook;
 use App\Models\Produit;
 use App\Models\Transformateur;
 use Illuminate\Http\Request;
@@ -184,6 +185,9 @@ class ProduitController extends Controller
             'photos' => $photosPath,
             'statut' => 'actif',
         ]);
+
+        // Déclencher la publication automatique sur Facebook (en arrière-plan)
+        PublierProduitSurFacebook::dispatch($produit->id)->delay(now()->addSeconds(5));
 
         return response()->json([
             'message' => 'Produit publie avec succes.',
