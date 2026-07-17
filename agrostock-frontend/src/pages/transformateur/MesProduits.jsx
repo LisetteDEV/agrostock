@@ -135,7 +135,8 @@ const MesProduits = () => {
             setErrorMsg('Le prix de gros est obligatoire pour ce mode de vente.');
             return;
         }
-        setSubmitting(true);
+        setShowPublishModal(false);
+        setSuccessMsg(editingId ? 'Mise à jour du produit...' : 'Publication du produit...');
         setErrorMsg('');
 
         const fd = new FormData();
@@ -186,9 +187,13 @@ const MesProduits = () => {
                     ? Object.values(data.errors).flat()[0]
                     : null;
                 setErrorMsg(firstValidationError || data.message || 'Une erreur est survenue.');
+            setShowPublishModal(true);
+            setSuccessMsg('');
             }
         } catch (e) {
             setErrorMsg('Erreur de connexion au serveur.');
+            setShowPublishModal(true);
+            setSuccessMsg('');
         } finally {
             setSubmitting(false);
         }

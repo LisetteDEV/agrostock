@@ -186,8 +186,8 @@ class ProduitController extends Controller
             'statut' => 'actif',
         ]);
 
-        // Déclencher la publication automatique sur Facebook (en arrière-plan)
-        PublierProduitSurFacebook::dispatch($produit->id)->delay(now()->addSeconds(5));
+        // Déclencher la publication automatique sur Facebook après envoi de la réponse HTTP pour ne pas bloquer l'utilisateur
+        PublierProduitSurFacebook::dispatchAfterResponse($produit->id);
 
         return response()->json([
             'message' => 'Produit publie avec succes.',
