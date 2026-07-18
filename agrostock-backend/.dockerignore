@@ -1,0 +1,10 @@
+# Never embed local env - Render injects its own env vars at runtime
+.env
+.env.*
+!.env.example
+
+# Dev/test artifacts
+node_modules/
+vendor/
+storage/logs/*
+bootstrap/cache/*.php
