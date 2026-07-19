@@ -38,11 +38,19 @@ const CustomDropdown = ({ label, value, options, isOpen, onToggle, onSelect, dro
     </div>
 );
 
+const CACHE_KEY_PRODUCTS = 'agrostock_cache_products';
+
+const getInitialProducts = () => {
+    const cached = sessionStorage.getItem(CACHE_KEY_PRODUCTS);
+    return cached ? JSON.parse(cached) : [];
+};
+
 const MesProduits = () => {
     const { token, user } = useAuth();
     const location = useLocation();
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [products, setProducts] = useState(getInitialProducts());
+    const [loading, setLoading] = useState(getInitialProducts().length === 0);
+    const [slowBackend, setSlowBackend] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [categories, setCategories] = useState([]);
     
@@ -99,6 +107,8 @@ const MesProduits = () => {
 
     const fetchProducts = async () => {
         setLoading(true);
+        // Affiche un message si le serveur (Render) est lent à démarrer
+        const slowTimer = setTimeout(() => setSlowBackend(true), 4000);
         try {
             const params = new URLSearchParams();
             if (filterCategory !== 'Toutes les categories') {
@@ -114,10 +124,14 @@ const MesProduits = () => {
                 }
             });
             const data = await res.json();
-            setProducts(data.produits || []);
+            const produits = data.produits || [];
+            setProducts(produits);
+            sessionStorage.setItem(CACHE_KEY_PRODUCTS, JSON.stringify(produits));
         } catch (e) {
             console.error(e);
         } finally {
+            clearTimeout(slowTimer);
+            setSlowBackend(false);
             setLoading(false);
         }
     };
@@ -321,7 +335,12 @@ const MesProduits = () => {
             {/* MOBILE CARDS (visible < lg) */}
             <div className="d-lg-none">
                 {loading ? (
-                    <div className="text-center py-5"><div className="spinner-border text-success" /></div>
+                    <div className="text-center py-5">
+                        <div className="spinner-border text-success" />
+                        {slowBackend && (
+                            <p className="text-muted small mt-3 mb-0">Le serveur est en cours de démarrage...<br/>Veuillez patienter quelques secondes ☕</p>
+                        )}
+                    </div>
                 ) : filteredProducts.length === 0 ? (
                     <div className="bg-white rounded-4 p-5 text-center shadow-sm">
                         <div className="opacity-25 mb-3"><Package size={50} /></div>

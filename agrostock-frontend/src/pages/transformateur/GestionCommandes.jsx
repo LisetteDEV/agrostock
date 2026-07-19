@@ -54,6 +54,7 @@ const GestionCommandes = () => {
   const [filter, setFilter] = useState("Toutes");
   const [uiMessage, setUiMessage] = useState(null);
   const [loading, setLoading] = useState(orders.length === 0);
+  const [slowBackend, setSlowBackend] = useState(false);
   const [confirmModalOrder, setConfirmModalOrder] = useState(null);
   const [statusLoadingId, setStatusLoadingId] = useState(null);
   const [bonCodeInput, setBonCodeInput] = useState("");
@@ -62,6 +63,7 @@ const GestionCommandes = () => {
   const { token } = useAuth();
 
   const loadOrders = async () => {
+    const slowTimer = setTimeout(() => setSlowBackend(true), 4000);
     try {
       const res = await fetch(`${API_URL}/transformateur/commandes`, {
         headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
@@ -95,6 +97,8 @@ const GestionCommandes = () => {
     } catch (error) {
       console.error("Failed to load orders", error);
     } finally {
+      clearTimeout(slowTimer);
+      setSlowBackend(false);
       setLoading(false);
     }
   };
@@ -262,7 +266,9 @@ const GestionCommandes = () => {
         {loading ? (
           <div className="text-center py-5 bg-white rounded-4 shadow-sm border">
             <div className="spinner-border text-success" role="status"></div>
-            <p className="fw-medium text-muted mt-3 mb-0">Chargement des commandes...</p>
+            <p className="fw-medium text-muted mt-3 mb-0">
+              {slowBackend ? <>Le serveur démarre...<br/><span className="small">Encore quelques secondes ☕</span></> : 'Chargement des commandes...'}
+            </p>
           </div>
         ) : filteredOrders.length === 0 ? (
           <div className="text-center py-5 bg-white rounded-4 shadow-sm border">
@@ -348,7 +354,9 @@ const GestionCommandes = () => {
                 <tr>
                   <td colSpan="7" className="py-5 text-center">
                     <div className="spinner-border text-success" role="status"></div>
-                    <p className="fw-medium text-muted mt-3 mb-0">Chargement des commandes...</p>
+                    <p className="fw-medium text-muted mt-3 mb-0">
+                      {slowBackend ? <>Le serveur démarre...<br/><span className="small">Encore quelques secondes ☕</span></> : 'Chargement des commandes...'}
+                    </p>
                   </td>
                 </tr>
               ) : filteredOrders.length === 0 ? (
