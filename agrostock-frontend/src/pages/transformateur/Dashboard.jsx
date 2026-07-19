@@ -47,20 +47,26 @@ const normalizeStatus = (status) =>
 
 
 
+const CACHE_KEY_STATS = 'agrostock_dash_stats';
+const CACHE_KEY_ORDERS = 'agrostock_dash_orders';
+
+const getInitialStats = () => {
+  const cached = sessionStorage.getItem(CACHE_KEY_STATS);
+  return cached ? JSON.parse(cached) : { ventesNettes: 0, produits: 0, escrowEstime: 0, note: 0, totalAvis: 0 };
+};
+
+const getInitialOrders = () => {
+  const cached = sessionStorage.getItem(CACHE_KEY_ORDERS);
+  return cached ? JSON.parse(cached) : [];
+};
+
 const Dashboard = () => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
 
-  const [statsData, setStatsData] = useState({
-    ventesNettes: 0,
-    produits: 0,
-    escrowEstime: 0,
-    note: 0,
-    totalAvis: 0,
-  });
-
-  const [recentOrders, setRecentOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [statsData, setStatsData] = useState(getInitialStats());
+  const [recentOrders, setRecentOrders] = useState(getInitialOrders());
+  const [loading, setLoading] = useState(recentOrders.length === 0);
   const [error, setError] = useState("");
   const [lastUpdatedAt, setLastUpdatedAt] = useState(null);
 
@@ -158,13 +164,17 @@ const Dashboard = () => {
         .filter((c) => ESCROW_HOLD_STATUSES.includes(c.statut))
         .reduce((acc, c) => acc + Number(c.montant_total || 0), 0);
 
-      setStatsData({
+      const newStats = {
         ventesNettes,
         produits: produitsCount,
         escrowEstime,
         note: Number(noteMoyenne.toFixed(2)),
         totalAvis,
-      });
+      };
+
+      setStatsData(newStats);
+      sessionStorage.setItem(CACHE_KEY_STATS, JSON.stringify(newStats));
+      sessionStorage.setItem(CACHE_KEY_ORDERS, JSON.stringify(commandes.slice(0, 5)));
       setLastUpdatedAt(new Date());
     } catch (e) {
       console.error("Erreur chargement dashboard transformateur", e);

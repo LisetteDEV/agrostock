@@ -41,12 +41,19 @@ const FILTER_KEYS = [
   { label: "Annulee",      key: "Annulee" },
 ];
 
+const CACHE_KEY_ALL_ORDERS = 'agrostock_cache_all_orders';
+
+const getInitialOrders = () => {
+  const cached = sessionStorage.getItem(CACHE_KEY_ALL_ORDERS);
+  return cached ? JSON.parse(cached) : [];
+};
+
 const GestionCommandes = () => {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState(getInitialOrders());
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [filter, setFilter] = useState("Toutes");
   const [uiMessage, setUiMessage] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(orders.length === 0);
   const [confirmModalOrder, setConfirmModalOrder] = useState(null);
   const [statusLoadingId, setStatusLoadingId] = useState(null);
   const [bonCodeInput, setBonCodeInput] = useState("");
@@ -79,6 +86,8 @@ const GestionCommandes = () => {
         status: cmd.statut === "en_cours" ? "en_cours_livraison" : (cmd.statut || "en_attente_confirmation"),
       }));
       setOrders(formatted);
+      sessionStorage.setItem(CACHE_KEY_ALL_ORDERS, JSON.stringify(formatted));
+      
       if (selectedOrder) {
         const refreshed = formatted.find((o) => o.id === selectedOrder.id);
         if (refreshed) { setSelectedOrder(refreshed); setBonCodeInput(refreshed.bon_retrait?.code || ""); }
