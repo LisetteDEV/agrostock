@@ -186,11 +186,10 @@ class ProduitController extends Controller
             'statut' => 'actif',
         ]);
 
-        // Publier sur Facebook uniquement si un vrai driver de queue est configuré (pas sync)
-        // pour ne jamais bloquer la réponse HTTP
-        if (config('queue.default') !== 'sync') {
-            PublierProduitSurFacebook::dispatch($produit->id);
-        }
+        // dispatchAfterResponse : la réponse HTTP est envoyée immédiatement au client,
+        // puis le job Facebook s'exécute juste après dans le même processus.
+        // Fonctionne même avec QUEUE_CONNECTION=sync (pas besoin d'un worker séparé).
+        PublierProduitSurFacebook::dispatchAfterResponse($produit->id);
 
         return response()->json([
             'message' => 'Produit publie avec succes.',
