@@ -305,7 +305,7 @@ class CommandeController extends Controller
             return response()->json(['commandes' => []]);
         }
 
-        $commandes = Commande::with(['items.produit', 'transformateur.user', 'bonRetrait'])
+        $commandes = Commande::with(['items.produit', 'transformateur.user', 'bonRetrait', 'acheteur.user'])
             ->where('acheteur_id', $acheteur->id)
             ->orderBy('created_at', 'desc')
             ->get()
@@ -381,7 +381,7 @@ class CommandeController extends Controller
             return response()->json(['commandes' => []]);
         }
 
-        $commandes = Commande::with(['items.produit', 'acheteur.user', 'bonRetrait'])
+        $commandes = Commande::with(['items.produit', 'acheteur.user', 'bonRetrait', 'transformateur.user'])
             ->where('transformateur_id', $transformateur->id)
             ->orderBy('created_at', 'desc')
             ->get()

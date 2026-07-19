@@ -46,6 +46,7 @@ const GestionCommandes = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [filter, setFilter] = useState("Toutes");
   const [uiMessage, setUiMessage] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [confirmModalOrder, setConfirmModalOrder] = useState(null);
   const [statusLoadingId, setStatusLoadingId] = useState(null);
   const [bonCodeInput, setBonCodeInput] = useState("");
@@ -84,6 +85,8 @@ const GestionCommandes = () => {
       }
     } catch (error) {
       console.error("Failed to load orders", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -247,7 +250,12 @@ const GestionCommandes = () => {
       {/* ── ORDERS TABLE ── */}
       {/* MOBILE CARDS */}
       <div className="d-lg-none mb-4">
-        {filteredOrders.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-5 bg-white rounded-4 shadow-sm border">
+            <div className="spinner-border text-success" role="status"></div>
+            <p className="fw-medium text-muted mt-3 mb-0">Chargement des commandes...</p>
+          </div>
+        ) : filteredOrders.length === 0 ? (
           <div className="text-center py-5 bg-white rounded-4 shadow-sm border">
             <div className="d-flex flex-column align-items-center text-muted opacity-50">
               <ShoppingBag size={40} className="mb-3" />
@@ -327,7 +335,14 @@ const GestionCommandes = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredOrders.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan="7" className="py-5 text-center">
+                    <div className="spinner-border text-success" role="status"></div>
+                    <p className="fw-medium text-muted mt-3 mb-0">Chargement des commandes...</p>
+                  </td>
+                </tr>
+              ) : filteredOrders.length === 0 ? (
                 <tr>
                   <td colSpan="7" className="py-5 text-center">
                     <div className="d-flex flex-column align-items-center text-muted opacity-50">
