@@ -186,8 +186,11 @@ class ProduitController extends Controller
             'statut' => 'actif',
         ]);
 
-        // Déclencher la publication automatique sur Facebook après envoi de la réponse HTTP pour ne pas bloquer l'utilisateur
-        PublierProduitSurFacebook::dispatchAfterResponse($produit->id);
+        // Publier sur Facebook uniquement si un vrai driver de queue est configuré (pas sync)
+        // pour ne jamais bloquer la réponse HTTP
+        if (config('queue.default') !== 'sync') {
+            PublierProduitSurFacebook::dispatch($produit->id);
+        }
 
         return response()->json([
             'message' => 'Produit publie avec succes.',

@@ -175,12 +175,17 @@ const MesProduits = () => {
             if (res.ok) {
                 setSuccessMsg(editingId ? 'Produit mis a jour !' : 'Produit publie avec succes !');
                 setShowPublishModal(false);
+                // Injection directe — affichage immediat sans re-fetch reseau
+                if (editingId) {
+                    setProducts(prev => prev.map(p => p.id === editingId ? { ...p, ...data.produit } : p));
+                } else {
+                    setProducts(prev => [data.produit, ...prev]);
+                }
                 setEditingId(null);
                 setFormData({ nom: '', categorie: '', prix: '', prix_gros: '', mode_vente: 'les_deux', quantite_min_gros: 10, unite_mesure: 'kg', delai_livraison: '', description: '', stock: '' });
                 setSelectedCategory('');
                 setProductImage(null);
                 setProductImagePreview(null);
-                fetchProducts();
                 setTimeout(() => setSuccessMsg(''), 4000);
             } else {
                 const firstValidationError = data?.errors
