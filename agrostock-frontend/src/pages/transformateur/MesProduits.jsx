@@ -135,8 +135,7 @@ const MesProduits = () => {
             setErrorMsg('Le prix de gros est obligatoire pour ce mode de vente.');
             return;
         }
-        setShowPublishModal(false);
-        setSuccessMsg(editingId ? 'Mise à jour du produit...' : 'Publication du produit...');
+        setSubmitting(true);
         setErrorMsg('');
 
         const fd = new FormData();
