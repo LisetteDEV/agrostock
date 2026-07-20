@@ -52,7 +52,7 @@ const CACHE_KEY_ORDERS = 'agrostock_dash_orders';
 
 const getInitialStats = () => {
   const cached = sessionStorage.getItem(CACHE_KEY_STATS);
-  return cached ? JSON.parse(cached) : { ventesNettes: 0, produits: 0, escrowEstime: 0, note: 0, totalAvis: 0 };
+  return cached ? JSON.parse(cached) : { ventesNettes: 0, produits: 0, escrowEstime: 0, note: 0, totalAvis: 0, litiges: 0, remboursements: 0, enCours: 0 };
 };
 
 const getInitialOrders = () => {
@@ -67,23 +67,11 @@ const Dashboard = () => {
   const [statsData, setStatsData] = useState(getInitialStats());
   const [recentOrders, setRecentOrders] = useState(getInitialOrders());
   const [loading, setLoading] = useState(recentOrders.length === 0);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [error, setError] = useState("");
   const [lastUpdatedAt, setLastUpdatedAt] = useState(null);
 
-  const litigesOuverts = useMemo(
-    () => recentOrders.filter((o) => normalizeStatus(o.statut) === "litige_ouvert").length,
-    [recentOrders],
-  );
-
-  const remboursements = useMemo(
-    () =>
-      recentOrders.filter((o) => {
-        const status = normalizeStatus(o.statut);
-        return status === "remboursee" || status === "annulee_auto";
-      }).length,
-    [recentOrders],
-  );
-
+  // Helper for Status Meta
   const getStatusMeta = (status) => {
     const normalized = normalizeStatus(status);
     return (
@@ -98,6 +86,7 @@ const Dashboard = () => {
     if (!token) return;
 
     setLoading((prev) => (lastUpdatedAt ? prev : true));
+    setIsSyncing(true);
     setError("");
 
     try {
@@ -164,12 +153,19 @@ const Dashboard = () => {
         .filter((c) => ESCROW_HOLD_STATUSES.includes(c.statut))
         .reduce((acc, c) => acc + Number(c.montant_total || 0), 0);
 
+      const litiges = commandes.filter((o) => o.statut === "litige_ouvert").length;
+      const rembs = commandes.filter((o) => o.statut === "remboursee" || o.statut === "annulee_auto").length;
+      const enCours = commandes.filter((o) => o.statut === "en_cours_livraison").length;
+
       const newStats = {
         ventesNettes,
         produits: produitsCount,
         escrowEstime,
         note: Number(noteMoyenne.toFixed(2)),
         totalAvis,
+        litiges,
+        remboursements: rembs,
+        enCours,
       };
 
       setStatsData(newStats);
@@ -178,9 +174,10 @@ const Dashboard = () => {
       setLastUpdatedAt(new Date());
     } catch (e) {
       console.error("Erreur chargement dashboard transformateur", e);
-      setError("Impossible de charger certaines données du tableau de bord.");
+      setError("Le serveur est en cours de réveil. Réessayez dans quelques secondes.");
     } finally {
       setLoading(false);
+      setIsSyncing(false);
     }
   }, [token, user?.transformateur?.id, lastUpdatedAt]);
 
@@ -246,7 +243,17 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="dash-senior">
+    <div className="dash-senior position-relative">
+      {/* ── SYNC INDICATOR OVERLAY ── */}
+      {isSyncing && (
+        <div className="position-fixed top-0 start-50 translate-middle-x mt-3 z-3 w-100 d-flex justify-content-center" style={{ pointerEvents: 'none' }}>
+           <div className="badge bg-white text-success shadow-lg border px-3 py-2 d-flex align-items-center gap-2 fw-medium" style={{ borderRadius: '50px' }}>
+             <span className="spinner-border spinner-border-sm" role="status"></span>
+             Connexion au serveur et synchronisation... (peu prendre jusqu'à 30s)
+           </div>
+        </div>
+      )}
+
       {/* ── HERO BANNER (en haut) ── */}
       <div className="hero-banner position-relative overflow-hidden mb-4" style={{ borderRadius: '20px', background: 'linear-gradient(135deg, #0a1d13 0%, #0f3524 50%, #105c38 100%)', padding: '2rem 2.5rem' }}>
         {/* Grid pattern overlay */}
@@ -311,31 +318,31 @@ const Dashboard = () => {
       {/* ── ALERT TILES ── */}
       <div className="row g-3 mb-4">
         <div className="col-md-6">
-          <div className="alert-tile d-flex align-items-center justify-content-between p-3" style={{ background: litigesOuverts > 0 ? '#fef2f2' : '#f8faf9', borderLeft: `4px solid ${litigesOuverts > 0 ? '#ef4444' : '#e2e8f0'}`, borderRadius: '12px' }}>
+          <div className="alert-tile d-flex align-items-center justify-content-between p-3" style={{ background: statsData.litiges > 0 ? '#fef2f2' : '#f8faf9', borderLeft: `4px solid ${statsData.litiges > 0 ? '#ef4444' : '#e2e8f0'}`, borderRadius: '12px' }}>
             <div className="d-flex align-items-center gap-3">
-              <div className="d-flex align-items-center justify-content-center" style={{ width: '38px', height: '38px', borderRadius: '10px', background: litigesOuverts > 0 ? '#fee2e2' : '#f1f5f9', color: litigesOuverts > 0 ? '#ef4444' : '#94a3b8' }}>
+              <div className="d-flex align-items-center justify-content-center" style={{ width: '38px', height: '38px', borderRadius: '10px', background: statsData.litiges > 0 ? '#fee2e2' : '#f1f5f9', color: statsData.litiges > 0 ? '#ef4444' : '#94a3b8' }}>
                 <ShieldAlert size={18} />
               </div>
               <div>
-                <div className="fw-bold" style={{ fontSize: '0.9rem', color: litigesOuverts > 0 ? '#991b1b' : '#475569' }}>Litiges ouverts</div>
+                <div className="fw-bold" style={{ fontSize: '0.9rem', color: statsData.litiges > 0 ? '#991b1b' : '#475569' }}>Litiges ouverts</div>
                 <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Résolution requise</div>
               </div>
             </div>
-            <span className="fw-bold d-flex align-items-center justify-content-center" style={{ width: '36px', height: '36px', borderRadius: '50%', background: litigesOuverts > 0 ? '#ef4444' : '#e2e8f0', color: litigesOuverts > 0 ? '#fff' : '#94a3b8', fontSize: '0.9rem' }}>{litigesOuverts}</span>
+            <span className="fw-bold d-flex align-items-center justify-content-center" style={{ width: '36px', height: '36px', borderRadius: '50%', background: statsData.litiges > 0 ? '#ef4444' : '#e2e8f0', color: statsData.litiges > 0 ? '#fff' : '#94a3b8', fontSize: '0.9rem' }}>{statsData.litiges}</span>
           </div>
         </div>
         <div className="col-md-6">
-          <div className="alert-tile d-flex align-items-center justify-content-between p-3" style={{ background: remboursements > 0 ? '#fffbeb' : '#f8faf9', borderLeft: `4px solid ${remboursements > 0 ? '#f59e0b' : '#e2e8f0'}`, borderRadius: '12px' }}>
+          <div className="alert-tile d-flex align-items-center justify-content-between p-3" style={{ background: statsData.remboursements > 0 ? '#fffbeb' : '#f8faf9', borderLeft: `4px solid ${statsData.remboursements > 0 ? '#f59e0b' : '#e2e8f0'}`, borderRadius: '12px' }}>
             <div className="d-flex align-items-center gap-3">
-              <div className="d-flex align-items-center justify-content-center" style={{ width: '38px', height: '38px', borderRadius: '10px', background: remboursements > 0 ? '#fef3c7' : '#f1f5f9', color: remboursements > 0 ? '#f59e0b' : '#94a3b8' }}>
+              <div className="d-flex align-items-center justify-content-center" style={{ width: '38px', height: '38px', borderRadius: '10px', background: statsData.remboursements > 0 ? '#fef3c7' : '#f1f5f9', color: statsData.remboursements > 0 ? '#f59e0b' : '#94a3b8' }}>
                 <CheckCircle2 size={18} />
               </div>
               <div>
-                <div className="fw-bold" style={{ fontSize: '0.9rem', color: remboursements > 0 ? '#92400e' : '#475569' }}>Remboursements</div>
+                <div className="fw-bold" style={{ fontSize: '0.9rem', color: statsData.remboursements > 0 ? '#92400e' : '#475569' }}>Remboursements</div>
                 <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Traités automatiquement</div>
               </div>
             </div>
-            <span className="fw-bold d-flex align-items-center justify-content-center" style={{ width: '36px', height: '36px', borderRadius: '50%', background: remboursements > 0 ? '#f59e0b' : '#e2e8f0', color: remboursements > 0 ? '#fff' : '#94a3b8', fontSize: '0.9rem' }}>{remboursements}</span>
+            <span className="fw-bold d-flex align-items-center justify-content-center" style={{ width: '36px', height: '36px', borderRadius: '50%', background: statsData.remboursements > 0 ? '#f59e0b' : '#e2e8f0', color: statsData.remboursements > 0 ? '#fff' : '#94a3b8', fontSize: '0.9rem' }}>{statsData.remboursements}</span>
           </div>
         </div>
       </div>
