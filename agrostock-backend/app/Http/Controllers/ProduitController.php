@@ -186,10 +186,9 @@ class ProduitController extends Controller
             'statut' => 'actif',
         ]);
 
-        // dispatchAfterResponse : la réponse HTTP est envoyée immédiatement au client,
-        // puis le job Facebook s'exécute juste après dans le même processus.
-        // Fonctionne même avec QUEUE_CONNECTION=sync (pas besoin d'un worker séparé).
-        PublierProduitSurFacebook::dispatchAfterResponse($produit->id);
+        // On place le job dans la base de données (si QUEUE_CONNECTION=database)
+        // La commande 'php artisan queue:work &' gère l'exécution en arrière-plan sans bloquer l'UI
+        PublierProduitSurFacebook::dispatch($produit->id);
 
         return response()->json([
             'message' => 'Produit publie avec succes.',
