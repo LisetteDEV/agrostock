@@ -17,6 +17,11 @@ Route::prefix('api')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
 
+    // Route ultra-légère pour réveiller le serveur Render instantanément
+    Route::get('/ping', function () {
+        return response()->json(['status' => 'ok', 'time' => now()->toDateTimeString()]);
+    });
+
     // Routes publiques â€“ pas d'authentification requise
     Route::get('/produits/publics', [ProduitController::class, 'getPublics']);
     Route::get('/produits/publics/{id}', [ProduitController::class, 'getPublicSingle']);

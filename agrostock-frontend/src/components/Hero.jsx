@@ -75,7 +75,7 @@ const Hero = () => {
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             zIndex: 0,
-                            visibility: isLoaded || isActive ? 'visible' : 'hidden',
+                            visibility: (index === 0 || isLoaded || isActive) ? 'visible' : 'hidden',
                         }}
                     />
                 );

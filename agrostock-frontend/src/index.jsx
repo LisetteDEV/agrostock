@@ -188,7 +188,21 @@ const AppContent = () => {
   );
 };
 
+import { API_URL } from './services/config';
+
 const App = () => {
+  React.useEffect(() => {
+    // Ping immédiat au chargement de l'application pour réveiller Render le plus tôt possible
+    fetch(`${API_URL}/ping`).catch(() => {});
+    
+    // Ping toutes les 8 minutes pour empêcher le backend Render de s'endormir (limite de Render: 15 min)
+    const interval = setInterval(() => {
+      fetch(`${API_URL}/ping`).catch(() => {});
+    }, 8 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <AuthProvider>
       <FavorisProvider>
